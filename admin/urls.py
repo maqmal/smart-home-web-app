@@ -15,9 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from camera import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('camera.urls')),
     path('catalog/', include('catalog.urls')),
+    path('', views.index, name='index'),
+    path('special/', views.special, name='special'),
+    path('logout/', views.user_logout, name='user_logout'),
 ]
