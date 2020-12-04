@@ -21,6 +21,7 @@
         <li><a href="{% url 'user_logout' %}">Logout</a></li>
         {% else %}
         <li><a class="navbar-link" href="{% url 'camera:user_login' %}">Login</a></li>
+        <li><a class="navbar-link" href="{% url 'camera:register' %}">Register</a></li>
         {% endif %}
       </ul>
     </div>

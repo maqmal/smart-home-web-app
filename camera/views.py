@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from camera.forms import UserForm,UserProfileInfoForm
+from camera.forms import UserForm,UserProfileInfoForm, RoomForm, DeviceForm, CameraForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
