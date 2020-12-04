@@ -24,4 +24,4 @@ class DeviceForm(forms.ModelForm):
 class CameraForm(forms.ModelForm):
     class Meta():
         model = Camera
-        fields = ('name','room')
+        fields = ('name', 'cam_url', 'room')

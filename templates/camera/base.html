@@ -15,6 +15,8 @@
       <ul class="nav navbar-nav">
         {# Django Home Link / Admin Link / Register Link#}
         <li><a class="navbar-brand" href="{% url 'index' %}">DJANGO</a></li>
+
+
         <li><a class="navbar-link" href="{% url 'admin:index' %}">Admin</a></li>
         {# Some logic on what to display for last item#}
         {% if user.is_authenticated %}
@@ -30,6 +32,8 @@
     {% block body_block %}
     {% endblock %}
   </div>
+
+
 </body>
 
 </html>

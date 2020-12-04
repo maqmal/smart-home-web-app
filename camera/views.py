@@ -4,6 +4,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.views.generic import DetailView
+from camera.models import UserProfileInfo, Camera, Device, Room
+
 
 def index(request):
     return render(request,'camera/index.html')
@@ -59,3 +62,8 @@ def register(request):
                           {'user_form':user_form,
                            'profile_form':profile_form,
                            'registered':registered})
+
+def get_user(request):
+    if request.method == 'GET':
+        user_info = UserProfileInfo.objects.all()
+        return render(request, 'camera/index.html', {'user_info' : user_info})
