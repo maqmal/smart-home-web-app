@@ -7,3 +7,23 @@ class UserProfileInfo(models.Model):
     profile_pic = models.ImageField(upload_to='profile_pics',blank=True)
     def __str__(self):
         return self.user.username
+
+class Room(models.Model):
+    name = models.CharField(max_length = 200)
+    created_at = models.DateField()
+    def __str__(self):
+        return self.name
+
+class Device(models.Model):
+    room = models.ForeignKey(Room   , on_delete=models.CASCADE)
+    name = models.CharField(max_length = 200)
+    created_at = models.DateField() 
+    def __str__(self):
+        return self.name
+
+class Camera(models.Model):
+    room = models.ForeignKey(Room   , on_delete=models.CASCADE)
+    name = models.CharField(max_length = 200)
+    created_at = models.DateField() 
+    def __str__(self):
+        return self.name
