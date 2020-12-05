@@ -10,17 +10,29 @@
 </head>
 
 <body>
+
+
   <nav class="navbar navbar-default navbar-static-top">
     <div class="container">
       <ul class="nav navbar-nav">
-        {# Django Home Link / Admin Link / Register Link#}
         <li><a class="navbar-brand" href="{% url 'index' %}">DJANGO</a></li>
 
 
-        <li><a class="navbar-link" href="{% url 'admin:index' %}">Admin</a></li>
-        {# Some logic on what to display for last item#}
+        <li><a class="navbar-link" href="{% url 'admin:index' %}">Log</a></li>
+
         {% if user.is_authenticated %}
         <li><a href="{% url 'user_logout' %}">Logout</a></li>
+        {% for user in user_info %}
+        <li><img src="{{ user.profile_pic.url }}" class="img-responsive img-circle" style="width: 30px;"/></li>
+        <li>{{ user.room }}</li>
+          {% for camera in camera_info %}
+          <li>{{ camera.name }}</li>
+          {% endfor %}
+          {% for device in device_info %}
+          <li>{{ device.name }}</li>
+          {% endfor %}
+
+        {% endfor %}
         {% else %}
         <li><a class="navbar-link" href="{% url 'camera:user_login' %}">Login</a></li>
         <li><a class="navbar-link" href="{% url 'camera:register' %}">Register</a></li>

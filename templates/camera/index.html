@@ -5,16 +5,29 @@
     <div class="jumbotron">
         <h1>Welcome to the Djungle !</h1>
         {% if user.is_authenticated %}
+        <h1>Hello {{user.username}}</h1>
 
-
-
-        <h2>Hello {{ user.username }}</h2>
         {% for user in user_info %}
-        <div class="col-md-4">
-            <img src="{{ user.profile_pic.url }}" class="img-responsive"
-                style="width: 100%; float: left; margin-right: 10px;" />
-        </div>
+        <li>{{ user.room }}</li>
+          {% for camera in camera_info %}
+          <li>{{ camera.name }}</li>
+          {% endfor %}
+          {% for device in device_info %}
+          <li>{{ device.name }}</li>
+          {% endfor %}
         {% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
 
         {% else %}
         <h2>Register or Login if you'd like to</h2>

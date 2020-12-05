@@ -66,4 +66,6 @@ def register(request):
 def get_user(request):
     if request.method == 'GET':
         user_info = UserProfileInfo.objects.all()
-        return render(request, 'camera/index.html', {'user_info' : user_info})
+        camera = Camera.objects.all()
+        device = Device.objects.all()
+        return render(request, 'camera/index.html', {'user_info' : user_info, 'camera_info' : camera, 'device_info':device})
