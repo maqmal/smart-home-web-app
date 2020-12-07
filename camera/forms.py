@@ -6,6 +6,7 @@ class UserForm(forms.ModelForm):
     class Meta():
         model = User
         fields = ('username','password','email')
+
 class UserProfileInfoForm(forms.ModelForm):
      class Meta():
          model = UserProfileInfo
@@ -14,14 +15,14 @@ class UserProfileInfoForm(forms.ModelForm):
 class RoomForm(forms.ModelForm):
     class Meta():
         model = Room
-        fields = ('name',)
+        fields = ('name','camera','device')
 
 class DeviceForm(forms.ModelForm):
     class Meta():
         model = Device
-        fields = ('name','room')
+        fields = ('name','sub')
 
 class CameraForm(forms.ModelForm):
     class Meta():
         model = Camera
-        fields = ('name', 'cam_url', 'room')
+        fields = ('name', 'cam_url',)

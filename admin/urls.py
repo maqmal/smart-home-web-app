@@ -22,6 +22,5 @@ urlpatterns = [
     path('', include('camera.urls')),
     path('catalog/', include('catalog.urls')),
     path('', views.index, name='index'),
-    path('special/', views.special, name='special'),
     path('logout/', views.user_logout, name='user_logout'),
 ]

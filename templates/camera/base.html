@@ -22,17 +22,6 @@
 
         {% if user.is_authenticated %}
         <li><a href="{% url 'user_logout' %}">Logout</a></li>
-        {% for user in user_info %}
-        <li><img src="{{ user.profile_pic.url }}" class="img-responsive img-circle" style="width: 30px;"/></li>
-        <li>{{ user.room }}</li>
-          {% for camera in camera_info %}
-          <li>{{ camera.name }}</li>
-          {% endfor %}
-          {% for device in device_info %}
-          <li>{{ device.name }}</li>
-          {% endfor %}
-
-        {% endfor %}
         {% else %}
         <li><a class="navbar-link" href="{% url 'camera:user_login' %}">Login</a></li>
         <li><a class="navbar-link" href="{% url 'camera:register' %}">Register</a></li>

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from camera.forms import UserForm,UserProfileInfoForm, RoomForm, DeviceForm, CameraForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
@@ -7,13 +7,9 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import DetailView
 from camera.models import UserProfileInfo, Camera, Device, Room
 
-
 def index(request):
     return render(request,'camera/index.html')
 
-@login_required
-def special(request):
-    return HttpResponse("You are logged in !")
 @login_required
 def user_logout(request):
     logout(request)
@@ -65,7 +61,9 @@ def register(request):
 
 def get_user(request):
     if request.method == 'GET':
-        user_info = UserProfileInfo.objects.all()
+        user_info = UserProfileInfo.objects.get(id=request.user.id)
+        print(user_info.room.all())
         camera = Camera.objects.all()
         device = Device.objects.all()
         return render(request, 'camera/index.html', {'user_info' : user_info, 'camera_info' : camera, 'device_info':device})
+

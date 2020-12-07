@@ -7,28 +7,6 @@
         {% if user.is_authenticated %}
         <h1>Hello {{user.username}}</h1>
 
-        {% for user in user_info %}
-        <li>{{ user.room }}</li>
-          {% for camera in camera_info %}
-          <li>{{ camera.name }}</li>
-          {% endfor %}
-          {% for device in device_info %}
-          <li>{{ device.name }}</li>
-          {% endfor %}
-        {% endfor %}
-
-
-
-
-
-
-
-
-
-
-
-
-
         {% else %}
         <h2>Register or Login if you'd like to</h2>
         {% endif %}
