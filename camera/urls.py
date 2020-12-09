@@ -9,7 +9,8 @@ app_name = 'camera'
 urlpatterns = [
     path('user_login/', views.user_login, name='user_login'),
     path('register/', views.register, name ='register'),
-    # path('', views.get_user, name ='get_user'),
+    path('create_room/', views.create_room_view, name ='create_room_view'),
+
 ]
 
 urlpatterns += staticfiles_urlpatterns()

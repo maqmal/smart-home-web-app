@@ -1,6 +1,7 @@
 from django import forms
 from camera.models import UserProfileInfo, Camera, Device, Room
 from django.contrib.auth.models import User
+
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
     class Meta():
@@ -15,14 +16,17 @@ class UserProfileInfoForm(forms.ModelForm):
 class RoomForm(forms.ModelForm):
     class Meta():
         model = Room
-        fields = ('name','camera','device')
+        fields = ('name',)
+        exclude = ["user"]
 
 class DeviceForm(forms.ModelForm):
     class Meta():
         model = Device
-        fields = ('name','sub')
+        fields = ('name','sub','room',)
+        exclude = ["user"]
 
 class CameraForm(forms.ModelForm):
     class Meta():
         model = Camera
-        fields = ('name', 'cam_url',)
+        fields = ('name', 'cam_url','room',)
+        exclude = ["user"]

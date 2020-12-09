@@ -1,0 +1,22 @@
+{% extends "camera/base.html" %}
+{% block body_block %}
+{% load static %}
+<div class="container">
+    <div class="jumbotron">
+        <h1>Welcome to the Djungle !</h1>
+        <h1>Hello {{user.username}}</h1>
+
+        <center>
+            <h1 class="display-3" style="background-color:#000000;color:#FFFF99;">Create Room</h1>
+            <form method='POST' enctype="multipart/form-data">
+                {% csrf_token %}
+                <table class='w-50 table table-light' style="border-radius:10px;background-color:#FFFF99;">    
+                {{ upload_form.as_p }}
+                </table>
+                <button type="submit" class="btn btn-lg btn-warning">Submit</button>
+            </form>
+        </center>
+
+    </div>
+</div>
+{% endblock %}

@@ -59,11 +59,20 @@ def register(request):
                            'profile_form':profile_form,
                            'registered':registered})
 
-def get_user(request):
-    if request.method == 'GET':
-        user_info = UserProfileInfo.objects.get(id=request.user.id)
-        print(user_info.room.all())
-        camera = Camera.objects.all()
-        device = Device.objects.all()
-        return render(request, 'camera/index.html', {'user_info' : user_info, 'camera_info' : camera, 'device_info':device})
+
+@login_required
+def create_room_view(request):
+    upload = RoomForm()
+    if request.method == 'POST':
+        upload = RoomForm(request.POST)
+        if upload.is_valid():
+            room_profile = upload.save(commit = False)
+            room_profile.user = request.user
+            room_profile.save()
+            return HttpResponseRedirect(reverse('index'))
+        else:
+            return HttpResponse("""your form is wrong, reload on <a href = "{{ url 'camera:create_room_view' }}">reload</a>""")
+    else:
+        return render(request, 'camera/create_room.html', {'upload_form':upload})
+
 
