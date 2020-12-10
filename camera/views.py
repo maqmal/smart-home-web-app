@@ -66,13 +66,27 @@ def create_room_view(request):
     if request.method == 'POST':
         upload = RoomForm(request.POST)
         if upload.is_valid():
-            room_profile = upload.save(commit = False)
-            room_profile.user = request.user
-            room_profile.save()
+            room_save = upload.save(commit = False)
+            room_save.user = request.user
+            room_save.save()
             return HttpResponseRedirect(reverse('index'))
         else:
             return HttpResponse("""your form is wrong, reload on <a href = "{{ url 'camera:create_room_view' }}">reload</a>""")
     else:
         return render(request, 'camera/create_room.html', {'upload_form':upload})
+
+@login_required
+def create_device_view(request):
+    user = request.user
+    upload = DeviceForm(user)
+    if request.method == 'POST':
+        upload = DeviceForm(request.user, data = request.POST)
+        if upload.is_valid():
+            upload.save()
+            return HttpResponseRedirect(reverse('index'))
+        else:
+            return HttpResponse("""your form is wrong, reload on <a href = "{{ url 'camera:create_device_view' }}">reload</a>""")
+    else:
+        return render(request, 'camera/create_device.html', {'upload_form':upload})
 
 

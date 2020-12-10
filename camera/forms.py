@@ -20,6 +20,10 @@ class RoomForm(forms.ModelForm):
         exclude = ["user"]
 
 class DeviceForm(forms.ModelForm):
+    room = forms.ModelChoiceField(queryset = Room.objects.filter(user_id=1))
+    def __init__(self, user, *args, **kwargs):
+        super(DeviceForm, self).__init__(*args, **kwargs)
+        self.fields['room'].queryset = Room.objects.filter(user=user)
     class Meta():
         model = Device
         fields = ('name','sub','room',)
