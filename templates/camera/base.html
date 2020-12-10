@@ -22,6 +22,7 @@
         
         <li><a class="navbar-link" href="{% url 'camera:create_room_view' %}">Create Room</a></li>
         <li><a class="navbar-link" href="{% url 'camera:create_device_view' %}">Create Device</a></li>
+        <li><a class="navbar-link" href="{% url 'camera:create_camera_view' %}">Create Camera</a></li>
         <li><a href="{% url 'user_logout' %}">Logout</a></li>
         {% else %}
         <li><a class="navbar-link" href="{% url 'camera:user_login' %}">Login</a></li>

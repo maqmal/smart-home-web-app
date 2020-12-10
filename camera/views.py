@@ -11,6 +11,39 @@ def index(request):
     return render(request,'camera/index.html')
 
 @login_required
+def get_data(request):
+    ambil_room = Room.objects.filter(user=request.user).values_list('name',flat=True)
+
+    ambil_device = Device.objects.filter(room__user=request.user)
+    nama_room_device = ambil_device.values_list('room__name',flat=True)
+    nama_device = ambil_device.values_list('name',flat=True)
+    sub_device = ambil_device.values_list('sub',flat=True)
+
+    ambil_camera = Camera.objects.filter(room__user=request.user)
+    nama_room_camera = ambil_camera.values_list('room__name',flat=True)
+    nama_camera = ambil_camera.values_list('name',flat=True)
+    url_camera = ambil_camera.values_list('cam_url',flat=True)
+
+    data = {}
+    for i in range(len(ambil_room)):
+        j = 0
+        data[ambil_room[i]]={}
+        data[ambil_room[i]]['device'] = []
+        data[ambil_room[i]]['camera'] = []
+        for device in nama_device:
+            if (nama_room_device[j]==ambil_room[i]):
+                data[ambil_room[i]]['device'].append(device)
+            j+=1
+        k = 0
+        for camera in nama_camera:
+            if (nama_room_camera[k]==ambil_room[i]):
+                data[ambil_room[i]]['camera'].append(camera)
+            k+=1
+    print(data) 
+    context = {'data':data }
+    return render(request,'camera/index.html',context)
+
+@login_required
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect(reverse('index'))
@@ -88,5 +121,19 @@ def create_device_view(request):
             return HttpResponse("""your form is wrong, reload on <a href = "{{ url 'camera:create_device_view' }}">reload</a>""")
     else:
         return render(request, 'camera/create_device.html', {'upload_form':upload})
+
+@login_required
+def create_camera_view(request):
+    user = request.user
+    upload = CameraForm(user)
+    if request.method == 'POST':
+        upload = CameraForm(request.user, data = request.POST)
+        if upload.is_valid():
+            upload.save()
+            return HttpResponseRedirect(reverse('index'))
+        else:
+            return HttpResponse("""your form is wrong, reload on <a href = "{{ url 'camera:create_camera_view' }}">reload</a>""")
+    else:
+        return render(request, 'camera/create_camera.html', {'upload_form':upload})
 
 

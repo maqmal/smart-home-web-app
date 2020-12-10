@@ -19,8 +19,8 @@ from camera import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('camera.urls')),
+    path('camera/', include('camera.urls')),
     path('catalog/', include('catalog.urls')),
-    path('', views.index, name='index'),
+    path('camera/', views.index, name='index'),
     path('logout/', views.user_logout, name='user_logout'),
 ]

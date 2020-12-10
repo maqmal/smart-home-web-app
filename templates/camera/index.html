@@ -5,6 +5,24 @@
     <div class="jumbotron">
         <h1>Welcome to the Djungle !</h1>
         {% if user.is_authenticated %}
+
+        {% for room,value in data.items %}
+        <ul>
+            <li>{{room}}</li>
+            {% for device_camera, value in value.items %}
+            <ul>
+                <li>{{device_camera}} </li>
+                {% for value in value %}
+                    <ul>
+                        <li>{{ value }}</li>
+                    </ul>
+                {% endfor %}
+            </ul>
+
+            {% endfor %}
+        </ul>
+        {% endfor %}
+
         <h1>Hello {{user.username}}</h1>
 
         {% else %}
