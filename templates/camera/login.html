@@ -1,17 +1,68 @@
-{% extends 'camera/base.html' %}
-{% block body_block %}
-<div class="container">
-    <div class="jumbotron">
-        <h1>Login here :</h1>
-        <form method="post" action="{% url 'user_login' %}">
-            {% csrf_token %}
-            {# A more "HTML" way of creating the login form#}
-            <label for="username">Username:</label>
-            <input type="text" name="username" placeholder="Username">
-            <label for="password">Password:</label>
-            <input type="password" name="password" placeholder="Password">
-            <input type="submit" name="" value="Login">
-        </form>
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'camera.css' %}">
+    <script src="{% static 'login.js' %}"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous">
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <section id="formHolder">
+            <div class="row">
+
+                <!-- Brand Box -->
+                <div class="col-sm-6 brand">
+
+
+                    <div class="heading">
+                        <h2 style="color:#f95959;">homeOS</h2>
+                        <p>Yet Another Smart Home Dashboard</p>
+                    </div>
+
+                </div>
+
+
+                <!-- Form Box -->
+                <div class="col-sm-6 form">
+
+                    <div class="signup form-peice">
+                        <form class="login-form" action="{% url 'user_login' %}" method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <input type="text" name="username" id="username" placeholder="Username" required>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="password" name="password" id="password" placeholder="Password" required>
+                            </div>
+
+                            <div class="CTA">
+                                <input type="submit" value="Login">
+                                <a href="{% url 'camera:register' %}" style="color: rgb(99, 99, 99);">I'm New</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+
     </div>
-</div>
-{% endblock %}
+
+</body>
+
+</html>
