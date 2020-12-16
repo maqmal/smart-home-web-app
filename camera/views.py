@@ -16,6 +16,7 @@ def user_logout(request):
 
 def user_login(request):
     if request.method == 'POST':
+        login_failed = False
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(username=username, password=password)
@@ -26,9 +27,10 @@ def user_login(request):
             else:
                 return HttpResponse("Your account was inactive.")
         else:
-            return HttpResponse("Invalid login details given")
+            login_failed = True
+            return render(request, 'camera/login.html', {'login_failed': login_failed})
     else:
-        return render(request, 'camera/login.html', {})
+        return render(request, 'camera/login.html')
 
 def register(request):
     registered = False

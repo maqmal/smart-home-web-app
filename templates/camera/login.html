@@ -49,6 +49,14 @@
                                 <input type="password" name="password" id="password" placeholder="Password" required>
                             </div>
 
+                            {% if login_failed %}
+                            <div class="form-group" id="alertFailed">
+                                <div class="alert alert-danger alert-dismissable" role="alert">
+                                    <p>Username or password is incorrect</p>
+                                </div>
+                            </div>
+                            {% endif %}
+
                             <div class="CTA">
                                 <input type="submit" value="Login">
                                 <a href="{% url 'camera:register' %}" style="color: rgb(99, 99, 99);">I'm New</a>
@@ -62,6 +70,12 @@
 
 
     </div>
+
+    <script type="text/javascript">
+        $("#alertFailed").fadeTo(5000, 1000).slideUp(1000, function () {
+            $("#alertFailed").slideUp(1000);
+        });
+    </script>
 
 </body>
 
