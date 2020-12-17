@@ -56,6 +56,16 @@ def register(request):
     return render(request,'camera/register.html', {'user_form':user_form, 'registered':registered})
 
 
+def delete(request, delname):
+    names_from_db = Room.objects.all()
+    form = RoomForm()
+    context_dict = {'names_from_context': names_from_db, 'form': form} 
+    if request.method == 'POST':
+        del_name = Room.objects.get(id = delname)
+        del_name.delete()
+    return HttpResponseRedirect(reverse('index'))
+
+
 @login_required
 def create_room_view(request):
     upload = RoomForm()
@@ -104,6 +114,7 @@ def create_camera_view(request):
 @login_required
 def get_data(request):
     ambil_room = Room.objects.filter(user=request.user).values_list('name',flat=True)
+    ambil_room_id = ambil_room.values_list('id',flat=True)
 
     ambil_device = Device.objects.filter(room__user=request.user)
     nama_room_device = ambil_device.values_list('room__name',flat=True)
@@ -118,17 +129,18 @@ def get_data(request):
     data = {}
     for i in range(len(ambil_room)):
         j = 0
-        data[ambil_room[i]]={}
-        data[ambil_room[i]]['device'] = []
-        data[ambil_room[i]]['camera'] = []
+        data[ambil_room_id[i]]={}
+        data[ambil_room_id[i]]['nama'] = [ambil_room[i] ]
+        data[ambil_room_id[i]]['device'] = []
+        data[ambil_room_id[i]]['camera'] = []
         for device in nama_device:
             if (nama_room_device[j]==ambil_room[i]):
-                data[ambil_room[i]]['device'].append(device)
+                data[ambil_room_id[i]]['device'].append(device)
             j+=1
         k = 0
         for camera in nama_camera:
             if (nama_room_camera[k]==ambil_room[i]):
-                data[ambil_room[i]]['camera'].append(camera)
+                data[ambil_room_id[i]]['camera'].append(camera)
             k+=1
     print(data) 
     context = {'data':data }
