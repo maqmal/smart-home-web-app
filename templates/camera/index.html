@@ -1,7 +1,9 @@
 {% extends "camera/base.html" %}
-{% block body_block %}
+{% block content %}
 {% load static %}
+
 <div class="container">
+    <br>
     <div class="">
         {% if user.is_authenticated %}
         <h6 class="display-6" style="font-size: 180%;">Welcome back {{user.username}}</h6>
@@ -30,11 +32,12 @@
                         </div>
                     </div>
                 </td>
-                {% endfor %}
                 <form id="name_form" method="post" action="/del/{{ id_room }}"> 
                     {% csrf_token %} 
                     <button type="submit" name="submit" class="btn btn-outline-danger">Delete</button>
                 </form>
+                {% endfor %}
+                
             </tr>
         </table>
 
