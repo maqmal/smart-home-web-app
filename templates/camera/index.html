@@ -6,7 +6,7 @@
     <br>
     <div class="">
         {% if user.is_authenticated %}
-        <h6 class="display-6" style="font-size: 180%;">Welcome back {{user.username}}</h6>
+        <h6 class="display-6" style="font-size: 140%;">Welcome back {{user.username}}</h6>
 
         <table>
             {% for id_room,value in data.items %}
@@ -18,26 +18,57 @@
                                 <img src="{% url 'camera:face_detect' %}" alt="error" class="img-fluid">
                             </div>
                             <div class="col-md-8">
+                                {% for device_camera, value in value.items %}
                                 <div class="card-body">
                                     <h5 class="card-title"> </h5>
-                                    {% for device_camera, value in value.items %}
+
                                     <p class="card-text"> </p>
                                     {% for value in value %}
                                     <p class="card-text">{{ value }}</p>
-                                    
+
                                     {% endfor %}
                                 </div>
                                 {% endfor %}
+                                <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                                    data-target="#exampleModalCenter">
+                                    Delete
+                                </button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+                                    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLongTitle">Delete Room</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure to delete this room?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Close</button>
+                                                <form id="name_form" method="post" action="/del/{{ id_room }}">
+                                                    {% csrf_token %}
+                                                    <button type="submit" name="submit"
+                                                        class="btn btn-danger">Yes</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
+
                         </div>
                     </div>
                 </td>
-                <form id="name_form" method="post" action="/del/{{ id_room }}"> 
-                    {% csrf_token %} 
-                    <button type="submit" name="submit" class="btn btn-outline-danger">Delete</button>
-                </form>
+
                 {% endfor %}
-                
+
             </tr>
         </table>
 
