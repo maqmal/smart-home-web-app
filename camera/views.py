@@ -1,10 +1,23 @@
 from django.shortcuts import render, redirect
 from camera.forms import UserForm, RoomForm, DeviceForm, CameraForm
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, StreamingHttpResponse
 from django.urls import reverse
+from django.views.decorators import gzip
 from django.contrib.auth.decorators import login_required
 from camera.models import UserProfileInfo, Camera, Device, Room
+from camera.cv import FaceDetect
+
+import cv2
+from imutils.io import TempFile
+from datetime import datetime
+from datetime import date
+import imutils
+import time
+import os
+from django.conf import settings
+from azure.storage.blob import ContainerClient
+from azure.storage.blob import BlobClient
 
 def index(request):
     return render(request,'camera/index.html')
@@ -110,6 +123,12 @@ def create_camera_view(request):
         return render(request, 'camera/create_camera.html', {'upload_form':upload})
 
 
+def generator(camera):
+    while True:
+        frame, detected = camera.get_frame()
+
+        yield(b'--frame\r\n'
+        b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
 @login_required
 def get_data(request):
@@ -122,9 +141,9 @@ def get_data(request):
     sub_device = ambil_device.values_list('sub',flat=True)
 
     ambil_camera = Camera.objects.filter(room__user=request.user)
+    url_camera = ambil_camera.values_list('cam_url',flat=True)
     nama_room_camera = ambil_camera.values_list('room__name',flat=True)
     nama_camera = ambil_camera.values_list('name',flat=True)
-    url_camera = ambil_camera.values_list('cam_url',flat=True)
 
     data = {}
     for i in range(len(ambil_room)):
@@ -145,3 +164,10 @@ def get_data(request):
     print(data) 
     context = {'data':data }
     return render(request,'camera/index.html',context)
+
+@gzip.gzip_page
+def face_detect(request):
+    ambil_camera = Camera.objects.filter(room__user=request.user)
+    url_camera = ambil_camera.values_list('cam_url',flat=True)
+    url = int(url_camera[0])
+    return StreamingHttpResponse(generator(FaceDetect(url)),content_type="multipart/x-mixed-replace;boundary=frame")
