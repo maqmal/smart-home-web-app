@@ -70,9 +70,6 @@ def register(request):
 
 
 def delete(request, delname):
-    names_from_db = Room.objects.all()
-    form = RoomForm()
-    context_dict = {'names_from_context': names_from_db, 'form': form} 
     if request.method == 'POST':
         del_name = Room.objects.get(id = delname)
         del_name.delete()
@@ -161,13 +158,18 @@ def get_data(request):
             if (nama_room_camera[k]==ambil_room[i]):
                 data[ambil_room_id[i]]['camera'].append(camera)
             k+=1
+
+    url_cam = {}
+    i=0
+    for url in url_camera:
+        url_cam[i] = url
+        i+=1
     print(data) 
-    context = {'data':data }
-    return render(request,'camera/index.html',context)
+    print(url_cam)
+    context = {'data':data, 'url_cam':url_cam}
+    return render(request,'camera/index.html', context)
 
 @gzip.gzip_page
-def face_detect(request):
-    ambil_camera = Camera.objects.filter(room__user=request.user)
-    url_camera = ambil_camera.values_list('cam_url',flat=True)
-    url = int(url_camera[0])
-    return StreamingHttpResponse(generator(FaceDetect(url)),content_type="multipart/x-mixed-replace;boundary=frame")
+def face_detect(request, url):
+    url_cam = int(url)
+    return StreamingHttpResponse(generator(FaceDetect(url_cam)),content_type="multipart/x-mixed-replace;boundary=frame")

@@ -8,6 +8,7 @@
         {% if user.is_authenticated %}
         <h6 class="display-6" style="font-size: 140%;">Welcome back {{user.username}}</h6>
 
+
         <table>
             {% for id_room,value in data.items %}
             <tr>
@@ -15,7 +16,10 @@
                     <div class="card mb-3" style="max-width: 540px;">
                         <div class="row g-0">
                             <div class="col-md-4">
-                                <img src="{% url 'camera:face_detect' %}" alt="error" class="img-fluid">
+                                {% for key, value in url_cam.items %}
+                                <img src="{% url 'camera:face_detect' value %}" alt="error" class="img-fluid">
+                                
+                                {% endfor %}      
                             </div>
                             <div class="col-md-8">
                                 {% for device_camera, value in value.items %}
@@ -50,7 +54,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
-                                                    data-dismiss="modal">Close</button>
+                                                    data-dismiss="modal">No</button>
                                                 <form id="name_form" method="post" action="/del/{{ id_room }}">
                                                     {% csrf_token %}
                                                     <button type="submit" name="submit"
