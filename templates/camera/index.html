@@ -17,15 +17,14 @@
                         <div class="row g-0">
                             <div class="col-md-4">
                                 {% for key, value in url_cam.items %}
-                                <img src="{% url 'camera:face_detect' value %}" alt="error" class="img-fluid">
-                                
+                                <img src="{% url 'camera:face_detect' key %}" alt="error" class="img-fluid">
+                                {{ value }}
                                 {% endfor %}      
                             </div>
                             <div class="col-md-8">
                                 {% for device_camera, value in value.items %}
                                 <div class="card-body">
                                     <h5 class="card-title"> </h5>
-
                                     <p class="card-text"> </p>
                                     {% for value in value %}
                                     <p class="card-text">{{ value }}</p>

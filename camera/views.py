@@ -8,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 from camera.models import UserProfileInfo, Camera, Device, Room
 from camera.cv import FaceDetect
 
+from django.utils.text import slugify
+
 import cv2
 from imutils.io import TempFile
 from datetime import datetime
@@ -138,6 +140,7 @@ def get_data(request):
     sub_device = ambil_device.values_list('sub',flat=True)
 
     ambil_camera = Camera.objects.filter(room__user=request.user)
+    ambil_camera_id = ambil_camera.values_list('id',flat=True)
     url_camera = ambil_camera.values_list('cam_url',flat=True)
     nama_room_camera = ambil_camera.values_list('room__name',flat=True)
     nama_camera = ambil_camera.values_list('name',flat=True)
@@ -160,16 +163,22 @@ def get_data(request):
             k+=1
 
     url_cam = {}
-    i=0
-    for url in url_camera:
-        url_cam[i] = url
-        i+=1
+    k = 0 
+    for idx in ambil_camera_id:
+        url_cam[idx] = url_camera[k]
+        k+=1
+
     print(data) 
     print(url_cam)
     context = {'data':data, 'url_cam':url_cam}
     return render(request,'camera/index.html', context)
 
 @gzip.gzip_page
-def face_detect(request, url):
-    url_cam = int(url)
-    return StreamingHttpResponse(generator(FaceDetect(url_cam)),content_type="multipart/x-mixed-replace;boundary=frame")
+def face_detect(request, cam_id):
+    camera = Camera.objects.filter(pk=cam_id).values_list('cam_url',flat=True)
+    for cam in camera:
+        print("==>>", cam)
+        if cam == "0":
+            cam = int(cam)
+        temp = cam
+    return StreamingHttpResponse(generator(FaceDetect(temp)),content_type="multipart/x-mixed-replace;boundary=frame")

@@ -12,7 +12,7 @@ urlpatterns = [
     path('create_device/', views.create_device_view, name ='create_device_view'),
     path('create_camera/', views.create_camera_view, name ='create_camera_view'),
     path('del/<slug:delname>', views.delete),
-    path('face_detect/<slug:url>',views.face_detect, name='face_detect'),
+    path('face_detect/<int:cam_id>',views.face_detect, name='face_detect'),
     path('', views.get_data, name ='get_data'),
 
 ]
