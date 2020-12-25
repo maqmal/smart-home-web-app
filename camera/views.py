@@ -135,6 +135,7 @@ def get_data(request):
     ambil_room_id = ambil_room.values_list('id',flat=True)
 
     ambil_device = Device.objects.filter(room__user=request.user)
+    ambil_device_id = ambil_device.values_list('id',flat=True)
     nama_room_device = ambil_device.values_list('room__name',flat=True)
     nama_device = ambil_device.values_list('name',flat=True)
     sub_device = ambil_device.values_list('sub',flat=True)
@@ -147,30 +148,32 @@ def get_data(request):
 
     data = {}
     for i in range(len(ambil_room)):
-        j = 0
         data[ambil_room_id[i]]={}
-        data[ambil_room_id[i]]['nama'] = [ambil_room[i] ]
-        data[ambil_room_id[i]]['device'] = []
-        data[ambil_room_id[i]]['camera'] = []
+        data[ambil_room_id[i]]['nama'] = ambil_room[i]
+
+        data[ambil_room_id[i]]['device'] = {}
+        data[ambil_room_id[i]]['device']['nama_device'] = []
+        data[ambil_room_id[i]]['device']['id_device'] = []
+
+        data[ambil_room_id[i]]['camera'] = {}
+        data[ambil_room_id[i]]['camera']['nama_camera'] = []
+        data[ambil_room_id[i]]['camera']['id_camera'] = []
+
+        j = 0
         for device in nama_device:
             if (nama_room_device[j]==ambil_room[i]):
-                data[ambil_room_id[i]]['device'].append(device)
+                data[ambil_room_id[i]]['device']['nama_device'].append(device)
+                data[ambil_room_id[i]]['device']['id_device'].append(ambil_device_id[j])
             j+=1
+
         k = 0
         for camera in nama_camera:
             if (nama_room_camera[k]==ambil_room[i]):
-                data[ambil_room_id[i]]['camera'].append(camera)
+                data[ambil_room_id[i]]['camera']['nama_camera'].append(camera)
+                data[ambil_room_id[i]]['camera']['id_camera'].append(ambil_camera_id[k])
             k+=1
-
-    url_cam = {}
-    k = 0 
-    for idx in ambil_camera_id:
-        url_cam[idx] = url_camera[k]
-        k+=1
-
-    print(data) 
-    print(url_cam)
-    context = {'data':data, 'url_cam':url_cam}
+    print(data)
+    context = {'data':data.items()}
     return render(request,'camera/index.html', context)
 
 @gzip.gzip_page
