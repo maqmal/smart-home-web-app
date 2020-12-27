@@ -1,36 +1,34 @@
+<div class="sb-sidenav-menu">
+    <br>
+    <div class="nav">
+        <a class="nav-link" href="/">
+            <div class="sb-nav-link-icon " ><i class="fas fa-tachometer-alt"></i></div>
+            Dashboard
+        </a>
 
-            <div class="sb-sidenav-menu">
-                <br>
-                <div class="nav">
-                    <a class="nav-link" href="/">
-                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                        Dashboard
-                    </a>
+        <div class="sb-sidenav-menu-heading" style="color: rgba(255, 255, 255, 0.705);">Room</div>
+        <a class="nav-link" href="{% url 'camera:create_room_view' %}">
+            <div class="sb-nav-link-icon"></div>
+            Create Room
+        </a>
+        <a class="nav-link" href="{% url 'camera:create_device_view' %}">
+            <div class="sb-nav-link-icon"> </div>
+            Create Device
+        </a>
+        <a class="nav-link" href="{% url 'camera:create_camera_view' %}">
+            <div class="sb-nav-link-icon"> </div>
+            Create Camera
+        </a>
 
-                    <div class="sb-sidenav-menu-heading">Room</div>
-                    <a class="nav-link" href="{% url 'camera:create_room_view' %}">
-                        <div class="sb-nav-link-icon"></div>
-                        Create Room
-                    </a>
-                    <a class="nav-link" href="{% url 'camera:create_device_view' %}">
-                        <div class="sb-nav-link-icon"> </div>
-                        Create Device
-                    </a>
-                    <a class="nav-link" href="{% url 'camera:create_camera_view' %}">
-                        <div class="sb-nav-link-icon"> </div>
-                        Create Camera
-                    </a>
+        <div class="sb-sidenav-menu-heading"  style="color: rgba(255, 255, 255, 0.705);">Catalog</div>
+        <a class="nav-link" href="#">
+            <div class="sb-nav-link-icon"> </div>
+            Catalog Page
+        </a>
 
-                    <div class="sb-sidenav-menu-heading">Catalog</div>
-                    <a class="nav-link" href="#">
-                        <div class="sb-nav-link-icon"> </div>
-                        Catalog Page
-                    </a>
-
-                    <a class="nav-link" href="{% url 'user_logout' %}">
-                        <div class="sb-nav-link-icon"> <i class="fas fa-sign-out-alt"></i></div>
-                        Logout
-                    </a>
-                </div>
-            </div>
-
+        <a class="nav-link" href="{% url 'user_logout' %}">
+            <div class="sb-nav-link-icon"> <i class="fas fa-sign-out-alt"></i></div>
+            Logout
+        </a>
+    </div>
+</div>

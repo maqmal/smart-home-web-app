@@ -77,6 +77,18 @@ def delete(request, delname):
         del_name.delete()
     return HttpResponseRedirect(reverse('index'))
 
+def delete_cam(request, delname):
+    if request.method == 'POST':
+        del_name = Camera.objects.get(id = delname)
+        del_name.delete()
+    return HttpResponseRedirect(reverse('index'))
+
+def delete_device(request, delname):
+    if request.method == 'POST':
+        del_name = Device.objects.get(id = delname)
+        del_name.delete()
+    return HttpResponseRedirect(reverse('index'))
+
 
 @login_required
 def create_room_view(request):
