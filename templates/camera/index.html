@@ -2,16 +2,15 @@
 {% block content %}
 {% load static %}
 
-<div class="container">
-    <br>
-    <div>
+    <div style="padding: 30px 50px;">
         {% if user.is_authenticated %}
-        <h6 class="display-6" style="font-size: 140%; color: white;">Welcome back {{user.username}}</h6>
-        <table style="width: 90%;">
+        
+        <h6 class="display-6" style="font-size: 140%; color: black;">Welcome {{user.username}}</h6>
+        <table style="width: 100%;">
             {% for key,value in data %}
             <tr>
                 <td>
-                    <div class="card shadow p-3 mb-5 bg-white rounded">
+                    <div class="card shadow p-3 mb-12 bg-white rounded">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card-body">
@@ -42,7 +41,7 @@
                                                 <tr>
                                                     {% for id_camera in val.id_camera %}
                                                     <td>                                            
-                                                        <img src="{% url 'camera:face_detect' id_camera %}" alt="error" class="img-fluid img-thumbnail rounded mx-auto d-block" width="50%">
+                                                        <img src="{% url 'camera:face_detect' id_camera %}" alt="" class="img-fluid img-thumbnail rounded mx-auto d-block" width="50%">
                                                     </td>
                                                     {% endfor %}
                                                 </tr>
@@ -74,7 +73,7 @@
         <h2>Register or Login if you'd like to</h2>
         {% endif %}
     </div>
-</div>
+
 
 
 {% endblock %}

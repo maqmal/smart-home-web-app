@@ -1,17 +1,48 @@
-<nav class="sb-topnav navbar navbar-expand navbar-dark shadow p-2 mb-2 bg-white" >
+<nav class="sb-topnav navbar navbar-expand navbar-dark p-2 mb-2 bg-white"
+    style="box-shadow: 0 1px 1px rgb(226, 226, 226);">
     <a class="navbar-brand" href="/" style="color: black;">homeOS</a>
-    <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#" style="color:black;"><i class="fas fa-bars"></i></button>
+    <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#" style="color:black;"><i
+            class="fas fa-bars"></i></button>
+    <span class="display-3" id="date-now" style="color:rgb(0, 0, 0);font-size: 15px;"></span>
+    &nbsp;
+    {% load static %}
+    <img src="{% static 'info.svg' %}" alt="!" type="button" href="" data-toggle="modal" data-target="#exampleModal">
+
     <!-- Navbar-->
     <ul class="navbar-nav ml-auto ml-md-6">
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" 
-            style="color:black;">{{ request.user.username }}&nbsp;<i class="fas fa-user fa-fw"></i></a>
+            <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false" style="color:black;"><i
+                    class="fas fa-user fa-fw"></i>&nbsp;&nbsp;{{ request.user.username }}&nbsp;</a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="{% url 'user_logout' %}" >Logout</a>
+                <a class="dropdown-item" href="{% url 'user_logout' %}">Logout</a>
             </div>
         </li>
-        
-
     </ul>
 </nav>
-
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Weather Info</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <i class='fas fa-map-marker-alt'></i><h5 class="modal-title"id="city-name"></h5>
+            <div id="temp" style="color:black;font-size: 15px; letter-spacing: 1px;" class="display-3">
+            </div>
+            
+            <img src="" alt="" id="icon" style="color:black" width="30px">
+            <span id="desc" class="small" style="color: rgba(0, 0, 0, 0.705);"></span>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+    </div>
+</div>
+</div>

@@ -4,7 +4,92 @@
     </script>
     <script src="{% static 'scripts.js' %}"></script>
     <script>
+        //Start weather
+        const appKey = '9697e661a188cb4621c5a52a23ca3907';
+
+        let cityName = document.getElementById("city-name");
+        let icon = document.getElementById("icon");
+        let temperature = document.getElementById("temp");
+        let desc = document.getElementById("desc");
+
+        var x = document.getElementById("cuaca");
+
+        navigator.geolocation.getCurrentPosition(showPosition);
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                x.innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
+
+        function showPosition(position) {
+            // (position.coords.latitude) (position.coords.longitude) -6.921507 107.617751
+            var latt = (position.coords.latitude);
+            var long = (position.coords.longitude);
+            console.log('Your latitude is :' + latt + ' and longitude is ' + long);
+            findWeatherDetails();
+
+            function findWeatherDetails() {
+                let searchLink = "https://api.openweathermap.org/data/2.5/weather?lat=" + latt + "&lon=" + long +
+                    "&appid=" + appKey;
+                httpRequestAsync(searchLink, theResponse);
+            }
+
+            function theResponse(response) {
+                let jsonObject = JSON.parse(response);
+                cityName.innerHTML = jsonObject.name;
+                icon.src = "http://openweathermap.org/img/w/" + jsonObject.weather[0].icon + ".png";
+                temperature.innerHTML = "Feels like " + parseInt(jsonObject.main.temp - 273) + "°";
+                desc.innerHTML = jsonObject.weather[0].main + "-" + jsonObject.weather[0].description;
+                // + "-" + jsonObject.weather[0].description;
+            }
+
+            function httpRequestAsync(url, callback) {
+                var httpRequest = new XMLHttpRequest();
+                httpRequest.onreadystatechange = () => {
+                    if (httpRequest.readyState == 4 && httpRequest.status == 200)
+                        callback(httpRequest.responseText);
+                }
+                httpRequest.open("GET", url, true); // true for asynchronous 
+                httpRequest.send();
+            }
+        }
+        // End weather
         $(document).on('click', '.confirm-delete', function () {
             return confirm('Are you sure you want to delete this?');
         })
+
+        function startTime() {
+            var today = new Date();
+            var weekday = new Array(7);
+            weekday[0] = "Sun";
+            weekday[1] = "Mon";
+            weekday[2] = "Tue";
+            weekday[3] = "Wed";
+            weekday[4] = "Thur";
+            weekday[5] = "Fri";
+            weekday[6] = "Sat";
+            var hari = weekday[today.getDay()];
+            var m = today.getMonth();
+            // var jam = today.getHours();
+            // var menit = today.getMinutes();
+            // menit = checkTime(menit);
+            var monthArr = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
+                "October", "November", "December"
+            ];
+            var m = monthArr[m];
+            var d = today.getDate();
+            document.getElementById("date-now").innerHTML = hari + ", " + m + " " + +d +
+                " ";
+            var t = setTimeout(startTime, 500);
+        }
+
+        function checkTime(i) {
+            if (i < 10) {
+                i = "0" + i
+            }; // add zero in front of numbers < 10
+            return i;
+        }
     </script>

@@ -18,6 +18,7 @@
     integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 
   <link rel="stylesheet" href="{% static 'styles.css' %}">
+
   <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet"
     crossorigin="anonymous" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous">
@@ -26,7 +27,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
 </head>
 
-<body class="sb-nav-fixed">
+<body class="sb-nav-fixed" onload="startTime();">
 
   {% include 'includes/navigation.html' %}
 
@@ -34,11 +35,10 @@
 
     {% include 'includes/sidebar.html' %}
 
-    <div id="layoutSidenav_content" style="background-color:rgb(255, 255, 255);">
+    <div id="layoutSidenav_content">
 
       {% block content %}
       {% endblock content %}
-
 
     </div>
   </div>
