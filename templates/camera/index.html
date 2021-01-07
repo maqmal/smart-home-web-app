@@ -6,6 +6,9 @@
         {% if user.is_authenticated %}
         
         <h6 class="display-6" style="font-size: 140%; color: black;">Welcome {{user.username}}</h6>
+
+
+        
         <table style="width: 100%;">
             {% for key,value in data %}
             <tr>
@@ -19,7 +22,7 @@
                                     <div class="container" style="padding-bottom: 10px;">
                                         <div class="row">
                                             {% for nama_device in val.nama_device %}
-                                            <div class="col-md-6">
+                                            <div class="col-md-12">
                                                 <p class="lead" style="font-size: 120%;">{{nama_device}}</p>
                                             </div>
                                             {% endfor %}
