@@ -70,7 +70,6 @@ def register(request):
         #profile_form = UserProfileInfoForm()  =>> ini ke render 'profile_form':profile_form,
     return render(request,'camera/register.html', {'user_form':user_form, 'registered':registered})
 
-
 def delete(request, delname):
     if request.method == 'POST':
         del_name = Room.objects.get(id = delname)
@@ -88,7 +87,6 @@ def delete_device(request, delname):
         del_name = Device.objects.get(id = delname)
         del_name.delete()
     return HttpResponseRedirect(reverse('index'))
-
 
 @login_required
 def create_room_view(request):
@@ -133,7 +131,6 @@ def create_camera_view(request):
     else:
         return render(request, 'camera/create_camera.html', {'upload_form':upload})
 
-
 def generator(camera):
     while True:
         frame, detected = camera.get_frame()
@@ -170,14 +167,14 @@ def get_data(request):
         data[ambil_room_id[i]]['camera'] = {}
         data[ambil_room_id[i]]['camera']['nama_camera'] = []
         data[ambil_room_id[i]]['camera']['id_camera'] = []
-
+        
         j = 0
         for device in nama_device:
             if (nama_room_device[j]==ambil_room[i]):
                 data[ambil_room_id[i]]['device']['nama_device'].append(device)
                 data[ambil_room_id[i]]['device']['id_device'].append(ambil_device_id[j])
             j+=1
-
+             
         k = 0
         for camera in nama_camera:
             if (nama_room_camera[k]==ambil_room[i]):
