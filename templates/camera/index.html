@@ -5,7 +5,7 @@
 <div style="padding: 30px 50px;">
     {% if user.is_authenticated %}
 
-    <h6 class="display-6" style="font-size: 140%; color: black;">Welcome {{user.username}}</h6>
+    <h6 class="display-6" style="font-size: 140%; color: black;">Welcome home {{user.username}}</h6>
 
     <table style="width: 100%;">
         {% for key,value in data %}
@@ -29,33 +29,33 @@
                                     </div>
                                 </div>
 
-                                <div class="container">
+                                
                                     <table>
                                         <thead>
                                             <tr>
                                                 {% for nama_camera in val.nama_camera %}
                                                 <th>
-                                                    <center>
+                                                   
                                                         <h6 class="display-4" style="font-size: 17.5px;">{{nama_camera}}
                                                         </h6>
-                                                    </center>
+                                                    
                                                 </th>
                                                 {% endfor %}
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody >
                                             <tr>
                                                 {% for id_camera in val.id_camera %}
                                                 <td>
                                                     <img src="{% url 'camera:face_detect' id_camera %}" alt=""
-                                                        class="img-fluid img-thumbnail rounded mx-auto d-block"
+                                                        class="img-fluid img-thumbnail"
                                                         width="50%">
                                                 </td>
                                                 {% endfor %}
                                             </tr>
                                         </tbody>
                                     </table>
-                                </div>
+                               
 
                                 {% endfor %}
                             </div>
@@ -67,7 +67,7 @@
                             </form>
 
                         </div>
-
+                        
                     </div>
                 </div>
             </td>
@@ -76,7 +76,44 @@
 
     </table>
 
+    <br>
+    <div class="card bg-white rounded" style="width: 120px;height: 130px;">
+        <center>
+            <div data-toggle="modal" data-target="#addRoomModal" type="button" style="padding-top: 30px;">
+                <h6 class="display-4" style="font-size: 17px;">Create Room</h6>
+                <img src="{% static 'add_circle.svg' %}" alt="+" href="" width="30px" style="opacity: 0.5;">
+            </div>
+        </center>
+    </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="addRoomModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Create Room</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <center>
+                        <form method='POST' enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <table class='w-50 table table-light'>    
+                            {{ upload_form.as_p }}
+                            </table>
+                    </center>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     {% else %}
     <h2>Register or Login if you'd like to</h2>
     {% endif %}

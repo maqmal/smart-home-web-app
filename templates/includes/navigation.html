@@ -29,21 +29,26 @@
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Weather Info</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <div class="modal-header" style="border-bottom: 0 none;">
+                <center>
+                    <h5 class="modal-title" id="exampleModalLabel">Weather Info</h5>
+                </center>
+                <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
-                </button>
+                </button> -->
             </div>
             <div class="modal-body">
-                <span class="display-3" id="date-now" style="color:rgb(0, 0, 0);font-size: 15px;"></span>
-                <h5 class="modal-title" id="city-name"></h5>
-                <span id="icon" style="width: 10px;"></span>
-                <div id="temp" style="color:black;font-size: 15px; letter-spacing: 1px;" class="display-3">
-                </div>
-                <span id="desc" class="small" style="color: rgba(0, 0, 0, 0.705);"></span>
+                <center>
+                    <p id="date-now"></p>
+                    <span class="display-3" id="date-now" style="color:rgb(0, 0, 0);font-size: 15px;"></span>
+                    <h5 class="modal-title" id="city-name"></h5>
+                    <span id="icon" style="width: 10px;"></span>
+                    <div id="temp" style="color:black;font-size: 15px; letter-spacing: 1px;" class="display-3">
+                    </div>
+                    <span id="desc" class="small" style="color: rgba(0, 0, 0, 0.705);"></span>
+                </center>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer" style="border-top: 0 none;">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
             </div>
         </div>

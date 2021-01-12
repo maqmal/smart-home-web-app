@@ -89,21 +89,6 @@ def delete_device(request, delname):
     return HttpResponseRedirect(reverse('index'))
 
 @login_required
-def create_room_view(request):
-    upload = RoomForm()
-    if request.method == 'POST':
-        upload = RoomForm(request.POST)
-        if upload.is_valid():
-            room_save = upload.save(commit = False)
-            room_save.user = request.user
-            room_save.save()
-            return HttpResponseRedirect(reverse('index'))
-        else:
-            return HttpResponse("""your form is wrong, reload on <a href = "{{ url 'camera:create_room_view' }}">reload</a>""")
-    else:
-        return render(request, 'camera/create_room.html', {'upload_form':upload})
-
-@login_required
 def create_device_view(request):
     user = request.user
     upload = DeviceForm(user)
@@ -140,50 +125,60 @@ def generator(camera):
 
 @login_required
 def get_data(request):
-    ambil_room = Room.objects.filter(user=request.user).values_list('name',flat=True)
-    ambil_room_id = ambil_room.values_list('id',flat=True)
+    upload = RoomForm()
+    if request.method == 'POST':
+        upload = RoomForm(request.POST)
+        if upload.is_valid():
+            room_save = upload.save(commit = False)
+            room_save.user = request.user
+            room_save.save()
+            return HttpResponseRedirect(reverse('index'))
+        else:
+            return HttpResponse("""your form is wrong, reload on <a href = "{{ url 'camera:create_room_view' }}">reload</a>""")
+    else:
+        ambil_room = Room.objects.filter(user=request.user).values_list('name',flat=True)
+        ambil_room_id = ambil_room.values_list('id',flat=True)
 
-    ambil_device = Device.objects.filter(room__user=request.user)
-    ambil_device_id = ambil_device.values_list('id',flat=True)
-    nama_room_device = ambil_device.values_list('room__name',flat=True)
-    nama_device = ambil_device.values_list('name',flat=True)
-    sub_device = ambil_device.values_list('sub',flat=True)
+        ambil_device = Device.objects.filter(room__user=request.user)
+        ambil_device_id = ambil_device.values_list('id',flat=True)
+        nama_room_device = ambil_device.values_list('room__name',flat=True)
+        nama_device = ambil_device.values_list('name',flat=True)
+        sub_device = ambil_device.values_list('sub',flat=True)
 
-    ambil_camera = Camera.objects.filter(room__user=request.user)
-    ambil_camera_id = ambil_camera.values_list('id',flat=True)
-    url_camera = ambil_camera.values_list('cam_url',flat=True)
-    nama_room_camera = ambil_camera.values_list('room__name',flat=True)
-    nama_camera = ambil_camera.values_list('name',flat=True)
+        ambil_camera = Camera.objects.filter(room__user=request.user)
+        ambil_camera_id = ambil_camera.values_list('id',flat=True)
+        url_camera = ambil_camera.values_list('cam_url',flat=True)
+        nama_room_camera = ambil_camera.values_list('room__name',flat=True)
+        nama_camera = ambil_camera.values_list('name',flat=True)
 
-    data = {}
-    for i in range(len(ambil_room)):
-        data[ambil_room_id[i]]={}
-        data[ambil_room_id[i]]['nama'] = ambil_room[i]
+        data = {}
+        for i in range(len(ambil_room)):
+            data[ambil_room_id[i]]={}
+            data[ambil_room_id[i]]['nama'] = ambil_room[i]
 
-        data[ambil_room_id[i]]['device'] = {}
-        data[ambil_room_id[i]]['device']['nama_device'] = []
-        data[ambil_room_id[i]]['device']['id_device'] = []
+            data[ambil_room_id[i]]['device'] = {}
+            data[ambil_room_id[i]]['device']['nama_device'] = []
+            data[ambil_room_id[i]]['device']['id_device'] = []
 
-        data[ambil_room_id[i]]['camera'] = {}
-        data[ambil_room_id[i]]['camera']['nama_camera'] = []
-        data[ambil_room_id[i]]['camera']['id_camera'] = []
-        
-        j = 0
-        for device in nama_device:
-            if (nama_room_device[j]==ambil_room[i]):
-                data[ambil_room_id[i]]['device']['nama_device'].append(device)
-                data[ambil_room_id[i]]['device']['id_device'].append(ambil_device_id[j])
-            j+=1
-             
-        k = 0
-        for camera in nama_camera:
-            if (nama_room_camera[k]==ambil_room[i]):
-                data[ambil_room_id[i]]['camera']['nama_camera'].append(camera)
-                data[ambil_room_id[i]]['camera']['id_camera'].append(ambil_camera_id[k])
-            k+=1
-    print(data)
-    context = {'data':data.items()}
-    return render(request,'camera/index.html', context)
+            data[ambil_room_id[i]]['camera'] = {}
+            data[ambil_room_id[i]]['camera']['nama_camera'] = []
+            data[ambil_room_id[i]]['camera']['id_camera'] = []
+            
+            j = 0
+            for device in nama_device:
+                if (nama_room_device[j]==ambil_room[i]):
+                    data[ambil_room_id[i]]['device']['nama_device'].append(device)
+                    data[ambil_room_id[i]]['device']['id_device'].append(ambil_device_id[j])
+                j+=1
+                
+            k = 0
+            for camera in nama_camera:
+                if (nama_room_camera[k]==ambil_room[i]):
+                    data[ambil_room_id[i]]['camera']['nama_camera'].append(camera)
+                    data[ambil_room_id[i]]['camera']['id_camera'].append(ambil_camera_id[k])
+                k+=1
+        print(data)
+        return render(request,'camera/index.html', {'data':data.items(),'upload_form':upload})
 
 @gzip.gzip_page
 def face_detect(request, cam_id):
