@@ -143,14 +143,14 @@ def get_data(request):
         ambil_device_id = ambil_device.values_list('id',flat=True)
         nama_room_device = ambil_device.values_list('room__name',flat=True)
         nama_device = ambil_device.values_list('name',flat=True)
-        sub_device = ambil_device.values_list('sub',flat=True)
+        topic = ambil_device.values_list('topic',flat=True)
 
         ambil_camera = Camera.objects.filter(room__user=request.user)
         ambil_camera_id = ambil_camera.values_list('id',flat=True)
         url_camera = ambil_camera.values_list('cam_url',flat=True)
         nama_room_camera = ambil_camera.values_list('room__name',flat=True)
         nama_camera = ambil_camera.values_list('name',flat=True)
-
+    
         data = {}
         for i in range(len(ambil_room)):
             data[ambil_room_id[i]]={}

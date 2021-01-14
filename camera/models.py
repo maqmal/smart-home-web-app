@@ -16,7 +16,7 @@ class Room(models.Model):
 
 class Device(models.Model):
     name = models.CharField(max_length = 50)
-    sub = models.CharField(max_length = 50)
+    topic = models.CharField(max_length = 50)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     created_at = models.DateField(auto_now_add=True, blank=True) 
     def __str__(self):

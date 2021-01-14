@@ -26,7 +26,7 @@ class DeviceForm(forms.ModelForm):
         self.fields['room'].queryset = Room.objects.filter(user=user)
     class Meta():
         model = Device
-        fields = ('name','sub','room',)
+        fields = ('name','topic','room',)
         exclude = ["user"]
 
 class CameraForm(forms.ModelForm):

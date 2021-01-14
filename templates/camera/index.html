@@ -4,9 +4,9 @@
 
 <div style="padding: 30px 50px;">
     {% if user.is_authenticated %}
-
+    
     <h6 class="display-6" style="font-size: 140%; color: black;">Welcome home {{user.username}}</h6>
-
+    
     <table style="width: 100%;">
         {% for key,value in data %}
         <tr>
@@ -23,7 +23,7 @@
                                     <div class="row">
                                         {% for nama_device in val.nama_device %}
                                         <div class="col-md-12">
-                                            <p class="lead" style="font-size: 120%;">{{nama_device}}</p>
+                                            <p class="lead" style="font-size: 120%;"> {{nama_device}}</p>
                                         </div>
                                         {% endfor %}
                                     </div>
@@ -56,7 +56,7 @@
                                         </tbody>
                                     </table>
                                
-
+    
                                 {% endfor %}
                             </div>
                             <form id="name_form" method="post" action="/del/{{ key }}">
@@ -65,7 +65,7 @@
                                     Delete
                                 </button>
                             </form>
-
+    
                         </div>
                         
                     </div>
@@ -73,9 +73,9 @@
             </td>
         </tr>
         {% endfor %}
-
+    
     </table>
-
+    
     <br>
     <div class="card bg-white rounded" style="width: 120px;height: 130px;">
         <center>
@@ -85,7 +85,7 @@
             </div>
         </center>
     </div>
-
+       
     <!-- Modal -->
     <div class="modal fade" id="addRoomModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">

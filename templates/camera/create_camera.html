@@ -1,23 +1,26 @@
 {% extends "camera/base.html" %}
 {% block content %}
 {% load static %}
-
+{% load crispy_forms_tags %}
 <div class="container">
     <br><br>
-    <div class="jumbotron">
-        <center>
-            <h1 class="display-3">Create Camera</h1>
-            <form method='POST' enctype="multipart/form-data">
-                {% csrf_token %}
-                <table class='w-50 table table-light'>    
-                {{ upload_form.as_p }}
-                </table>
-                <button type="submit" class="btn btn-lg btn-warning">Submit</button>
-            </form>
-        </center>
+    <div class="card shadow p-3 mb-12 bg-white rounded" style="width: 800px;">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card-body">
+                    <h5 class="card-title display-4"
+                        style="font-size: 280%;border-bottom: 2px solid rgb(198, 207, 255);">
+                        Create Camera </h5>
+
+                    <form method='POST' enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{upload_form|crispy}}
+                        <button type="submit" class="btn btn-outline-primary">Submit</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
 
     </div>
-</div>
-{% endblock %}
-
-
+    {% endblock %}
