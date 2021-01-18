@@ -3,6 +3,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js" crossorigin="anonymous">
     </script>
     <script src="{% static 'scripts.js' %}"></script>
+    <script src="{% static 'mqtt.js' %}"></script>
     <script>
         //Start weather
         const appKey = '9697e661a188cb4621c5a52a23ca3907';
@@ -316,28 +317,22 @@
                 cityName.innerHTML = "<i class='fas fa-map-marker-alt'></i> &nbsp;" + jsonObject.name;
                 // icon.src = "http://openweathermap.org/img/w/" + jsonObject.weather[0].icon + ".png";
                 temperature.innerHTML = "Feels like " + parseInt(jsonObject.main.temp - 273) + "°";
-                if (jsonObject.weather[0].icon=="10n" || jsonObject.weather[0].icon=="10d" || jsonObject.weather[0].icon=="09n" || jsonObject.weather[0].icon=="09d" ){
+                if (jsonObject.weather[0].icon == "10n" || jsonObject.weather[0].icon == "10d" || jsonObject.weather[0]
+                    .icon == "09n" || jsonObject.weather[0].icon == "09d") {
                     icon.innerHTML = rain_icon
-                }
-                else if (jsonObject.weather[0].icon=="11n" || jsonObject.weather[0].icon=="11d"){
+                } else if (jsonObject.weather[0].icon == "11n" || jsonObject.weather[0].icon == "11d") {
                     icon.innerHTML = thunder_icon
-                }
-                else if (jsonObject.weather[0].icon=="01d"){
+                } else if (jsonObject.weather[0].icon == "01d") {
                     icon.innerHTML = clear_icon
-                } 
-                else if (jsonObject.weather[0].icon=="01n"){
+                } else if (jsonObject.weather[0].icon == "01n") {
                     icon.innerHTML = night_clear
-                } 
-                else if (jsonObject.weather[0].icon=="13n" || jsonObject.weather[0].icon=="13d"){
+                } else if (jsonObject.weather[0].icon == "13n" || jsonObject.weather[0].icon == "13d") {
                     icon.innerHTML = snow_icon
-                } 
-                else if (jsonObject.weather[0].icon=="03n" || jsonObject.weather[0].icon=="03d"){
+                } else if (jsonObject.weather[0].icon == "03n" || jsonObject.weather[0].icon == "03d") {
                     icon.innerHTML = scattered_icon
-                } 
-                else if (jsonObject.weather[0].icon=="04n" || jsonObject.weather[0].icon=="04d"){
+                } else if (jsonObject.weather[0].icon == "04n" || jsonObject.weather[0].icon == "04d") {
                     icon.innerHTML = broke_cloud_icon
-                }
-                else if (jsonObject.weather[0].icon=="11n" || jsonObject.weather[0].icon=="11d"){
+                } else if (jsonObject.weather[0].icon == "11n" || jsonObject.weather[0].icon == "11d") {
                     icon.innerHTML = mist_icon
                 }
                 desc.innerHTML = jsonObject.weather[0].main + "-" + jsonObject.weather[0].description;
@@ -378,7 +373,7 @@
             ];
             var m = monthArr[m];
             var d = today.getDate();
-            document.getElementById("date-now").innerHTML = hari + ", " + m + " " + d +" ";
+            document.getElementById("date-now").innerHTML = hari + ", " + m + " " + d + " ";
             var t = setTimeout(startTime, 500);
         }
 
@@ -388,4 +383,5 @@
             }; // add zero in front of numbers < 10
             return i;
         }
+
     </script>
