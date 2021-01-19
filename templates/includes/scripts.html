@@ -17,9 +17,9 @@
         function onMessageArrived(msg) {
             var payload = msg.payloadString
             var data = JSON.parse(payload)
-            console.log(data.data1)
+            var topic = []
             console.log("====>"+msg.destinationName)
-            document.getElementById(msg.destinationName).innerHTML = data.data1
+            document.getElementById(msg.destinationName).innerHTML = data.data1 + '°C'
         }
 
         function onConnect() {
