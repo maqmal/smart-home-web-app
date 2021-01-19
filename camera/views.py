@@ -10,6 +10,8 @@ from camera.cv import FaceDetect
 
 from django.utils.text import slugify
 
+from json import dumps 
+
 import cv2
 from imutils.io import TempFile
 from datetime import datetime
@@ -151,34 +153,40 @@ def get_data(request):
         nama_room_camera = ambil_camera.values_list('room__name',flat=True)
         nama_camera = ambil_camera.values_list('name',flat=True)
     
-        data = {}
+        raw_data = []
         for i in range(len(ambil_room)):
-            data[ambil_room_id[i]]={}
-            data[ambil_room_id[i]]['nama'] = ambil_room[i]
+            data = {}
+            data['room']={}
+            data['room']['nama'] = ambil_room[i]
+            data['room']['id'] = ambil_room_id[i]
 
-            data[ambil_room_id[i]]['device'] = {}
-            data[ambil_room_id[i]]['device']['nama_device'] = []
-            data[ambil_room_id[i]]['device']['id_device'] = []
+            data['room']['device'] = {}
+            data['room']['device']['nama'] = []
+            data['room']['device']['id'] = []
+            data['room']['device']['topic'] = []
 
-            data[ambil_room_id[i]]['camera'] = {}
-            data[ambil_room_id[i]]['camera']['nama_camera'] = []
-            data[ambil_room_id[i]]['camera']['id_camera'] = []
+            data['room']['camera'] = {}
+            data['room']['camera']['nama'] = []
+            data['room']['camera']['id'] = []
             
             j = 0
             for device in nama_device:
                 if (nama_room_device[j]==ambil_room[i]):
-                    data[ambil_room_id[i]]['device']['nama_device'].append(device)
-                    data[ambil_room_id[i]]['device']['id_device'].append(ambil_device_id[j])
+                    data['room']['device']['nama'].append(device)
+                    data['room']['device']['id'].append(ambil_device_id[j])
+                    data['room']['device']['topic'].append(topic[j])
                 j+=1
                 
             k = 0
             for camera in nama_camera:
                 if (nama_room_camera[k]==ambil_room[i]):
-                    data[ambil_room_id[i]]['camera']['nama_camera'].append(camera)
-                    data[ambil_room_id[i]]['camera']['id_camera'].append(ambil_camera_id[k])
+                    data['room']['camera']['nama'].append(camera)
+                    data['room']['camera']['id'].append(ambil_camera_id[k])
                 k+=1
-        print(data)
-        return render(request,'camera/index.html', {'data':data.items(),'upload_form':upload})
+            raw_data.append(data)
+        dataJSON = dumps(raw_data) 
+        print(raw_data)
+        return render(request,'camera/index.html', {'data':raw_data,'upload_form':upload,'dataJSON':dataJSON})
 
 @gzip.gzip_page
 def face_detect(request, cam_id):

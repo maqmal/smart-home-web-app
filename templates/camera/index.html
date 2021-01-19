@@ -4,11 +4,11 @@
 
 <div style="padding: 30px 50px;">
     {% if user.is_authenticated %}
-    
+
     <h6 class="display-6" style="font-size: 140%; color: black;">Welcome home {{user.username}}</h6>
-    
+
     <table style="width: 100%;">
-        {% for key,value in data %}
+        {% for value in data %}
         <tr>
             <td>
                 <div class="card shadow p-3 mb-12 bg-white rounded">
@@ -17,65 +17,78 @@
                             <div class="card-body">
                                 <h5 class="card-title display-4"
                                     style="font-size: 180%;border-left: 6px solid rgb(198, 207, 255);">
-                                    &nbsp;{{value.nama}} </h5>
-                                {% for kunci, val in value.items %}
-                                <div class="container" style="padding-bottom: 10px;">
-                                    <div class="row">
-                                        {% for nama_device in val.nama_device %}
-                                        <div class="col-md-12">
-                                            <p class="lead" style="font-size: 120%;"> {{nama_device}}</p>
-                                        </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
+                                    &nbsp;{{value.room.nama}} </h5>
 
-                                
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                {% for nama_camera in val.nama_camera %}
-                                                <th>
-                                                   
-                                                        <h6 class="display-4" style="font-size: 17.5px;">{{nama_camera}}
-                                                        </h6>
-                                                    
-                                                </th>
-                                                {% endfor %}
-                                            </tr>
-                                        </thead>
-                                        <tbody >
-                                            <tr>
-                                                {% for id_camera in val.id_camera %}
-                                                <td>
-                                                    <img src="{% url 'camera:face_detect' id_camera %}" alt=""
-                                                        class="img-fluid img-thumbnail"
-                                                        width="50%">
-                                                </td>
-                                                {% endfor %}
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                               
-    
-                                {% endfor %}
+
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            {% for nama_device in value.room.device.nama %}
+                                            <th>
+                                                <p class="lead" style="font-size: 120%;"> {{nama_device}}</p>
+                                            </th>
+                                            {% endfor %}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            {% for topic in value.room.device.topic %}
+                                            <td>
+                                                <p class="lead" style="font-size: 120%;" id="{{ topic }}"></p>
+                                            </td>
+                                            {% endfor %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+
+
+
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            {% for nama_camera in value.room.device.camera.nama %}
+                                            <th>
+                                                <h6 class="display-4" style="font-size: 17.5px;">{{nama_camera}}
+                                                </h6>
+
+                                            </th>
+                                            {% endfor %}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            {% for id_camera in value.room.device.camera.id %}
+                                            <td>
+                                                <img src="{% url 'camera:face_detect' id_camera %}" alt=""
+                                                    class="img-fluid img-thumbnail" width="50%">
+                                            </td>
+                                            {% endfor %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+
+
                             </div>
-                            <form id="name_form" method="post" action="/del/{{ key }}">
+                            <form id="name_form" method="post" action="/del/{{ value.room.id }}">
                                 {% csrf_token %}
                                 <button class="btn btn-outline-danger confirm-delete" type="submit" name="submit">
                                     Delete
                                 </button>
                             </form>
-    
+
                         </div>
-                        
+
                     </div>
                 </div>
+                <br>
             </td>
         </tr>
         {% endfor %}
-    
+
     </table>
-    
+
     <br>
     <div class="card bg-white rounded" style="width: 120px;height: 130px;">
         <center>
@@ -85,7 +98,7 @@
             </div>
         </center>
     </div>
-       
+
     <!-- Modal -->
     <div class="modal fade" id="addRoomModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -101,8 +114,8 @@
                     <center>
                         <form method='POST' enctype="multipart/form-data">
                             {% csrf_token %}
-                            <table class='w-50 table table-light'>    
-                            {{ upload_form.as_p }}
+                            <table class='w-50 table table-light'>
+                                {{ upload_form.as_p }}
                             </table>
                     </center>
                 </div>

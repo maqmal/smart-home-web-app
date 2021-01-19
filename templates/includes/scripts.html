@@ -3,7 +3,53 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js" crossorigin="anonymous">
     </script>
     <script src="{% static 'scripts.js' %}"></script>
-    <script src="{% static 'mqtt.js' %}"></script>
+    <script>
+        var mqtt;
+        var reconnectTimeout = 1000;
+        var host = "broker.hivemq.com";
+        var port = 8000;
+
+        function onFailure(message) {
+            console.log("Connection Attempt to Host " + host + "Failed");
+            setTimeout(MQTTconnect, reconnectTimeout);
+        }
+
+        function onMessageArrived(msg) {
+            var payload = msg.payloadString
+            var data = JSON.parse(payload)
+            console.log(data.data1)
+            console.log("====>"+msg.destinationName)
+            document.getElementById(msg.destinationName).innerHTML = data.data1
+        }
+
+        function onConnect() {
+            // Once a connection has been made, make a subscription and send a message.
+            console.log("Connected ");
+            var data = JSON.parse("{{dataJSON|escapejs}}");
+            var topic = []
+            for (let i = 0; i < data.length; i++) {
+                for (let j = 0; j < data[i].room.device.topic.length; j++) {
+                    topic.push(data[i].room.device.topic[j]);
+                }
+            }
+            for (let i = 0; i < topic.length; i++) {
+                mqtt.subscribe(String(topic[i]));
+            }
+            console.log(topic)
+        }
+
+        function MQTTconnect() {
+            console.log("connecting to " + host + " " + port);
+            mqtt = new Paho.MQTT.Client(host, port, "clientjs");
+            var options = {
+                timeout: 2,
+                onSuccess: onConnect,
+                onFailure: onFailure,
+            };
+            mqtt.onMessageArrived = onMessageArrived
+            mqtt.connect(options); //connect
+        }
+    </script>
     <script>
         //Start weather
         const appKey = '9697e661a188cb4621c5a52a23ca3907';
@@ -383,5 +429,4 @@
             }; // add zero in front of numbers < 10
             return i;
         }
-
     </script>
