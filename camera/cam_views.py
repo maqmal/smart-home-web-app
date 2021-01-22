@@ -49,6 +49,7 @@ def generator(camera, logged_in, url_cam):
 
         if (trigger and not triggerPrev):
             startTime = datetime.now()
+            
             # fourcc = cv2.VideoWriter_fourcc(*'XVID')
             # filename = "video/{}_{}.avi".format(startTime.strftime('%A'),iterate)
             # writer = cv2.VideoWriter(filename,fourcc,20,(640,480))

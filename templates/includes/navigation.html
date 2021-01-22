@@ -1,3 +1,66 @@
+{% load notifications_tags %}
+{% load static %}
+<script src="{% static 'notifications/notify.js' %}" type="text/javascript"></script>
+<!-- toastr -->
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+{% register_notify_callbacks refresh_period=2 callbacks='fill_notification_badge' %}
+<script>
+    function custom() {
+        temp = "{% live_notify_badge  %}"
+        // console.log(temp)
+        var div = document.createElement('div');
+        div.innerHTML = temp
+        test_2 = div.firstChild
+        notif_num = parseInt(test_2.innerText)
+        return (notif_num)
+    }
+    toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-bottom-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+</script>
+<script>
+    arr_msg_copy = []
+    notif_num_temp = custom()
+
+    function my_special_notification_callback(data) {
+        arr_msg = []
+        // toastr.error('Intruder Alert!');
+        temp = document.getElementsByClassName("live_notify_badge")[0].innerText
+        temp = parseInt(temp)
+        if (notif_num_temp != temp) {
+            toastr.error('Intruder Alert!');
+            notif_num_temp = notif_num_temp + 1
+        }
+        for (var i = 0; i < data.unread_list.length; i++) {
+            msg = data.unread_list[i];
+            arr_msg.push(msg);
+            if (!document.getElementById(`${data.unread_list[i].id}`)) {
+                let string =
+                    `<li id='${data.unread_list[i].id}' style="font-size: 13px;border-bottom:2px solid gray">${data.unread_list[i].verb}</li>`
+                $('#notice-link').append(string)
+            }
+        }
+        console.log(data.unread_list.length)
+        arr_msg_copy = JSON.parse(JSON.stringify(arr_msg))
+    }
+</script>
+
 <nav class="sb-topnav navbar navbar-expand navbar-dark p-2 mb-2 bg-white"
     style="box-shadow: 0 1px 1px rgb(226, 226, 226);">
 
@@ -5,38 +68,19 @@
     <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#" style="color:black;"><i
             class="fas fa-bars"></i></button>
 
-    {% load static %}
     <img src="{% static 'info.svg' %}" alt="!" type="button" href="" data-toggle="modal" data-target="#exampleModal">
 
     <span class="display-3" style="font-size: 12px;padding-left: 2px;" type="button" data-toggle="modal"
         data-target="#exampleModal">Weather info</span>
     <!-- Navbar-->
     <ul class="navbar-nav ml-auto ml-md-12">
-        {% load notifications_tags %}
-        <script src="{% static 'notifications/notify.js' %}" type="text/javascript"></script>
-        {% register_notify_callbacks refresh_period=2 callbacks='fill_notification_badge' %}
-        <script>
-            arr_msg_lol = []
 
-            function my_special_notification_callback(data) {
-                arr_msg = []
-                for (var i = 0; i < data.unread_list.length; i++) {
-                    msg = data.unread_list[i];
-                    // arr_msg.push(msg);
-                    if (!document.getElementById(`${data.unread_list[i].id}`)) {
-                        var string = `<li id='${data.unread_list[i].id}' style="font-size: 13px">${data.unread_list[i].verb}</li>`
-                        $('#notice-link').append(string)
-                    }
-                }
-                arr_msg_lol = JSON.parse(JSON.stringify(arr_msg))
-            }
-        </script>
+
         <li class="nav-item dropdown" style="padding-left: 300px;">
             <a class="nav-link " id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
                 aria-expanded="false" style="color:black;">
                 <img src="{% static 'notif.svg' %}" alt="!" class="dropbtn">
                 <span class="badge badge-pill badge-warning" style="float:right;margin-bottom:-10px;">
-
                     {% live_notify_badge  %}
                 </span>
 
