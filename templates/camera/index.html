@@ -41,24 +41,21 @@
                                     </tbody>
                                 </table>
 
-
-
-
                                 <table>
                                     <thead>
                                         <tr>
-                                            {% for nama_camera in value.room.device.camera.nama %}
+                                            {% for nama_camera in value.room.camera.nama %}
                                             <th>
                                                 <h6 class="display-4" style="font-size: 17.5px;">{{nama_camera}}
                                                 </h6>
-
+                                                
                                             </th>
                                             {% endfor %}
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            {% for id_camera in value.room.device.camera.id %}
+                                            {% for id_camera in value.room.camera.id %}
                                             <td>
                                                 <img src="{% url 'camera:face_detect' id_camera %}" alt=""
                                                     class="img-fluid img-thumbnail" width="50%">
@@ -90,11 +87,11 @@
     </table>
 
     <br>
-    <div class="card bg-white rounded" style="width: 120px;height: 130px;">
-        <center>
+    <div class="card rounded"  style="width: 120px;height: 130px;"  id="create-room-card">
+        <center >
             <div data-toggle="modal" data-target="#addRoomModal" type="button" style="padding-top: 30px;">
                 <h6 class="display-4" style="font-size: 17px;">Create Room</h6>
-                <img src="{% static 'add_circle.svg' %}" alt="+" href="" width="30px" style="opacity: 0.5;">
+                <img src="{% static 'add_circle.svg' %}" alt="+" href="" width="30px" style="opacity: 0.5;" id="onclick">
             </div>
         </center>
     </div>

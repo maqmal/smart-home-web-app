@@ -3,25 +3,9 @@ from camera.forms import UserForm, RoomForm, DeviceForm, CameraForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse, StreamingHttpResponse
 from django.urls import reverse
-from django.views.decorators import gzip
 from django.contrib.auth.decorators import login_required
 from camera.models import UserProfileInfo, Camera, Device, Room
-from camera.cv import FaceDetect
-
-from django.utils.text import slugify
-
 from json import dumps 
-
-import cv2
-from imutils.io import TempFile
-from datetime import datetime
-from datetime import date
-import imutils
-import time
-import os
-from django.conf import settings
-from azure.storage.blob import ContainerClient
-from azure.storage.blob import BlobClient
 
 def index(request):
     return render(request,'camera/index.html')
@@ -118,13 +102,11 @@ def create_camera_view(request):
     else:
         return render(request, 'camera/create_camera.html', {'upload_form':upload})
 
-def generator(camera):
-    while True:
-        frame, detected = camera.get_frame()
-
-        yield(b'--frame\r\n'
-        b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
-
+def read_notif(request):
+    user = request.user
+    user.notifications.mark_all_as_deleted()
+    return HttpResponseRedirect(reverse('index'))
+    
 @login_required
 def get_data(request):
     upload = RoomForm()
@@ -188,12 +170,3 @@ def get_data(request):
         print(raw_data)
         return render(request,'camera/index.html', {'data':raw_data,'upload_form':upload,'dataJSON':dataJSON})
 
-@gzip.gzip_page
-def face_detect(request, cam_id):
-    camera = Camera.objects.filter(pk=cam_id).values_list('cam_url',flat=True)
-    for cam in camera:
-        print("==>>", cam)
-        if cam == "0":
-            cam = int(cam)
-        temp = cam
-    return StreamingHttpResponse(generator(FaceDetect(temp)),content_type="multipart/x-mixed-replace;boundary=frame")

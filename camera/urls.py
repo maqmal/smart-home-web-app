@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views
+from . import views, cam_views
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
@@ -16,8 +16,9 @@ urlpatterns = [
     path('del_cam/<slug:delname>', views.delete_cam, name='delete_cam'),
     path('del_device/<slug:delname>', views.delete_device, name='delete_device'),
 
-    path('face_detect/<int:cam_id>',views.face_detect, name='face_detect'),
+    path('face_detect/<int:cam_id>',cam_views.face_detect, name='face_detect'),
     path('', views.get_data, name ='get_data'),
+    path('del_notif/', views.read_notif, name ='read_notif')
 
 ]
 

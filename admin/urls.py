@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from camera import views
+from django.conf.urls import url
+import notifications.urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,4 +26,5 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('camera/user_login/', views.user_login, name='user_login'),
     path('logout/', views.user_logout, name='user_logout'),
+    path('inbox/notifications/', include(notifications.urls, namespace='notifications')),
 ]
