@@ -104,7 +104,7 @@ def create_camera_view(request):
 
 def read_notif(request):
     user = request.user
-    user.notifications.mark_all_as_deleted()
+    user.notifications.mark_all_as_read()
     return HttpResponseRedirect(reverse('index'))
     
 @login_required
