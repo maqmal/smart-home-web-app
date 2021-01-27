@@ -5,6 +5,20 @@
 <div class="container">
     <br><br>
     <div class="card shadow p-3 mb-12 bg-white rounded" style="width: 800px;">
+        {% if created == "0" %}
+        <div class="form-group" id="alertSucced">
+            <div class="alert alert-danger alert-dismissable" role="alert">
+                <p>Failed to create camera.</p>
+            </div>
+        </div>
+        {% endif %}
+        {% if created == "1" %}
+        <div class="form-group" id="alertSucced">
+            <div class="alert alert-success alert-dismissable" role="alert">
+                <p>Camera created successfully.</p>
+            </div>
+        </div>
+        {% endif %}
         <div class="row">
             <div class="col-md-12">
                 <div class="card-body">
@@ -18,9 +32,13 @@
                         <button type="submit" class="btn btn-outline-primary">Submit</button>
                     </form>
                 </div>
-
             </div>
         </div>
 
     </div>
+    <script type="text/javascript">
+        $("#alertSucced").fadeTo(5000, 1000).slideUp(1000, function () {
+            $("#alertSucced").slideUp(1000);
+        });
+    </script>
     {% endblock %}

@@ -1,8 +1,6 @@
 {% load notifications_tags %}
 {% load static %}
 <script src="{% static 'notifications/notify.js' %}" type="text/javascript"></script>
-<!-- toastr -->
-<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
 {% register_notify_callbacks refresh_period=2 callbacks='fill_notification_badge' %}
@@ -35,29 +33,47 @@
     }
 </script>
 <script>
-    arr_msg_copy = []
     notif_num_temp = custom()
+    id_arr = []
 
     function my_special_notification_callback(data) {
-        arr_msg = []
-        // toastr.error('Intruder Alert!');
         temp = document.getElementsByClassName("live_notify_badge")[0].innerText
         temp = parseInt(temp)
-        if (notif_num_temp != temp) {
-            toastr.error('Intruder Alert!');
-            notif_num_temp = notif_num_temp + 1
-        }
-        for (var i = 0; i < data.unread_list.length; i++) {
-            msg = data.unread_list[i];
-            arr_msg.push(msg);
-            if (!document.getElementById(`${data.unread_list[i].id}`)) {
-                let string =
-                    `<li id='${data.unread_list[i].id}' style="font-size: 13px;border-bottom:2px solid gray">${data.unread_list[i].verb}</li>`
-                $('#notice-link').append(string)
+        if (temp == 0) {
+            console.log(id_arr)
+            notif_num_temp = 0
+        } else {
+            if (notif_num_temp != temp) {
+                toastr.error('Camera Activity Detected!');
+                notif_num_temp = notif_num_temp + 1
+            }
+            for (var i = data.unread_list.length - 1; i >= 0; i--) {
+                msg = JSON.parse(data.unread_list[i].verb)
+                if (msg.warning == "1") {
+                    verb_msg = 'Someone detected in ' + '<b>' + msg.location + '</b>' + ' at ' + '<b>' + msg.time +
+                        '</b>'
+                    if (!document.getElementById(`${data.unread_list[i].id}`)) {
+                        id_arr.push(data.unread_list[i].id)
+                        let string =
+                            `<li id='${data.unread_list[i].id}' style="font-size: 13px;padding: 5px">${verb_msg}</li>
+                            <li id='${data.unread_list[i].id}d' style="font-size: 10px;border-bottom:1px solid;border-color: rgb(219, 219, 219);padding-left: 5px;padding-bottom: 10px"><i>${msg.date}</i></li>
+                    `
+                        $('#notice-link').append(string)
+                    }
+                } else if (msg.warning == "2") {
+                    verb_msg = 'Someone was in ' + '<b>' + msg.location + '</b>' + ' at ' + '<b>' + msg.time + '</b>' +
+                        ' for ' + '<b>' + msg.duration + '</b>' + ' seconds'
+                    if (!document.getElementById(`${data.unread_list[i].id}`)) {
+                        id_arr.push(data.unread_list[i].id)
+                        let string =
+                            `<li id='${data.unread_list[i].id}' style="font-size: 13px;padding: 5px">${verb_msg}</li>
+                            <li id='${data.unread_list[i].id}d' style="font-size: 10px;border-bottom:1px solid;border-color: rgb(219, 219, 219);padding-left: 5px;padding-bottom: 10px"><i>${msg.date}</i></li>
+                    `
+                        $('#notice-link').append(string)
+                    }
+                }
             }
         }
-        console.log(data.unread_list.length)
-        arr_msg_copy = JSON.parse(JSON.stringify(arr_msg))
     }
 </script>
 
@@ -74,26 +90,24 @@
         data-target="#exampleModal">Weather info</span>
     <!-- Navbar-->
     <ul class="navbar-nav ml-auto ml-md-12">
-
-
-        <li class="nav-item dropdown" style="padding-left: 300px;">
+        <li class="nav-item dropdown">
             <a class="nav-link " id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
                 aria-expanded="false" style="color:black;">
                 <img src="{% static 'notif.svg' %}" alt="!" class="dropbtn">
                 <span class="badge badge-pill badge-warning" style="float:right;margin-bottom:-10px;">
                     {% live_notify_badge  %}
                 </span>
-
             </a>
 
             {% register_notify_callbacks refresh_period=2 callbacks='my_special_notification_callback' %}
             <ul class="dropdown-menu dropdown-menu-right dropdown-content" id="notice-link">
-                <a href="{% url 'camera:read_notif' %}" type="submit" name='clear_btn' style="font-size: 12px;">Mark all
+                <a href="#" type="submit" name='clear_btn' style="font-size: 12px;" id="mark-as-read">Mark all
                     as read</a>
 
             </ul>
         </li>
     </ul>
+
     <ul class="navbar-nav ml-auto ml-md-2">
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown"
@@ -116,9 +130,6 @@
                 <center>
                     <h5 class="modal-title" id="exampleModalLabel">Weather Info</h5>
                 </center>
-                <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button> -->
             </div>
             <div class="modal-body">
                 <center>
@@ -137,3 +148,19 @@
         </div>
     </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $("#mark-as-read").click(function () {
+        $.ajax({
+            url: "{% url 'camera:read_notif' %}",
+            dataType: 'json',
+            success: function (data) {
+                toastr.success(data.msg)
+                for (let i = 0; i < id_arr.length; i++) {
+                    $(`#${id_arr[i]}`).remove();
+                    $(`#${id_arr[i]}d`).remove();
+                }
+            }
+        });
+    });
+</script>

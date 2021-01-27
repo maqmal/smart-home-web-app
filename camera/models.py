@@ -8,7 +8,7 @@ class UserProfileInfo(models.Model):
         return self.user.username
 
 class Room(models.Model):
-    name = models.CharField(max_length = 50)
+    name = models.CharField(max_length = 50, unique=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateField(auto_now_add=True, blank=True)
     def __str__(self):
@@ -16,7 +16,7 @@ class Room(models.Model):
 
 class Device(models.Model):
     name = models.CharField(max_length = 50)
-    topic = models.CharField(max_length = 50)
+    topic = models.CharField(max_length = 50, unique=True)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     created_at = models.DateField(auto_now_add=True, blank=True) 
     def __str__(self):
@@ -24,9 +24,20 @@ class Device(models.Model):
 
 class Camera(models.Model):
     name = models.CharField(max_length = 50)
-    cam_url = models.CharField(max_length = 200)
+    cam_url = models.CharField(max_length = 200, unique=True)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     created_at = models.DateField(auto_now_add=True, blank=True) 
+    WARNING_CHOICE = [
+        ('0',"Don't use warning system"),
+        ('1','Warning system 1'),
+        ('2','Warning system 2'),
+    ]
+    warning_system = models.CharField(
+        max_length=100,
+        choices=WARNING_CHOICE,
+        default='0',
+    )
+    cv = models.BooleanField(default=True)
     def __str__(self):
         return self.name
 

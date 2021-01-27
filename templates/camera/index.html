@@ -4,9 +4,21 @@
 
 <div style="padding: 30px 50px;">
     {% if user.is_authenticated %}
-
     <h6 class="display-6" style="font-size: 140%; color: black;">Welcome home {{user.username}}</h6>
-
+    {% if messages %}
+    {% for message in messages %}
+    <div class="form-group" id="alertSucced">
+        <div class="alert {{ message.tags }} alert-dismissable" role="alert">
+            <p>{{ message }}</p>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+    <script type="text/javascript">
+        $("#alertSucced").fadeTo(5000, 1000).slideUp(1000, function () {
+            $("#alertSucced").slideUp(1000);
+        });
+    </script>
     <table style="width: 100%;">
         {% for value in data %}
         <tr>
@@ -15,7 +27,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card-body">
-                                <h5 class="card-title display-4"
+                                <h5 class="card-title display-4 text-capitalize"
                                     style="font-size: 180%;border-left: 6px solid rgb(198, 207, 255);">
                                     &nbsp;{{value.room.nama}} </h5>
 
@@ -25,7 +37,14 @@
                                         <tr>
                                             {% for nama_device in value.room.device.nama %}
                                             <th>
-                                                <p class="lead" style="font-size: 120%;"> {{nama_device}}</p>
+                                                <p class="lead text-capitalize"
+                                                    style="font-size: 120%;padding-right: 25px;">
+                                                    {% if nama_device == "Lamp" %}
+                                                    <button class="btn btn-outline-info" id="for-lamp">Lamp</button>
+                                                    {% else %}
+                                                    {{nama_device}}
+                                                    {% endif %}
+                                                </p>
                                             </th>
                                             {% endfor %}
                                         </tr>
@@ -46,9 +65,10 @@
                                         <tr>
                                             {% for nama_camera in value.room.camera.nama %}
                                             <th>
-                                                <h6 class="display-4" style="font-size: 17.5px;">{{nama_camera}}
-                                                </h6>
-                                                
+                                                <a class="display-4 text-capitalize text-decoration-none"
+                                                    style="font-size: 17.5px;">
+                                                    {{nama_camera}}
+                                                </a>
                                             </th>
                                             {% endfor %}
                                         </tr>
@@ -57,8 +77,19 @@
                                         <tr>
                                             {% for id_camera in value.room.camera.id %}
                                             <td>
-                                                <img src="{% url 'camera:face_detect' id_camera %}" alt=""
-                                                    class="img-fluid img-thumbnail" width="50%">
+                                                <div>
+                                                    <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                                                        <li class="nav-item">
+                                                            <i class="nav-link btn bi bi-camera-video-off"
+                                                                onclick="myFunction('{{id_camera}}',this)" style="padding:5px;background-color:rgb(255, 255, 255);color:black"></i>
+                                                        </li>
+                                                    </ul>
+                                                    <div class="tab-content" id="pills-tabContent">
+                                                        <img src="{% url 'camera:face_detect' id_camera %}"
+                                                            class="img-fluid img-thumbnail camera-box" width="50%"
+                                                            loading="lazy" id="{{id_camera}}" alt="..." />
+                                                    </div>
+                                                </div>
                                             </td>
                                             {% endfor %}
                                         </tr>
@@ -87,11 +118,12 @@
     </table>
 
     <br>
-    <div class="card rounded"  style="width: 120px;height: 130px;"  id="create-room-card">
-        <center >
+    <div class="card rounded" style="width: 120px;height: 130px;" id="create-room-card">
+        <center>
             <div data-toggle="modal" data-target="#addRoomModal" type="button" style="padding-top: 30px;">
                 <h6 class="display-4" style="font-size: 17px;">Create Room</h6>
-                <img src="{% static 'add_circle.svg' %}" alt="+" href="" width="30px" style="opacity: 0.5;" id="onclick">
+                <img src="{% static 'add_circle.svg' %}" alt="+" href="" width="30px" style="opacity: 0.5;"
+                    id="onclick">
             </div>
         </center>
     </div>
@@ -128,7 +160,19 @@
     <h2>Register or Login if you'd like to</h2>
     {% endif %}
 </div>
+<script>
+    function myFunction(id, y) {
+        var x = document.getElementById(id);
+        y.classList.toggle("bi-camera-video");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
 
-
-
+    $("#alertSucced").fadeTo(5000, 1000).slideUp(1000, function () {
+        $("#alertSucced").slideUp(1000);
+    });
+</script>
 {% endblock %}

@@ -18,7 +18,7 @@ urlpatterns = [
 
     path('face_detect/<int:cam_id>',cam_views.face_detect, name='face_detect'),
     path('', views.get_data, name ='get_data'),
-    path('del_notif/', views.read_notif, name ='read_notif')
+    path('read_notif/', views.read_notif, name ='read_notif')
 
 ]
 

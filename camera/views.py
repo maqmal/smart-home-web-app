@@ -6,6 +6,10 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from camera.models import UserProfileInfo, Camera, Device, Room
 from json import dumps 
+from asgiref.sync import sync_to_async
+from django.http import JsonResponse
+from django.contrib import messages
+from django.template import loader
 
 def index(request):
     return render(request,'camera/index.html')
@@ -77,49 +81,63 @@ def delete_device(request, delname):
 @login_required
 def create_device_view(request):
     user = request.user
-    upload = DeviceForm(user)
+    created=None
     if request.method == 'POST':
-        upload = DeviceForm(request.user, data = request.POST)
+        upload = DeviceForm(user, data = request.POST)
         if upload.is_valid():
             upload.save()
-            return HttpResponseRedirect(reverse('index'))
+            created = '1'
         else:
-            return HttpResponse("""your form is wrong, reload on <a href = "{{ url 'camera:create_device_view' }}">reload</a>""")
+            created = '0'
     else:
-        return render(request, 'camera/create_device.html', {'upload_form':upload})
+        upload = DeviceForm(user)
+    t = loader.get_template('camera/create_device.html')
+    c = {'created': created,'upload_form':upload}
+    return HttpResponse(t.render(c, request))
 
 @login_required
 def create_camera_view(request):
     user = request.user
-    upload = CameraForm(user)
+    created = None
     if request.method == 'POST':
-        upload = CameraForm(request.user, data = request.POST)
+        upload = CameraForm(user, data = request.POST)
         if upload.is_valid():
             upload.save()
-            return HttpResponseRedirect(reverse('index'))
+            created = "1"
         else:
-            return HttpResponse("""your form is wrong, reload on <a href = "{{ url 'camera:create_camera_view' }}">reload</a>""")
+            created = "0"
     else:
-        return render(request, 'camera/create_camera.html', {'upload_form':upload})
+        upload = CameraForm(user)
+    t = loader.get_template('camera/create_camera.html')
+    c = {'created': created,'upload_form':upload}
+    return HttpResponse(t.render(c, request))
 
 def read_notif(request):
-    user = request.user
+    user =  request.user
     user.notifications.mark_all_as_read()
-    return HttpResponseRedirect(reverse('index'))
+    data = {'msg':'Notification Marked as Read'}
+    print(data)
+    return JsonResponse(data)
     
 @login_required
 def get_data(request):
-    upload = RoomForm()
+    created = None
+    raw_data = []
+    dataJSON = None
     if request.method == 'POST':
         upload = RoomForm(request.POST)
         if upload.is_valid():
             room_save = upload.save(commit = False)
             room_save.user = request.user
             room_save.save()
+            messages.success(request, 'Room created successfully.')
             return HttpResponseRedirect(reverse('index'))
         else:
-            return HttpResponse("""your form is wrong, reload on <a href = "{{ url 'camera:create_room_view' }}">reload</a>""")
+            messages.error(request, 'Room name already used.')
+            return HttpResponseRedirect(reverse('index'))
     else:
+        upload = RoomForm()
+
         ambil_room = Room.objects.filter(user=request.user).values_list('name',flat=True)
         ambil_room_id = ambil_room.values_list('id',flat=True)
 
@@ -134,22 +152,23 @@ def get_data(request):
         url_camera = ambil_camera.values_list('cam_url',flat=True)
         nama_room_camera = ambil_camera.values_list('room__name',flat=True)
         nama_camera = ambil_camera.values_list('name',flat=True)
-    
-        raw_data = []
+        warning = ambil_camera.values_list('warning_system',flat=True)
+
         for i in range(len(ambil_room)):
             data = {}
             data['room']={}
-            data['room']['nama'] = ambil_room[i]
             data['room']['id'] = ambil_room_id[i]
+            data['room']['nama'] = ambil_room[i]
 
             data['room']['device'] = {}
-            data['room']['device']['nama'] = []
             data['room']['device']['id'] = []
+            data['room']['device']['nama'] = []
             data['room']['device']['topic'] = []
 
             data['room']['camera'] = {}
-            data['room']['camera']['nama'] = []
             data['room']['camera']['id'] = []
+            data['room']['camera']['nama'] = []
+            data['room']['camera']['warning'] = []
             
             j = 0
             for device in nama_device:
@@ -164,9 +183,10 @@ def get_data(request):
                 if (nama_room_camera[k]==ambil_room[i]):
                     data['room']['camera']['nama'].append(camera)
                     data['room']['camera']['id'].append(ambil_camera_id[k])
+                    data['room']['camera']['warning'].append(warning[k])
                 k+=1
             raw_data.append(data)
         dataJSON = dumps(raw_data) 
         print(raw_data)
-        return render(request,'camera/index.html', {'data':raw_data,'upload_form':upload,'dataJSON':dataJSON})
+        return render(request,'camera/index.html', {'data':raw_data,'dataJSON':dataJSON, 'upload_form':upload})
 

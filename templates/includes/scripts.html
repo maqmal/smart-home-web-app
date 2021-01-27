@@ -787,14 +787,35 @@
         function onMessageArrived(msg) {
             var payload = msg.payloadString
             var data = JSON.parse(payload)
-            var topic = []
-            console.log("====>" + msg.destinationName)
+            console.log("====> " + msg.destinationName)
+            console.log(msg,'sdkspdskpdks')
             if (data.data2 == "temp") {
-                document.getElementById(msg.destinationName).innerHTML = data.data1 + "°"
+                document.getElementById(msg.destinationName).innerHTML = data.data1 + "°C"
             } else if (data.data2 == "humid") {
                 document.getElementById(msg.destinationName).innerHTML = data.data1 + "%"
+            } else if (data.data2 == "lamp") {
+                if (data.data1) {
+                    document.getElementById(msg.destinationName).innerHTML = "On"
+                    var data = new Object();
+                    data.data1 = false
+                    data.data2 = "lamp"
+                    document.getElementById('for-lamp').onclick = function () {
+                        for_lamp = new Paho.MQTT.Message(JSON.stringify(data))
+                        for_lamp.destinationName = msg.destinationName
+                        mqtt.send(for_lamp)
+                    }
+                } else if (data.data1 == false) {
+                    document.getElementById(msg.destinationName).innerHTML = "Off"
+                    var data = new Object();
+                    data.data1 = true
+                    data.data2 = "lamp"
+                    document.getElementById('for-lamp').onclick = function () {
+                        for_lamp = new Paho.MQTT.Message(JSON.stringify(data))
+                        for_lamp.destinationName = msg.destinationName
+                        mqtt.send(for_lamp)
+                    }
+                }
             }
-
         }
 
         function onConnect() {
@@ -808,9 +829,10 @@
                 }
             }
             for (let i = 0; i < topic.length; i++) {
-                mqtt.subscribe(String(topic[i]));
+                mqtt.subscribe(String(topic[i]))
+                document.getElementById(String(topic[i])).innerHTML = `<img src="{% static 'spinner.gif' %}" alt="o" width=50px loading="lazy">`
             }
-            console.log(topic)
+            // console.log(topic)
         }
 
         function MQTTconnect() {
