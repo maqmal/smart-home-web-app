@@ -131,7 +131,8 @@ def update_room(request, room_id):
 
 def update_device(request, device_id):
     device_field = Device.objects.get(id = device_id)
-    upload = DeviceUpdateForm(request.user, request.POST,instance=device_field)
+    data = {'name':device_field.name, 'room':device_field.room, 'qos':device_field.qos}
+    upload = DeviceUpdateForm(request.user, request.POST,instance=device_field, initial=data)
     if upload.is_valid():
         messages.success(request, 'Device updated.')
         upload.save()
@@ -139,7 +140,8 @@ def update_device(request, device_id):
     
 def update_cam(request, cam_id):
     camera_field = Camera.objects.get(id = cam_id)
-    upload = CameraUpdateForm(request.user, request.POST, instance=camera_field)
+    data = {'name':camera_field.name, 'room':camera_field.room,'warning_system':camera_field.warning_system,'ai_enable':camera_field.ai_enable}
+    upload = CameraUpdateForm(request.user, request.POST, instance=camera_field, initial=data)
     if upload.is_valid():
         messages.success(request, 'Camera updated.')
         upload.save()
