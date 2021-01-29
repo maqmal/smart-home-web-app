@@ -13,6 +13,8 @@ from datetime import date
 import time
 from notifications.signals import notify
 from json import dumps 
+from asgiref.sync import sync_to_async
+from django.http import JsonResponse
 
 def generator(camera, logged_in, url_cam):
     user = User.objects.get(username=logged_in)
@@ -128,7 +130,7 @@ def generator(camera, logged_in, url_cam):
 def face_detect(request, cam_id):
     logged_in = request.user
     camera = Camera.objects.filter(pk=cam_id).values_list('cam_url',flat=True)
-    detect = Camera.objects.filter(pk=cam_id).values_list('cv',flat=True)
+    detect = Camera.objects.filter(pk=cam_id).values_list('ai_enable',flat=True)
     for cam in camera:
         print("==>>", cam)
         if cam == "0":
@@ -138,3 +140,19 @@ def face_detect(request, cam_id):
         print("AI ENABLE===>",on_off)
         enable_rectangle = on_off
     return StreamingHttpResponse(generator(FaceDetect(url_cam,enable_rectangle),logged_in,url_cam),content_type="multipart/x-mixed-replace;boundary=frame")
+
+def off_cam(request, cam_id):
+    logged_in = request.user
+    camera = Camera.objects.filter(pk=cam_id).values_list('cam_url',flat=True)
+    detect = Camera.objects.filter(pk=cam_id).values_list('ai_enable',flat=True)
+    for cam in camera:
+        print("==>>", cam)
+        if cam == "0":
+            cam = int(cam)
+        url_cam = cam
+    for on_off in detect:
+        print("AI ENABLE===>",on_off)
+        enable_rectangle = on_off
+    FaceDetect(url_cam,enable_rectangle).close_frame()
+    data = {'msg':'Camera turned off'}
+    return HttpResponseRedirect(reverse('index'))

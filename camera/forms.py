@@ -1,7 +1,6 @@
 from django import forms
 from camera.models import UserProfileInfo, Camera, Device, Room
 from django.contrib.auth.models import User
-
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
     class Meta():
@@ -38,3 +37,24 @@ class CameraForm(forms.ModelForm):
         model = Camera
         fields = ('name', 'cam_url','room','warning_system',)
         exclude = ["user",]
+
+class DeviceUpdateForm(forms.ModelForm):
+    room = forms.ModelChoiceField(queryset = Room.objects.filter(user_id=1))
+    def __init__(self, user, *args, **kwargs):
+        super(DeviceUpdateForm, self).__init__(*args, **kwargs)
+        self.fields['room'].queryset = Room.objects.filter(user=user)
+    class Meta():
+        model = Device
+        fields = ('name','room','qos')
+        exclude = ["user"]
+
+class CameraUpdateForm(forms.ModelForm):
+    room = forms.ModelChoiceField(queryset = Room.objects.filter(user_id=1))
+    def __init__(self, user, *args, **kwargs):
+        super(CameraUpdateForm, self).__init__(*args, **kwargs)
+        self.fields['room'].queryset = Room.objects.filter(user=user)
+    class Meta():
+        model = Camera
+        fields = ('name', 'room','warning_system','ai_enable')
+        exclude = ["user",]
+

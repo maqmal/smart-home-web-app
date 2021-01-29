@@ -22,9 +22,9 @@
                     <div class="sb-nav-link-icon"> </div>
                     Add Device
                 </a>
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{% url 'camera:create_device_view' %}">
                     <div class="sb-nav-link-icon"> </div>
-                    Device Setting
+                    Device View
                 </a>
             </nav>
         </div>
@@ -41,18 +41,18 @@
                     <div class="sb-nav-link-icon"> </div>
                     Add Camera
                 </a>
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{% url 'camera:create_camera_view' %}">
                     <div class="sb-nav-link-icon"> </div>
-                    Camera Setting
+                    Camera View
                 </a>
             </nav>
         </div>
 
-        <div class="sb-sidenav-menu-heading" style="color: rgba(255, 255, 255, 0.705);">Catalog</div>
+        <!-- <div class="sb-sidenav-menu-heading" style="color: rgba(255, 255, 255, 0.705);">Catalog</div>
         <a class="nav-link" href="#">
             <div class="sb-nav-link-icon"> </div>
             Catalog Page
-        </a>
+        </a> -->
 
         <a class="nav-link" href="{% url 'user_logout' %}">
             <div class="sb-nav-link-icon"> <i class="fas fa-sign-out-alt"></i></div>

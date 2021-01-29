@@ -18,6 +18,16 @@ class Device(models.Model):
     name = models.CharField(max_length = 50)
     topic = models.CharField(max_length = 50, unique=True)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    QOS_CHOICE = [
+        ('0','QoS 0'),
+        ('1','QoS 1'),
+        ('2','QoS 2'),
+    ]
+    qos = models.CharField(
+        max_length=5,
+        choices=QOS_CHOICE,
+        default='0',
+    )
     created_at = models.DateField(auto_now_add=True, blank=True) 
     def __str__(self):
         return self.name
@@ -37,7 +47,7 @@ class Camera(models.Model):
         choices=WARNING_CHOICE,
         default='0',
     )
-    cv = models.BooleanField(default=True)
+    ai_enable = models.BooleanField(default=True)
     def __str__(self):
         return self.name
 

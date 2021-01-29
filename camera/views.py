@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from camera.forms import UserForm, RoomForm, DeviceForm, CameraForm
+from camera.forms import UserForm, RoomForm, DeviceForm, CameraForm, DeviceUpdateForm, CameraUpdateForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse, StreamingHttpResponse
 from django.urls import reverse
@@ -60,22 +60,25 @@ def register(request):
         #profile_form = UserProfileInfoForm()  =>> ini ke render 'profile_form':profile_form,
     return render(request,'camera/register.html', {'user_form':user_form, 'registered':registered})
 
-def delete(request, delname):
+def delete(request, room_id):
     if request.method == 'POST':
-        del_name = Room.objects.get(id = delname)
+        del_name = Room.objects.get(id = room_id)
         del_name.delete()
+        messages.success(request, 'Room deleted successfully.')
     return HttpResponseRedirect(reverse('index'))
 
-def delete_cam(request, delname):
+def delete_cam(request, cam_id):
     if request.method == 'POST':
-        del_name = Camera.objects.get(id = delname)
+        del_name = Camera.objects.get(id = cam_id)
         del_name.delete()
+        messages.success(request, 'Camera deleted successfully.')
     return HttpResponseRedirect(reverse('index'))
 
-def delete_device(request, delname):
+def delete_device(request, device_id):
     if request.method == 'POST':
-        del_name = Device.objects.get(id = delname)
+        del_name = Device.objects.get(id = device_id)
         del_name.delete()
+        messages.success(request, 'Device deleted successfully.')
     return HttpResponseRedirect(reverse('index'))
 
 @login_required
@@ -116,14 +119,40 @@ def read_notif(request):
     user =  request.user
     user.notifications.mark_all_as_read()
     data = {'msg':'Notification Marked as Read'}
-    print(data)
     return JsonResponse(data)
+
+def update_room(request, room_id):
+    room_field = Room.objects.get(id = room_id)
+    upload = RoomForm(request.POST, instance=room_field)
+    if upload.is_valid():
+        messages.success(request, 'Room updated.')
+        upload.save()
+    return HttpResponseRedirect(reverse('index'))
+
+def update_device(request, device_id):
+    device_field = Device.objects.get(id = device_id)
+    upload = DeviceUpdateForm(request.user, request.POST,instance=device_field)
+    if upload.is_valid():
+        messages.success(request, 'Device updated.')
+        upload.save()
+    return HttpResponseRedirect(reverse('index'))
     
+def update_cam(request, cam_id):
+    camera_field = Camera.objects.get(id = cam_id)
+    upload = CameraUpdateForm(request.user, request.POST, instance=camera_field)
+    if upload.is_valid():
+        messages.success(request, 'Camera updated.')
+        upload.save()
+    return HttpResponseRedirect(reverse('index'))
+
+
 @login_required
 def get_data(request):
     created = None
     raw_data = []
     dataJSON = None
+    update_device = DeviceUpdateForm(request.user)
+    update_cam = CameraUpdateForm(request.user)
     if request.method == 'POST':
         upload = RoomForm(request.POST)
         if upload.is_valid():
@@ -188,5 +217,6 @@ def get_data(request):
             raw_data.append(data)
         dataJSON = dumps(raw_data) 
         print(raw_data)
-        return render(request,'camera/index.html', {'data':raw_data,'dataJSON':dataJSON, 'upload_form':upload})
+        return render(request,'camera/index.html', {'data':raw_data,'dataJSON':dataJSON, 'upload_form':upload, 'update_device':update_device,'update_cam':update_cam})
+
 

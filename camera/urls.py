@@ -8,15 +8,21 @@ app_name = 'camera'
 
 urlpatterns = [
     path('register/', views.register, name ='register'),
-    # path('', views.create_room_view, name ='create_room_view'),
+
     path('create_device/', views.create_device_view, name ='create_device_view'),
     path('create_camera/', views.create_camera_view, name ='create_camera_view'),
 
-    path('del/<slug:delname>', views.delete, name='delete_room'),
-    path('del_cam/<slug:delname>', views.delete_cam, name='delete_cam'),
-    path('del_device/<slug:delname>', views.delete_device, name='delete_device'),
+    path('del/<int:room_id>', views.delete, name='delete_room'),
+    path('del_cam/<int:cam_id>', views.delete_cam, name='delete_cam'),
+    path('del_device/<int:device_id>', views.delete_device, name='delete_device'),
+
+    path('update_room/<int:room_id>', views.update_room, name='update_room'),
+    path('update_device/<int:device_id>', views.update_device, name='update_device'),
+    path('update_cam/<int:cam_id>', views.update_cam, name='update_cam'),
 
     path('face_detect/<int:cam_id>',cam_views.face_detect, name='face_detect'),
+    path('off_cam/<int:cam_id>',cam_views.off_cam, name='off_cam'),
+
     path('', views.get_data, name ='get_data'),
     path('read_notif/', views.read_notif, name ='read_notif')
 

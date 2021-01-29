@@ -1,10 +1,11 @@
 {% extends "camera/base.html" %}
 {% block content %}
 {% load static %}
-
+{% load index %}
+{% load crispy_forms_tags %}
 <div style="padding: 30px 50px;">
     {% if user.is_authenticated %}
-    <h6 class="display-6" style="font-size: 140%; color: black;">Welcome home {{user.username}}</h6>
+    <h6 class="display-6 text-capitalize" style="font-size: 140%; color: black;">Welcome home {{user.username}}</h6>
     {% if messages %}
     {% for message in messages %}
     <div class="form-group" id="alertSucced">
@@ -29,22 +30,52 @@
                             <div class="card-body">
                                 <h5 class="card-title display-4 text-capitalize"
                                     style="font-size: 180%;border-left: 6px solid rgb(198, 207, 255);">
-                                    &nbsp;{{value.room.nama}} </h5>
-
-
+                                    &nbsp;{{value.room.nama}} <span class="pull-right float-right"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="bi bi-three-dots-vertical btn" style="font-size: 20px;"></i></span>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <li>
+                                            <button class="btn" data-target="#settingRoomModal" data-toggle="modal"
+                                                type="button" onclick="myFunction2('{{value.room.id}}')">
+                                                Room Settings
+                                            </button>
+                                        </li>
+                                        <form id="name_form" method="post" action="/del/{{value.room.id}}">
+                                            {% csrf_token %}
+                                            <li><button class="btn confirm-delete" type="submit" name="submit">
+                                                    Delete Room
+                                                </button></li>
+                                        </form>
+                                    </div>
+                                </h5>
                                 <table>
                                     <thead>
                                         <tr>
                                             {% for nama_device in value.room.device.nama %}
                                             <th>
-                                                <p class="lead text-capitalize"
-                                                    style="font-size: 120%;padding-right: 25px;">
-                                                    {% if nama_device == "Lamp" %}
-                                                    <button class="btn btn-outline-info" id="for-lamp">Lamp</button>
-                                                    {% else %}
+                                                <a class="lead text-capitalize" style="font-size: 120%;">
                                                     {{nama_device}}
-                                                    {% endif %}
-                                                </p>
+                                                </a>
+                                                <button type="button"
+                                                    class="btn btn-sm dropdown-toggle dropdown-toggle-split"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <li>
+                                                        <button class="btn" data-toggle="modal" data-target="#modal2"
+                                                            onclick="myFunction3('{{value.room.device.id|index:forloop.counter0}}')">
+                                                            Device settings
+                                                        </button>
+                                                    </li>
+                                                    <form id="name_form" method="post"
+                                                        action="/del_device/{{value.room.device.id|index:forloop.counter0}}">
+                                                        {% csrf_token %}
+                                                        <li><button class="btn confirm-delete" type="submit"
+                                                                name="submit">
+                                                                Delete this device
+                                                            </button></li>
+                                                    </form>
+                                                </div>
                                             </th>
                                             {% endfor %}
                                         </tr>
@@ -69,6 +100,25 @@
                                                     style="font-size: 17.5px;">
                                                     {{nama_camera}}
                                                 </a>
+                                                <button type="button"
+                                                    class="btn btn-sm dropdown-toggle dropdown-toggle-split"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <li>
+                                                        <button class="btn" data-toggle="modal" data-target="#modal3"
+                                                            onclick="myFunction4('{{value.room.camera.id|index:forloop.counter0}}')">
+                                                            Camera settings
+                                                        </button>
+                                                    </li>
+                                                    <form id="name_form" method="post"
+                                                        action="/del_cam/{{value.room.camera.id|index:forloop.counter0}}">
+                                                        {% csrf_token %}
+                                                        <button class="btn confirm-delete" type="submit" name="submit">
+                                                            Delete this camera
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             </th>
                                             {% endfor %}
                                         </tr>
@@ -81,33 +131,41 @@
                                                     <ul class="nav nav-pills" id="pills-tab" role="tablist">
                                                         <li class="nav-item">
                                                             <i class="nav-link btn bi bi-camera-video-off"
-                                                                onclick="myFunction('{{id_camera}}',this)" style="padding:5px;background-color:rgb(255, 255, 255);color:black"></i>
+                                                                onclick="myFunction('{{id_camera}}',this)"
+                                                                style="padding:5px;background-color:rgb(255, 255, 255);color:black"></i>
                                                         </li>
                                                     </ul>
-                                                    <div class="tab-content" id="pills-tabContent">
+                                                    <div class="tab-content pop" id="pills-tabContent">
                                                         <img src="{% url 'camera:face_detect' id_camera %}"
                                                             class="img-fluid img-thumbnail camera-box" width="50%"
-                                                            loading="lazy" id="{{id_camera}}" alt="..." />
+                                                            loading="lazy" id="{{id_camera}}" />
                                                     </div>
                                                 </div>
                                             </td>
+
+                                            <!-- modal image  -->
+                                            <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog"
+                                                aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-body">
+                                                            <img src="" class="imagepreview" style="width: 100%;">
+                                                        </div>
+                                                        <div class="modal-footer" style="border-top: 0 none;">
+                                                            <button type="button" class="btn btn-primary"
+                                                                data-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
                                             {% endfor %}
                                         </tr>
                                     </tbody>
                                 </table>
-
-
-
                             </div>
-                            <form id="name_form" method="post" action="/del/{{ value.room.id }}">
-                                {% csrf_token %}
-                                <button class="btn btn-outline-danger confirm-delete" type="submit" name="submit">
-                                    Delete
-                                </button>
-                            </form>
-
                         </div>
-
                     </div>
                 </div>
                 <br>
@@ -149,25 +207,160 @@
                     </center>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Create</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    {% else %}
-    <h2>Register or Login if you'd like to</h2>
-    {% endif %}
+
+    <!-- Modal Settings -->
+    <div class="modal fade" id="settingRoomModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title modal-room-name text-capitalize" id="exampleModalLabel">Change Room Name</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body modal-update-room">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal2" tabindex="-1" role="dialog" aria-labelledby="modal1-label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title modal-room-name text-capitalize" id="exampleModalLabel">Change Device
+                        Settings</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body modal-update-device">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal3" tabindex="-1" role="dialog" aria-labelledby="modal1-label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title modal-room-name text-capitalize" id="exampleModalLabel">Change Camera
+                        Settings</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body modal-update-cam">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+{% else %}
+<h2>Register or Login if you'd like to</h2>
+{% endif %}
 </div>
 <script>
+    $(function () {
+        $('.pop').on('click', function () {
+            $('.imagepreview').attr('src', $(this).find('img').attr('src'));
+            $('#imagemodal').modal('show');
+        });
+    });
+
+    function myFunction2(id) {
+        var data = JSON.parse("{{dataJSON|escapejs}}")
+        var index = 0
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].room.id == id) {
+                index = i
+            }
+        }
+        var string_nama = String(data[index].room.nama) + ' Settings'
+        var string_num_device = String(data[index].room.device.id.length) + ' devices installed'
+        var string_num_cam = String(data[index].room.camera.id.length) + ' camera installed'
+        let string = `
+        <form id="name_form" method="post" action="update_room/${id}">
+            {% csrf_token %}
+            {{upload_form|crispy}}
+            <button class="btn btn-primary change-room-btn" type="submit" name="submit">
+                Submit
+            </button>
+        </form>`
+        if ($('.change-room-btn').length == 0) {
+            $('.modal-update-room').append(string)
+        }
+        console.log(data)
+    }
+
+    function myFunction3(id) {
+        id = parseInt(id)
+        var data = JSON.parse("{{dataJSON|escapejs}}")
+        var index = 0
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].room.id == id) {
+                index = i
+            }
+        }
+        let string = `
+        <form id="name_form" method="post" action="update_device/${id}">
+            {% csrf_token %}
+            {{update_device|crispy}}
+            <button class="btn btn-primary change-device-btn" type="submit" name="submit">
+                Submit
+            </button>
+        </form>`
+        if ($('.change-device-btn').length == 0) {
+            $('.modal-update-device').append(string)
+        }
+        console.log(data)
+    }
+
+    function myFunction4(id) {
+        id = parseInt(id)
+        var data = JSON.parse("{{dataJSON|escapejs}}")
+        var index = 0
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].room.id == id) {
+                index = i
+            }
+        }
+        let string = `
+        <form id="name_form" method="post" action="update_cam/${id}">
+            {% csrf_token %}
+            {{update_cam|crispy}}
+            <button class="btn btn-primary change-cam-btn" type="submit" name="submit">
+                Submit
+            </button>
+        </form>`
+        if ($('.change-cam-btn').length == 0) {
+            $('.modal-update-cam').append(string)
+        }
+        console.log(data)
+    }
+
     function myFunction(id, y) {
+        console.log(id)
         var x = document.getElementById(id);
         y.classList.toggle("bi-camera-video");
-        if (x.style.display === "none") {
-            x.style.display = "block";
+        if (y.classList.contains("bi-camera-video")) {
+            document.getElementById(id).src = "{% url 'camera:off_cam' 12345 %}".replace(/12345/, id.toString());
         } else {
-            x.style.display = "none";
+            document.getElementById(id).src = "{% url 'camera:face_detect' 12345 %}".replace(/12345/, id.toString());
         }
     }
 

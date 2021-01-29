@@ -15,9 +15,8 @@ class FaceDetect(object):
         self.capture = cv2.VideoCapture(url)
         self.faceDetect = cv2.CascadeClassifier(os.path.join(settings.BASE_DIR,'haarcascade/haarcascade_frontalface_default.xml'))
         self.detect_on = detect_on
-    def __del__(self):
+    def close_frame(self):
         self.capture.release()
-    
     def get_frame(self):        
         _,frame = self.capture.read()
         resize_frame = cv2.resize(frame, (640, 480), interpolation = cv2.INTER_LINEAR)  

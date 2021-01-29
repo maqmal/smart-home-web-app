@@ -788,7 +788,6 @@
             var payload = msg.payloadString
             var data = JSON.parse(payload)
             console.log("====> " + msg.destinationName)
-            console.log(msg,'sdkspdskpdks')
             if (data.data2 == "temp") {
                 document.getElementById(msg.destinationName).innerHTML = data.data1 + "°C"
             } else if (data.data2 == "humid") {
@@ -796,23 +795,57 @@
             } else if (data.data2 == "lamp") {
                 if (data.data1) {
                     document.getElementById(msg.destinationName).innerHTML = "On"
+                    document.getElementById(msg.destinationName).className = ''
+                    document.getElementById(msg.destinationName).classList.add('btn')
+                    document.getElementById(msg.destinationName).classList.add('btn-info')
                     var data = new Object();
                     data.data1 = false
                     data.data2 = "lamp"
-                    document.getElementById('for-lamp').onclick = function () {
+                    document.getElementById(msg.destinationName).onclick = function () {
                         for_lamp = new Paho.MQTT.Message(JSON.stringify(data))
                         for_lamp.destinationName = msg.destinationName
                         mqtt.send(for_lamp)
                     }
                 } else if (data.data1 == false) {
+                    document.getElementById(msg.destinationName).className = ''
                     document.getElementById(msg.destinationName).innerHTML = "Off"
+                    document.getElementById(msg.destinationName).classList.add('btn')
+                    document.getElementById(msg.destinationName).classList.add('btn-outline-info')
                     var data = new Object();
                     data.data1 = true
                     data.data2 = "lamp"
-                    document.getElementById('for-lamp').onclick = function () {
+                    document.getElementById(msg.destinationName).onclick = function () {
                         for_lamp = new Paho.MQTT.Message(JSON.stringify(data))
                         for_lamp.destinationName = msg.destinationName
                         mqtt.send(for_lamp)
+                    }
+                }
+            }else{
+                if (data.data1) {
+                    document.getElementById(msg.destinationName).innerHTML = "On"
+                    document.getElementById(msg.destinationName).className = ''
+                    document.getElementById(msg.destinationName).classList.add('btn')
+                    document.getElementById(msg.destinationName).classList.add('btn-info')
+                    var data = new Object();
+                    data.data1 = false
+                    data.data2 = "swch"
+                    document.getElementById(msg.destinationName).onclick = function () {
+                        for_swch = new Paho.MQTT.Message(JSON.stringify(data))
+                        for_swch.destinationName = msg.destinationName
+                        mqtt.send(for_swch)
+                    }
+                } else if (data.data1 == false) { 
+                    document.getElementById(msg.destinationName).className = ''
+                    document.getElementById(msg.destinationName).innerHTML = "Off"
+                    document.getElementById(msg.destinationName).classList.add('btn')
+                    document.getElementById(msg.destinationName).classList.add('btn-outline-info')
+                    var data = new Object();
+                    data.data1 = true
+                    data.data2 = "swch"
+                    document.getElementById(msg.destinationName).onclick = function () {
+                        for_swch = new Paho.MQTT.Message(JSON.stringify(data))
+                        for_swch.destinationName = msg.destinationName
+                        mqtt.send(for_swch)
                     }
                 }
             }
@@ -830,7 +863,8 @@
             }
             for (let i = 0; i < topic.length; i++) {
                 mqtt.subscribe(String(topic[i]))
-                document.getElementById(String(topic[i])).innerHTML = `<img src="{% static 'spinner.gif' %}" alt="o" width=50px loading="lazy">`
+                document.getElementById(String(topic[i])).innerHTML =
+                    `<img src="{% static 'spinner.gif' %}" alt="o" width=50px loading="lazy">`
             }
             // console.log(topic)
         }
@@ -1169,6 +1203,10 @@
                     icon.innerHTML = clear_icon
                 } else if (jsonObject.weather[0].icon == "01n") {
                     icon.innerHTML = night_clear
+                } else if (jsonObject.weather[0].icon == "02d") {
+                    icon.innerHTML = few_clouds
+                } else if (jsonObject.weather[0].icon == "02n") {
+                    icon.innerHTML = night_few_clouds
                 } else if (jsonObject.weather[0].icon == "13n" || jsonObject.weather[0].icon == "13d") {
                     icon.innerHTML = snow_icon
                 } else if (jsonObject.weather[0].icon == "03n" || jsonObject.weather[0].icon == "03d") {
@@ -1226,4 +1264,7 @@
             }; // add zero in front of numbers < 10
             return i;
         }
+        $(document).on('click', '.dropdown-menu', function (e) {
+            e.stopPropagation();
+        });
     </script>

@@ -55,19 +55,19 @@
                     if (!document.getElementById(`${data.unread_list[i].id}`)) {
                         id_arr.push(data.unread_list[i].id)
                         let string =
-                            `<li id='${data.unread_list[i].id}' style="font-size: 13px;padding: 5px">${verb_msg}</li>
-                            <li id='${data.unread_list[i].id}d' style="font-size: 10px;border-bottom:1px solid;border-color: rgb(219, 219, 219);padding-left: 5px;padding-bottom: 10px"><i>${msg.date}</i></li>
+                            `<li class="dropdown-large text-capitalize"id='${data.unread_list[i].id}' style="font-size: 13px;padding: 5px">${verb_msg}</li>
+                            <li class="dropdown-large text-capitalize"id='${data.unread_list[i].id}d' style="font-size: 10px;border-bottom:1px solid;border-color: rgb(219, 219, 219);padding-left: 5px;padding-bottom: 10px"><i>${msg.date}</i></li>
                     `
                         $('#notice-link').append(string)
                     }
                 } else if (msg.warning == "2") {
-                    verb_msg = 'Someone was in ' + '<b>' + msg.location + '</b>' + ' at ' + '<b>' + msg.time + '</b>' +
+                    verb_msg = 'Someone in ' + '<b>' + msg.location + '</b>' + ' at ' + '<b>' + msg.time + '</b>' +
                         ' for ' + '<b>' + msg.duration + '</b>' + ' seconds'
                     if (!document.getElementById(`${data.unread_list[i].id}`)) {
                         id_arr.push(data.unread_list[i].id)
                         let string =
-                            `<li id='${data.unread_list[i].id}' style="font-size: 13px;padding: 5px">${verb_msg}</li>
-                            <li id='${data.unread_list[i].id}d' style="font-size: 10px;border-bottom:1px solid;border-color: rgb(219, 219, 219);padding-left: 5px;padding-bottom: 10px"><i>${msg.date}</i></li>
+                            `<li class="dropdown-large text-capitalize"id='${data.unread_list[i].id}' style="font-size: 13px;padding: 5px">${verb_msg}</li>
+                            <li class="dropdown-large text-capitalize"id='${data.unread_list[i].id}d' style="font-size: 10px;border-bottom:1px solid;border-color: rgb(219, 219, 219);padding-left: 5px;padding-bottom: 10px"><i>${msg.date}</i></li>
                     `
                         $('#notice-link').append(string)
                     }
@@ -103,7 +103,6 @@
             <ul class="dropdown-menu dropdown-menu-right dropdown-content" id="notice-link">
                 <a href="#" type="submit" name='clear_btn' style="font-size: 12px;" id="mark-as-read">Mark all
                     as read</a>
-
             </ul>
         </li>
     </ul>
