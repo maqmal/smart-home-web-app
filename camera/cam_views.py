@@ -130,7 +130,7 @@ def generator(camera, logged_in, url_cam):
 def face_detect(request, cam_id):
     logged_in = request.user
     camera = Camera.objects.filter(pk=cam_id).values_list('cam_url',flat=True)
-    detect = Camera.objects.filter(pk=cam_id).values_list('ai_enable',flat=True)
+    detect = Camera.objects.filter(pk=cam_id).values_list('rectangle_box',flat=True)
     for cam in camera:
         print("==>>", cam)
         if cam == "0":
@@ -144,7 +144,7 @@ def face_detect(request, cam_id):
 def off_cam(request, cam_id):
     logged_in = request.user
     camera = Camera.objects.filter(pk=cam_id).values_list('cam_url',flat=True)
-    detect = Camera.objects.filter(pk=cam_id).values_list('ai_enable',flat=True)
+    detect = Camera.objects.filter(pk=cam_id).values_list('rectangle_box',flat=True)
     for cam in camera:
         print("==>>", cam)
         if cam == "0":

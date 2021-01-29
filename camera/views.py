@@ -10,7 +10,7 @@ from asgiref.sync import sync_to_async
 from django.http import JsonResponse
 from django.contrib import messages
 from django.template import loader
-
+from django.forms.models import model_to_dict
 def index(request):
     return render(request,'camera/index.html')
 
@@ -122,31 +122,40 @@ def read_notif(request):
     return JsonResponse(data)
 
 def update_room(request, room_id):
-    room_field = Room.objects.get(id = room_id)
-    upload = RoomForm(request.POST, instance=room_field)
-    if upload.is_valid():
-        messages.success(request, 'Room updated.')
-        upload.save()
+    if request.method == 'POST':
+        room_field = Room.objects.get(id = room_id)
+        upload = RoomForm(request.POST, instance=room_field)
+        if upload.is_valid():
+            messages.success(request, 'Room updated.')
+            upload.save()
+            return HttpResponseRedirect(reverse('index'))
+        else:
+            messages.error(request, 'Room name already used.')
     return HttpResponseRedirect(reverse('index'))
 
 def update_device(request, device_id):
-    device_field = Device.objects.get(id = device_id)
-    data = {'name':device_field.name, 'room':device_field.room, 'qos':device_field.qos}
-    upload = DeviceUpdateForm(request.user, request.POST,instance=device_field, initial=data)
-    if upload.is_valid():
-        messages.success(request, 'Device updated.')
-        upload.save()
+    if request.method == 'POST':
+        device_field = Device.objects.get(id = device_id)
+        upload = DeviceUpdateForm(request.user, request.POST,instance=device_field)
+        if upload.is_valid():
+            messages.success(request, 'Device updated.')
+            upload.save()
+            return HttpResponseRedirect(reverse('index'))
+        else:
+            messages.error(request, 'Device update failed.')
     return HttpResponseRedirect(reverse('index'))
     
 def update_cam(request, cam_id):
-    camera_field = Camera.objects.get(id = cam_id)
-    data = {'name':camera_field.name, 'room':camera_field.room,'warning_system':camera_field.warning_system,'ai_enable':camera_field.ai_enable}
-    upload = CameraUpdateForm(request.user, request.POST, instance=camera_field, initial=data)
-    if upload.is_valid():
-        messages.success(request, 'Camera updated.')
-        upload.save()
+    if request.method == 'POST':
+        camera_field = Camera.objects.get(id = cam_id)
+        upload = CameraUpdateForm(request.user, request.POST, instance=camera_field)
+        if upload.is_valid():
+            messages.success(request, 'Camera updated.')
+            upload.save()
+            return HttpResponseRedirect(reverse('index'))
+        else:
+            messages.error(request, 'Camera update failed.')
     return HttpResponseRedirect(reverse('index'))
-
 
 @login_required
 def get_data(request):
@@ -177,6 +186,7 @@ def get_data(request):
         nama_room_device = ambil_device.values_list('room__name',flat=True)
         nama_device = ambil_device.values_list('name',flat=True)
         topic = ambil_device.values_list('topic',flat=True)
+        qos = ambil_device.values_list('qos',flat=True) 
 
         ambil_camera = Camera.objects.filter(room__user=request.user)
         ambil_camera_id = ambil_camera.values_list('id',flat=True)
@@ -184,6 +194,7 @@ def get_data(request):
         nama_room_camera = ambil_camera.values_list('room__name',flat=True)
         nama_camera = ambil_camera.values_list('name',flat=True)
         warning = ambil_camera.values_list('warning_system',flat=True)
+        rectangle_box = ambil_camera.values_list('rectangle_box',flat=True)
 
         for i in range(len(ambil_room)):
             data = {}
@@ -195,11 +206,14 @@ def get_data(request):
             data['room']['device']['id'] = []
             data['room']['device']['nama'] = []
             data['room']['device']['topic'] = []
+            data['room']['device']['qos'] = []
 
             data['room']['camera'] = {}
             data['room']['camera']['id'] = []
             data['room']['camera']['nama'] = []
             data['room']['camera']['warning'] = []
+            data['room']['camera']['rectangle_box'] = []
+            data['room']['camera']['url'] = []
             
             j = 0
             for device in nama_device:
@@ -207,6 +221,7 @@ def get_data(request):
                     data['room']['device']['nama'].append(device)
                     data['room']['device']['id'].append(ambil_device_id[j])
                     data['room']['device']['topic'].append(topic[j])
+                    data['room']['device']['qos'].append(qos[j])
                 j+=1
                 
             k = 0
@@ -215,6 +230,8 @@ def get_data(request):
                     data['room']['camera']['nama'].append(camera)
                     data['room']['camera']['id'].append(ambil_camera_id[k])
                     data['room']['camera']['warning'].append(warning[k])
+                    data['room']['camera']['rectangle_box'].append(rectangle_box[k])
+                    data['room']['camera']['url'].append(url_camera[k])
                 k+=1
             raw_data.append(data)
         dataJSON = dumps(raw_data) 

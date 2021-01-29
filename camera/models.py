@@ -47,7 +47,7 @@ class Camera(models.Model):
         choices=WARNING_CHOICE,
         default='0',
     )
-    ai_enable = models.BooleanField(default=True)
+    rectangle_box = models.BooleanField(default=True)
     def __str__(self):
         return self.name
 

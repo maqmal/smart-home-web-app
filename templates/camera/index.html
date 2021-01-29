@@ -37,7 +37,7 @@
                                         <li>
                                             <button class="btn" data-target="#settingRoomModal" data-toggle="modal"
                                                 type="button" onclick="myFunction2('{{value.room.id}}')">
-                                                Room Settings
+                                                Edit Room
                                             </button>
                                         </li>
                                         <form id="name_form" method="post" action="/del/{{value.room.id}}">
@@ -64,7 +64,7 @@
                                                     <li>
                                                         <button class="btn" data-toggle="modal" data-target="#modal2"
                                                             onclick="myFunction3('{{value.room.device.id|index:forloop.counter0}}')">
-                                                            Device settings
+                                                            Edit Device
                                                         </button>
                                                     </li>
                                                     <form id="name_form" method="post"
@@ -72,7 +72,7 @@
                                                         {% csrf_token %}
                                                         <li><button class="btn confirm-delete" type="submit"
                                                                 name="submit">
-                                                                Delete this device
+                                                                Delete Device
                                                             </button></li>
                                                     </form>
                                                 </div>
@@ -108,14 +108,14 @@
                                                     <li>
                                                         <button class="btn" data-toggle="modal" data-target="#modal3"
                                                             onclick="myFunction4('{{value.room.camera.id|index:forloop.counter0}}')">
-                                                            Camera settings
+                                                            Edit Camera
                                                         </button>
                                                     </li>
                                                     <form id="name_form" method="post"
                                                         action="/del_cam/{{value.room.camera.id|index:forloop.counter0}}">
                                                         {% csrf_token %}
                                                         <button class="btn confirm-delete" type="submit" name="submit">
-                                                            Delete this camera
+                                                            Delete Camera
                                                         </button>
                                                     </form>
                                                 </div>
@@ -198,16 +198,10 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <center>
-                        <form method='POST' enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <table class='w-50 table table-light'>
-                                {{ upload_form.as_p }}
-                            </table>
-                    </center>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Create</button>
+                    <form method='POST' enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ upload_form|crispy }}
+                        <button type="submit" class="btn btn-primary">Create</button>
                     </form>
                 </div>
             </div>
@@ -220,7 +214,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title modal-room-name text-capitalize" id="exampleModalLabel">Change Room Name</h5>
+                    <h5 class="modal-title modal-room-name text-capitalize" id="exampleModalLabel">Edit Room</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -236,8 +230,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title modal-room-name text-capitalize" id="exampleModalLabel">Change Device
-                        Settings</h5>
+                    <h5 class="modal-title modal-device-name text-capitalize" id="exampleModalLabel">Edit Device</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -253,8 +246,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title modal-room-name text-capitalize" id="exampleModalLabel">Change Camera
-                        Settings</h5>
+                    <h5 class="modal-title modal-cam-name text-capitalize" id="exampleModalLabel">Edit Camera</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -290,36 +282,42 @@
                 index = i
             }
         }
-        var string_nama = String(data[index].room.nama) + ' Settings'
-        var string_num_device = String(data[index].room.device.id.length) + ' devices installed'
-        var string_num_cam = String(data[index].room.camera.id.length) + ' camera installed'
         let string = `
-        <form id="name_form" method="post" action="update_room/${id}">
+        <form id="room_name_form" method="post" action="update_room/${id}">
             {% csrf_token %}
             {{upload_form|crispy}}
             <button class="btn btn-primary change-room-btn" type="submit" name="submit">
                 Submit
             </button>
+            
         </form>`
         if ($('.change-room-btn').length == 0) {
             $('.modal-update-room').append(string)
         }
-        console.log(data)
+        my_form = document.getElementById("room_name_form")
+        my_form.name.value = data[index].room.nama
+
     }
 
     function myFunction3(id) {
         id = parseInt(id)
         var data = JSON.parse("{{dataJSON|escapejs}}")
-        var index = 0
+        var index_1, index_2 = 0
         for (let i = 0; i < data.length; i++) {
-            if (data[i].room.id == id) {
-                index = i
+            for (let j = 0; j < data[i].room.device.id.length; j++) {
+                if (data[i].room.device.id[j] == id) {
+                    index_1 = i
+                    index_2 = j
+                }
             }
         }
         let string = `
-        <form id="name_form" method="post" action="update_device/${id}">
+        <label for="field1">Topic</label>
+        <div class="form-control" type="text" id="field1" readonly></div>
+        <br>
+        <form id="device_form" method="post" action="update_device/${id}">
             {% csrf_token %}
-            {{update_device|crispy}}
+            {{update_device|crispy}} 
             <button class="btn btn-primary change-device-btn" type="submit" name="submit">
                 Submit
             </button>
@@ -327,20 +325,30 @@
         if ($('.change-device-btn').length == 0) {
             $('.modal-update-device').append(string)
         }
-        console.log(data)
+        var my_form = document.getElementById("device_form")
+        my_form.name.value = data[index_1].room.device.nama[index_2]
+        $('#field1').html(`${data[index_1].room.device.topic[index_2]}`)
+        $("#id_qos").val(parseInt(`${data[index_1].room.device.qos[index_2]}`))
+        $("#id_room").val(parseInt(`${data[index_1].room.id}`))
     }
 
     function myFunction4(id) {
         id = parseInt(id)
         var data = JSON.parse("{{dataJSON|escapejs}}")
-        var index = 0
+        var index_1, index_2 = 0
         for (let i = 0; i < data.length; i++) {
-            if (data[i].room.id == id) {
-                index = i
+            for (let j = 0; j < data[i].room.camera.id.length; j++) {
+                if (data[i].room.camera.id[j] == id) {
+                    index_1 = i
+                    index_2 = j
+                }
             }
         }
         let string = `
-        <form id="name_form" method="post" action="update_cam/${id}">
+        <label for="field2">Url</label>
+        <div class="form-control" type="text" id="field2" readonly></div>
+        <br>
+        <form id="cam_form" method="post" action="update_cam/${id}">
             {% csrf_token %}
             {{update_cam|crispy}}
             <button class="btn btn-primary change-cam-btn" type="submit" name="submit">
@@ -350,7 +358,16 @@
         if ($('.change-cam-btn').length == 0) {
             $('.modal-update-cam').append(string)
         }
-        console.log(data)
+        var my_form = document.getElementById("cam_form")
+        my_form.name.value = data[index_1].room.camera.nama[index_2]
+        $('#field2').html(`${data[index_1].room.camera.url[index_2]}`)
+        $("#id_warning_system").val(parseInt(`${data[index_1].room.camera.warning[index_2]}`))
+        $("#id_room").val(parseInt(`${data[index_1].room.id}`))
+        if ((data[index_1].room.camera.rectangle_box[index_2]) == false) {
+            document.getElementById('id_rectangle_box').checked = false
+        } else {
+            document.getElementById('id_rectangle_box').checked = true
+        }
     }
 
     function myFunction(id, y) {
@@ -363,9 +380,5 @@
             document.getElementById(id).src = "{% url 'camera:face_detect' 12345 %}".replace(/12345/, id.toString());
         }
     }
-
-    $("#alertSucced").fadeTo(5000, 1000).slideUp(1000, function () {
-        $("#alertSucced").slideUp(1000);
-    });
 </script>
 {% endblock %}

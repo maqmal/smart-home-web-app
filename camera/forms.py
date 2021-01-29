@@ -55,6 +55,6 @@ class CameraUpdateForm(forms.ModelForm):
         self.fields['room'].queryset = Room.objects.filter(user=user)
     class Meta():
         model = Camera
-        fields = ('name', 'room','warning_system','ai_enable')
+        fields = ('name', 'room','warning_system','rectangle_box')
         exclude = ["user",]
 

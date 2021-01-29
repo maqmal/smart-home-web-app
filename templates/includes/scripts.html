@@ -856,13 +856,15 @@
             console.log("Connected ");
             var data = JSON.parse("{{dataJSON|escapejs}}");
             var topic = []
+            var qos = []
             for (let i = 0; i < data.length; i++) {
                 for (let j = 0; j < data[i].room.device.topic.length; j++) {
                     topic.push(data[i].room.device.topic[j]);
+                    qos.push(data[i].room.device.qos[j])
                 }
             }
             for (let i = 0; i < topic.length; i++) {
-                mqtt.subscribe(String(topic[i]))
+                mqtt.subscribe(String(topic[i]), {qos:parseInt(qos[i])})
                 document.getElementById(String(topic[i])).innerHTML =
                     `<img src="{% static 'spinner.gif' %}" alt="o" width=50px loading="lazy">`
             }
