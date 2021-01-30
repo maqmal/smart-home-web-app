@@ -806,6 +806,7 @@
                     var data = new Object();
                     data.data1 = false
                     data.data2 = "lamp"
+                    console.log("Lamp" + msg.destinationName, data.data1)
                     document.getElementById(msg.destinationName).onclick = function () {
                         for_lamp = new Paho.MQTT.Message(JSON.stringify(data))
                         for_lamp.destinationName = msg.destinationName
@@ -819,6 +820,7 @@
                     var data = new Object();
                     data.data1 = true
                     data.data2 = "lamp"
+                    console.log("Lamp" + msg.destinationName, data.data1)
                     document.getElementById(msg.destinationName).onclick = function () {
                         for_lamp = new Paho.MQTT.Message(JSON.stringify(data))
                         for_lamp.destinationName = msg.destinationName
@@ -834,6 +836,7 @@
                     var data = new Object();
                     data.data1 = false
                     data.data2 = "swch"
+                    console.log("Switch" + msg.destinationName, data.data1)
                     document.getElementById(msg.destinationName).onclick = function () {
                         for_swch = new Paho.MQTT.Message(JSON.stringify(data))
                         for_swch.destinationName = msg.destinationName
@@ -847,6 +850,7 @@
                     var data = new Object();
                     data.data1 = true
                     data.data2 = "swch"
+                    console.log("Switch" + msg.destinationName, data.data1)
                     document.getElementById(msg.destinationName).onclick = function () {
                         for_swch = new Paho.MQTT.Message(JSON.stringify(data))
                         for_swch.destinationName = msg.destinationName
@@ -882,7 +886,6 @@
             console.log("connecting to " + host + " " + port);
             mqtt = new Paho.MQTT.Client(host, port, "clientjs");
             var options = {
-                timeout: 2,
                 onSuccess: onConnect,
                 onFailure: onFailure,
             };
@@ -1308,6 +1311,7 @@
                                     var x = (new Date()).getTime()
                                     if (topic_global_temp == id) {
                                         var y = data_global_temp;
+                                        
                                     }
                                     series.addPoint([x, y], true, true);
                                 }, 1500);
