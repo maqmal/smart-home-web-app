@@ -31,6 +31,12 @@
   <!-- bootstrap icon  -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 
+  <!-- highchart  -->
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/modules/export-data.js"></script>
+  <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
   <!-- <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}"> -->
   <style>
     @charset "UTF-8";
@@ -132,7 +138,8 @@
       line-height: 1.5;
       color: #212529;
       text-align: left;
-      background-color: #fff;
+      background-color: #d5fefd;
+      background-image: linear-gradient(315deg, rgba(213, 235, 255, 0.904) 0%, #fffcff 74%);
     }
 
     [tabindex="-1"]:focus:not(:focus-visible) {
@@ -11322,7 +11329,7 @@
   </style>
 </head>
 
-<body class="sb-nav-fixed" onload="startTime();MQTTconnect();custom()">
+<body class="sb-nav-fixed" onload="startTime();MQTTconnect();custom();">
 
   {% include 'includes/navigation.html' %}
 

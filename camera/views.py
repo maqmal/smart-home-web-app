@@ -11,8 +11,15 @@ from django.http import JsonResponse
 from django.contrib import messages
 from django.template import loader
 from django.forms.models import model_to_dict
+
 def index(request):
     return render(request,'camera/index.html')
+
+def index_device(request):
+    return render(request,'camera/device_view.html')
+
+def index_cam(request):
+    return render(request,'camera/cam_view.html')
 
 @login_required
 def user_logout(request):
@@ -65,21 +72,21 @@ def delete(request, room_id):
         del_name = Room.objects.get(id = room_id)
         del_name.delete()
         messages.success(request, 'Room deleted successfully.')
-    return HttpResponseRedirect(reverse('index'))
+    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
 def delete_cam(request, cam_id):
     if request.method == 'POST':
         del_name = Camera.objects.get(id = cam_id)
         del_name.delete()
         messages.success(request, 'Camera deleted successfully.')
-    return HttpResponseRedirect(reverse('index'))
+    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
 def delete_device(request, device_id):
     if request.method == 'POST':
         del_name = Device.objects.get(id = device_id)
         del_name.delete()
         messages.success(request, 'Device deleted successfully.')
-    return HttpResponseRedirect(reverse('index'))
+    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
 @login_required
 def create_device_view(request):
@@ -128,10 +135,10 @@ def update_room(request, room_id):
         if upload.is_valid():
             messages.success(request, 'Room updated.')
             upload.save()
-            return HttpResponseRedirect(reverse('index'))
+            return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
         else:
             messages.error(request, 'Room name already used.')
-    return HttpResponseRedirect(reverse('index'))
+            return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
 def update_device(request, device_id):
     if request.method == 'POST':
@@ -140,10 +147,10 @@ def update_device(request, device_id):
         if upload.is_valid():
             messages.success(request, 'Device updated.')
             upload.save()
-            return HttpResponseRedirect(reverse('index'))
+            return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
         else:
             messages.error(request, 'Device update failed.')
-    return HttpResponseRedirect(reverse('index'))
+            return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
     
 def update_cam(request, cam_id):
     if request.method == 'POST':
@@ -152,10 +159,10 @@ def update_cam(request, cam_id):
         if upload.is_valid():
             messages.success(request, 'Camera updated.')
             upload.save()
-            return HttpResponseRedirect(reverse('index'))
+            return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
         else:
             messages.error(request, 'Camera update failed.')
-    return HttpResponseRedirect(reverse('index'))
+            return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
 @login_required
 def get_data(request):
@@ -239,3 +246,116 @@ def get_data(request):
         return render(request,'camera/index.html', {'data':raw_data,'dataJSON':dataJSON, 'upload_form':upload, 'update_device':update_device,'update_cam':update_cam})
 
 
+@login_required
+def get_data_device(request):
+    created = None
+    raw_data = []
+    dataJSON = None
+    update_device = DeviceUpdateForm(request.user)
+    if request.method == 'POST':
+        upload = RoomForm(request.POST)
+        if upload.is_valid():
+            room_save = upload.save(commit = False)
+            room_save.user = request.user
+            room_save.save()
+            messages.success(request, 'Room created successfully.')
+            return HttpResponseRedirect(reverse('index_device'))
+        else:
+            messages.error(request, 'Room name already used.')
+            return HttpResponseRedirect(reverse('index_device'))
+    else:
+        upload = RoomForm()
+
+        ambil_room = Room.objects.filter(user=request.user).values_list('name',flat=True)
+        ambil_room_id = ambil_room.values_list('id',flat=True)
+
+        ambil_device = Device.objects.filter(room__user=request.user)
+        ambil_device_id = ambil_device.values_list('id',flat=True)
+        nama_room_device = ambil_device.values_list('room__name',flat=True)
+        nama_device = ambil_device.values_list('name',flat=True)
+        topic = ambil_device.values_list('topic',flat=True)
+        qos = ambil_device.values_list('qos',flat=True) 
+
+        for i in range(len(ambil_room)):
+            data = {}
+            data['room']={}
+            data['room']['id'] = ambil_room_id[i]
+            data['room']['nama'] = ambil_room[i]
+
+            data['room']['device'] = {}
+            data['room']['device']['id'] = []
+            data['room']['device']['nama'] = []
+            data['room']['device']['topic'] = []
+            data['room']['device']['qos'] = []
+            
+            j = 0
+            for device in nama_device:
+                if (nama_room_device[j]==ambil_room[i]):
+                    data['room']['device']['nama'].append(device)
+                    data['room']['device']['id'].append(ambil_device_id[j])
+                    data['room']['device']['topic'].append(topic[j])
+                    data['room']['device']['qos'].append(qos[j])
+                j+=1
+
+            raw_data.append(data)
+        dataJSON = dumps(raw_data) 
+        print(raw_data)
+        return render(request,'camera/device_view.html', {'data':raw_data,'dataJSON':dataJSON, 'upload_form':upload, 'update_device':update_device})
+
+@login_required
+def get_data_cam(request):
+    created = None
+    raw_data = []
+    dataJSON = None
+    update_cam = CameraUpdateForm(request.user)
+    if request.method == 'POST':
+        upload = RoomForm(request.POST)
+        if upload.is_valid():
+            room_save = upload.save(commit = False)
+            room_save.user = request.user
+            room_save.save()
+            messages.success(request, 'Room created successfully.')
+            return HttpResponseRedirect(reverse('index_cam'))
+        else:
+            messages.error(request, 'Room name already used.')
+            return HttpResponseRedirect(reverse('index_cam'))
+    else:
+        upload = RoomForm()
+
+        ambil_room = Room.objects.filter(user=request.user).values_list('name',flat=True)
+        ambil_room_id = ambil_room.values_list('id',flat=True)
+
+        ambil_camera = Camera.objects.filter(room__user=request.user)
+        ambil_camera_id = ambil_camera.values_list('id',flat=True)
+        url_camera = ambil_camera.values_list('cam_url',flat=True)
+        nama_room_camera = ambil_camera.values_list('room__name',flat=True)
+        nama_camera = ambil_camera.values_list('name',flat=True)
+        warning = ambil_camera.values_list('warning_system',flat=True)
+        rectangle_box = ambil_camera.values_list('rectangle_box',flat=True)
+
+        for i in range(len(ambil_room)):
+            data = {}
+            data['room']={}
+            data['room']['id'] = ambil_room_id[i]
+            data['room']['nama'] = ambil_room[i]
+
+            data['room']['camera'] = {}
+            data['room']['camera']['id'] = []
+            data['room']['camera']['nama'] = []
+            data['room']['camera']['warning'] = []
+            data['room']['camera']['rectangle_box'] = []
+            data['room']['camera']['url'] = []
+
+            k = 0
+            for camera in nama_camera:
+                if (nama_room_camera[k]==ambil_room[i]):
+                    data['room']['camera']['nama'].append(camera)
+                    data['room']['camera']['id'].append(ambil_camera_id[k])
+                    data['room']['camera']['warning'].append(warning[k])
+                    data['room']['camera']['rectangle_box'].append(rectangle_box[k])
+                    data['room']['camera']['url'].append(url_camera[k])
+                k+=1
+            raw_data.append(data)
+        dataJSON = dumps(raw_data) 
+        print(raw_data)
+        return render(request,'camera/cam_view.html', {'data':raw_data,'dataJSON':dataJSON, 'upload_form':upload, 'update_cam':update_cam})

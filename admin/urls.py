@@ -24,6 +24,8 @@ urlpatterns = [
     path('', include('camera.urls')),
     path('catalog/', include('catalog.urls')),
     path('', views.index, name='index'),
+    path('device_view/', views.index_device, name='index_device'),
+    path('cam_view/', views.index_cam, name='index_cam'),
     path('camera/user_login/', views.user_login, name='user_login'),
     path('logout/', views.user_logout, name='user_logout'),
     path('inbox/notifications/', include(notifications.urls, namespace='notifications')),

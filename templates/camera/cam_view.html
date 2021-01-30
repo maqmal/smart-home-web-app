@@ -1,0 +1,293 @@
+{% extends "camera/base.html" %}
+{% block content %}
+{% load static %}
+{% load index %}
+{% load crispy_forms_tags %}
+<div style="padding: 30px 50px;">
+    {% if user.is_authenticated %}
+    <h6 class="display-6 text-capitalize" style="font-size: 140%; color: black;">Camera View</h6>
+    {% if messages %}
+    {% for message in messages %}
+    <div class="form-group" id="alertSucced">
+        <div class="alert {{ message.tags }} alert-dismissable" role="alert">
+            <p>{{ message }}</p>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+    <script type="text/javascript">
+        $("#alertSucced").fadeTo(5000, 1000).slideUp(1000, function () {
+            $("#alertSucced").slideUp(1000);
+        });
+    </script>
+    <table style="width: 100%;">
+        {% for value in data %}
+        <tr>
+            <td>
+                <div class="card shadow p-3 mb-12 bg-white rounded">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card-body">
+                                <h5 class="card-title display-4 text-capitalize"
+                                    style="font-size: 180%;border-left: 6px solid rgb(198, 207, 255);">
+                                    &nbsp;{{value.room.nama}} <span class="pull-right float-right"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="bi bi-three-dots-vertical btn" style="font-size: 20px;"></i></span>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <li>
+                                            <button class="btn" data-target="#settingRoomModal" data-toggle="modal"
+                                                type="button" onclick="myFunction2('{{value.room.id}}')">
+                                                Edit Room
+                                            </button>
+                                        </li>
+                                        <form id="name_form" method="post" action="/del/{{value.room.id}}">
+                                            {% csrf_token %}
+                                            <li><button class="btn confirm-delete" type="submit" name="submit">
+                                                    Delete Room
+                                                </button></li>
+                                        </form>
+                                    </div>
+                                </h5>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            {% for nama_camera in value.room.camera.nama %}
+                                            <th>
+                                                <a class="display-4 text-capitalize text-decoration-none"
+                                                    style="font-size: 17.5px;">
+                                                    {{nama_camera}}
+                                                </a>
+                                                <button type="button"
+                                                    class="btn btn-sm dropdown-toggle dropdown-toggle-split"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <li>
+                                                        <button class="btn" data-toggle="modal" data-target="#modal3"
+                                                            onclick="myFunction4('{{value.room.camera.id|index:forloop.counter0}}')">
+                                                            Edit Camera
+                                                        </button>
+                                                    </li>
+                                                    <form id="name_form" method="post"
+                                                        action="/del_cam/{{value.room.camera.id|index:forloop.counter0}}">
+                                                        {% csrf_token %}
+                                                        <button class="btn confirm-delete" type="submit" name="submit">
+                                                            Delete Camera
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </th>
+                                            {% endfor %}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            {% for id_camera in value.room.camera.id %}
+                                            <td>
+                                                <div>
+                                                    <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                                                        <li class="nav-item">
+                                                            <i class="nav-link btn bi bi-camera-video-off"
+                                                                onclick="myFunction('{{id_camera}}',this)"
+                                                                style="padding:5px;background-color:rgb(255, 255, 255);color:black"></i>
+                                                        </li>
+                                                    </ul>
+                                                    <div class="tab-content pop" id="pills-tabContent">
+                                                        <img src="{% url 'camera:face_detect' id_camera %}"
+                                                            class="img-fluid img-thumbnail camera-box" width="50%"
+                                                            loading="lazy" id="{{id_camera}}" />
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            <!-- modal image  -->
+                                            <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog"
+                                                aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-body">
+                                                            <img src="" class="imagepreview" style="width: 100%;">
+                                                        </div>
+                                                        <div class="modal-footer" style="border-top: 0 none;">
+                                                            <button type="button" class="btn btn-primary"
+                                                                data-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            {% endfor %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+            </td>
+        </tr>
+        {% endfor %}
+
+    </table>
+
+    <br>
+    <div class="card rounded" style="width: 120px;height: 130px;" id="create-room-card">
+        <center>
+            <div data-toggle="modal" data-target="#addRoomModal" type="button" style="padding-top: 30px;">
+                <h6 class="display-4" style="font-size: 17px;">Create Room</h6>
+                <img src="{% static 'add_circle.svg' %}" alt="+" href="" width="30px" style="opacity: 0.5;"
+                    id="onclick">
+            </div>
+        </center>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="addRoomModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Create Room</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method='POST' enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ upload_form|crispy }}
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Settings -->
+    <div class="modal fade" id="settingRoomModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title modal-room-name text-capitalize" id="exampleModalLabel">Edit Room</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body modal-update-room">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="modal3" tabindex="-1" role="dialog" aria-labelledby="modal1-label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title modal-cam-name text-capitalize" id="exampleModalLabel">Edit Camera</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body modal-update-cam">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+{% else %}
+<h2>Register or Login if you'd like to</h2>
+{% endif %}
+</div>
+<script>
+    $(function () {
+        $('.pop').on('click', function () {
+            $('.imagepreview').attr('src', $(this).find('img').attr('src'));
+            $('#imagemodal').modal('show');
+        });
+    });
+
+    function myFunction2(id) {
+        var data = JSON.parse("{{dataJSON|escapejs}}")
+        var index = 0
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].room.id == id) {
+                index = i
+            }
+        }
+        let string = `
+        <form id="room_name_form" method="post" action="update_room/${id}">
+            {% csrf_token %}
+            {{upload_form|crispy}}
+            <button class="btn btn-primary change-room-btn" type="submit" name="submit">
+                Submit
+            </button>
+            
+        </form>`
+        if ($('.change-room-btn').length == 0) {
+            $('.modal-update-room').append(string)
+        }
+        my_form = document.getElementById("room_name_form")
+        my_form.name.value = data[index].room.nama
+
+    }
+
+    function myFunction4(id) {
+        id = parseInt(id)
+        var data = JSON.parse("{{dataJSON|escapejs}}")
+        var index_1, index_2 = 0
+        for (let i = 0; i < data.length; i++) {
+            for (let j = 0; j < data[i].room.camera.id.length; j++) {
+                if (data[i].room.camera.id[j] == id) {
+                    index_1 = i
+                    index_2 = j
+                }
+            }
+        }
+        let string = `
+        <label for="field2">Url</label>
+        <div class="form-control" type="text" id="field2" readonly></div>
+        <br>
+        <form id="cam_form" method="post" action="update_cam/${id}">
+            {% csrf_token %}
+            {{update_cam|crispy}}
+            <button class="btn btn-primary change-cam-btn" type="submit" name="submit">
+                Submit
+            </button>
+        </form>`
+        if ($('.change-cam-btn').length == 0) {
+            $('.modal-update-cam').append(string)
+        }
+        var my_form = document.getElementById("cam_form")
+        my_form.name.value = data[index_1].room.camera.nama[index_2]
+        $('#field2').html(`${data[index_1].room.camera.url[index_2]}`)
+        $("#id_warning_system").val(parseInt(`${data[index_1].room.camera.warning[index_2]}`))
+        $("#id_room").val(parseInt(`${data[index_1].room.id}`))
+        if ((data[index_1].room.camera.rectangle_box[index_2]) == false) {
+            document.getElementById('id_rectangle_box').checked = false
+        } else {
+            document.getElementById('id_rectangle_box').checked = true
+        }
+    }
+
+    function myFunction(id, y) {
+        console.log(id)
+        var x = document.getElementById(id);
+        y.classList.toggle("bi-camera-video");
+        if (y.classList.contains("bi-camera-video")) {
+            document.getElementById(id).src = "{% url 'camera:off_cam' 12345 %}".replace(/12345/, id.toString());
+        } else {
+            document.getElementById(id).src = "{% url 'camera:face_detect' 12345 %}".replace(/12345/, id.toString());
+        }
+    }
+</script>
+{% endblock %}
