@@ -1,934 +1,939 @@
-    {% load static %}
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js" crossorigin="anonymous">
-    </script>
-    <script src="{% static 'scripts.js' %}"></script>
-    {% load notifications_tags %}
-    <style>
-        .svg-contain {
-            max-width: 150px;
-            margin: 20px;
-            width: 100%;
+{% load static %}
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js" crossorigin="anonymous">
+</script>
+<script src="{% static 'scripts.js' %}"></script>
+{% load notifications_tags %}
+<style>
+    .svg-contain {
+        max-width: 150px;
+        margin: 20px;
+        width: 100%;
+    }
+
+    .big-path,
+    .lightening,
+    .line,
+    .little-path {
+        stroke-miterlimit: 10;
+        stroke-width: 2;
+        stroke-linecap: round;
+        fill: none;
+    }
+
+    .cloud {
+        fill: #DAD9D9;
+    }
+
+    .little-path {
+        stroke-width: 1;
+    }
+
+    .hurricane-svg .line {
+        stroke: #BAE2E0;
+        opacity: 1;
+        animation: fadeIn 0.8s ease-in alternate-reverse infinite;
+    }
+
+    .hurricane-svg .line:nth-child(1) {
+        -webkit-animation-delay: 0.1s;
+        animation-delay: 0.1s;
+    }
+
+    .hurricane-svg .line:nth-child(2) {
+        -webkit-animation-delay: 0.2s;
+        animation-delay: 0.2s;
+    }
+
+    .hurricane-svg .line:nth-child(3) {
+        -webkit-animation-delay: 0.3s;
+        animation-delay: 0.3s;
+    }
+
+    .hurricane-svg .line:nth-child(4) {
+        -webkit-animation-delay: 0.4s;
+        animation-delay: 0.4s;
+    }
+
+    .hurricane-svg .line:nth-child(5) {
+        -webkit-animation-delay: 0.5s;
+        animation-delay: 0.5s;
+    }
+
+    .hurricane-svg .line:nth-child(6) {
+        -webkit-animation-delay: 0.6s;
+        animation-delay: 0.6s;
+    }
+
+    .hurricane-svg .line:nth-child(7) {
+        -webkit-animation-delay: 0.7s;
+        animation-delay: 0.7s;
+    }
+
+    .hurricane-svg .line:nth-child(8) {
+        -webkit-animation-delay: 0.8s;
+        animation-delay: 0.8s;
+    }
+
+    .hurricane-svg .line:nth-child(9) {
+        -webkit-animation-delay: 0.9s;
+        animation-delay: 0.9s;
+    }
+
+    .hurricane-svg .line:nth-child(10) {
+        -webkit-animation-delay: 1s;
+        animation-delay: 1s;
+    }
+
+    .hurricane-svg .line:nth-child(11) {
+        -webkit-animation-delay: 1.1s;
+        animation-delay: 1.1s;
+    }
+
+    .hurricane-svg .line:nth-child(12) {
+        -webkit-animation-delay: 1.2s;
+        animation-delay: 1.2s;
+    }
+
+    .hurricane-svg .lightening {
+        -webkit-animation: flash 1s infinite;
+        animation: flash 1s infinite;
+        stroke: #E5D8BA;
+    }
+
+    .hurricane-svg .big-path,
+    .hurricane-svg .little-path {
+        stroke: #BAE2E0;
+    }
+
+    .hurricane-svg .big-path {
+        stroke-width: 1;
+    }
+
+    .hurricane-svg .little-path {
+        stroke-width: 0.5;
+    }
+
+    .hurricane-svg .cloud {
+        -webkit-animation: colorChange 1s infinite;
+        animation: colorChange 1s infinite;
+    }
+
+    .windy-svg .little-path,
+    .windy-svg .big-path {
+        animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
+    }
+
+    .windy-svg path {
+        stroke: #BAE2E0;
+    }
+
+    .windy-svg .path-1 {
+        stroke-dasharray: 7;
+        stroke-dashoffset: 7;
+    }
+
+    .windy-svg .path-2 {
+        stroke-dasharray: 25;
+        stroke-dashoffset: -25;
+    }
+
+    .windy-svg .path-3 {
+        stroke-dasharray: 30;
+        stroke-dashoffset: 30;
+    }
+
+    .windy-svg .path-4 {
+        stroke-dasharray: 8;
+        stroke-dashoffset: 8;
+    }
+
+    .windy-svg .path-5 {
+        stroke-dasharray: 22;
+        stroke-dashoffset: -22;
+    }
+
+    .windy-svg .big-path-1 {
+        stroke-dasharray: 57;
+        stroke-dashoffset: 57;
+    }
+
+    .windy-svg .big-path-2 {
+        stroke-dasharray: 76;
+        stroke-dashoffset: 76;
+    }
+
+    .clear-sky-svg {
+        animation: expand 0.8s alternate-reverse infinite;
+    }
+
+    .clear-sky-svg .sun {
+        fill: #E5D8BA;
+    }
+
+    .night-clear .sun {
+        fill: #505050;
+    }
+
+    .clear-sky-svg .line {
+        stroke: #E5D8BA;
+        stroke-dasharray: 7;
+        animation: dash 0.8s alternate-reverse infinite, fadeIn 1s forwards;
+    }
+
+    .clear-sky-svg .line-1,
+    .clear-sky-svg .line-3,
+    .clear-sky-svg .line-5,
+    .clear-sky-svg .line-7,
+    .clear-sky-svg .line-4 {
+        stroke-dashoffset: 5;
+        -webkit-animation-delay: 0.3s;
+        animation-delay: 0.3s;
+    }
+
+    .clear-sky-svg .line-2,
+    .clear-sky-svg .line-6,
+    .clear-sky-svg .line-8 {
+        stroke-dashoffset: -5;
+    }
+
+    .overcast-clouds .dark {
+        fill: rgb(61, 61, 61);
+        animation: bounce 4s ease-in-out alternate-reverse infinite;
+    }
+
+    .overcast-clouds .cloud-still {
+        fill: #DAD9D9;
+        animation: bounce 4s ease-in-out alternate-reverse infinite;
+    }
+
+    .overcast-clouds .cloud-for-rain {
+        fill: #DAD9D9;
+        animation: bounceCustom 10s ease-in-out alternate-reverse infinite;
+    }
+
+
+    @-webkit-keyframes bounceCustom {
+
+        0%,
+        50%,
+        100% {
+            transform: translateY(0px) translateX(0px) rotate(0.1deg);
         }
 
-        .big-path,
-        .lightening,
-        .line,
-        .little-path {
-            stroke-miterlimit: 10;
-            stroke-width: 2;
-            stroke-linecap: round;
-            fill: none;
+        30%,
+        80% {
+            transform: translateY(3px) translateX(3px) rotate(0.1deg);
+        }
+    }
+
+    @keyframes bounceCustom {
+
+        0%,
+        50%,
+        100% {
+            transform: translateY(0px) translateX(0px) rotate(0.1deg);
         }
 
-        .cloud {
-            fill: #DAD9D9;
+        80% {
+            transform: translateY(3px) translateX(3px) rotate(0.1deg);
         }
 
-        .little-path {
-            stroke-width: 1;
+        30% {
+            transform: translateY(3px) translateX(-4px);
+        }
+    }
+
+
+    .overcast-clouds .cloud-still:nth-child(1) {
+        -webkit-animation-delay: 0.2s;
+        animation-delay: 0.2s;
+    }
+
+    .snow-svg .snowflake {
+        transform-origin: 50% 50%;
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+
+    .snow-svg .snowflake:nth-child(1) {
+        -webkit-animation: fall-counterclockwise 2461ms ease-in forwards infinite;
+        animation: fall-counterclockwise 2461ms ease-in forwards infinite;
+        -webkit-animation-delay: 0.1s;
+        animation-delay: 0.1s;
+    }
+
+    .snow-svg .snowflake:nth-child(2) {
+        -webkit-animation: fall-clockwise 2765ms ease-in forwards infinite;
+        animation: fall-clockwise 2765ms ease-in forwards infinite;
+        -webkit-animation-delay: 0.2s;
+        animation-delay: 0.2s;
+    }
+
+    .snow-svg .snowflake:nth-child(3) {
+        -webkit-animation: fall-counterclockwise 3794ms ease-in forwards infinite;
+        animation: fall-counterclockwise 3794ms ease-in forwards infinite;
+        -webkit-animation-delay: 0.6s;
+        animation-delay: 0.6s;
+    }
+
+    .snow-svg .snowflake:nth-child(4) {
+        -webkit-animation: fall-clockwise 3068ms ease-in forwards infinite;
+        animation: fall-clockwise 3068ms ease-in forwards infinite;
+        -webkit-animation-delay: 0.4s;
+        animation-delay: 0.4s;
+    }
+
+    .snow-svg .snowflake:nth-child(5) {
+        -webkit-animation: fall-counterclockwise 3545ms ease-in forwards infinite;
+        animation: fall-counterclockwise 3545ms ease-in forwards infinite;
+        -webkit-animation-delay: 1s;
+        animation-delay: 1s;
+    }
+
+    .snow-svg .snowflake:nth-child(6) {
+        -webkit-animation: fall-clockwise 3983ms ease-in forwards infinite;
+        animation: fall-clockwise 3983ms ease-in forwards infinite;
+        -webkit-animation-delay: 1.8s;
+        animation-delay: 1.8s;
+    }
+
+    .snow-svg .snowflake:nth-child(7) {
+        -webkit-animation: fall-counterclockwise 2165ms ease-in forwards infinite;
+        animation: fall-counterclockwise 2165ms ease-in forwards infinite;
+        -webkit-animation-delay: 1.4s;
+        animation-delay: 1.4s;
+    }
+
+    .snow-svg .snowflake:nth-child(8) {
+        -webkit-animation: fall-clockwise 3745ms ease-in forwards infinite;
+        animation: fall-clockwise 3745ms ease-in forwards infinite;
+        -webkit-animation-delay: 2.4s;
+        animation-delay: 2.4s;
+    }
+
+    .snow-svg .snowflake:nth-child(9) {
+        -webkit-animation: fall-counterclockwise 2671ms ease-in forwards infinite;
+        animation: fall-counterclockwise 2671ms ease-in forwards infinite;
+        -webkit-animation-delay: 2.7s;
+        animation-delay: 2.7s;
+    }
+
+    .snow-svg .snowflake:nth-child(10) {
+        -webkit-animation: fall-clockwise 2308ms ease-in forwards infinite;
+        animation: fall-clockwise 2308ms ease-in forwards infinite;
+        -webkit-animation-delay: 2s;
+        animation-delay: 2s;
+    }
+
+    .snow-svg .snowflake-path {
+        stroke: #BAE2E0;
+        stroke-width: 1;
+    }
+
+    .fog-svg .fog-line:nth-child(1) {
+        stroke: #BAE2E0;
+        animation: bounce 4s ease-in-out alternate-reverse infinite;
+        animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
+        -webkit-animation-delay: 0.2s;
+        animation-delay: 0.2s;
+    }
+
+    .fog-svg .fog-line:nth-child(2) {
+        stroke: #BAE2E0;
+        animation: bounce 4s ease-in-out alternate-reverse infinite;
+        animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
+        -webkit-animation-delay: 0.4s;
+        animation-delay: 0.4s;
+    }
+
+    .fog-svg .fog-line:nth-child(3) {
+        stroke: #BAE2E0;
+        animation: bounce 4s ease-in-out alternate-reverse infinite;
+        animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
+        -webkit-animation-delay: 0.6s;
+        animation-delay: 0.6s;
+    }
+
+    .fog-svg .fog-line:nth-child(4) {
+        stroke: #BAE2E0;
+        animation: bounce 4s ease-in-out alternate-reverse infinite;
+        animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
+        -webkit-animation-delay: 0.8s;
+        animation-delay: 0.8s;
+    }
+
+    .fog-svg .fog-line:nth-child(5) {
+        stroke: #BAE2E0;
+        animation: bounce 4s ease-in-out alternate-reverse infinite;
+        animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
+        -webkit-animation-delay: 1s;
+        animation-delay: 1s;
+    }
+
+    .fog-svg .fog-line:nth-child(6) {
+        stroke: #BAE2E0;
+        animation: bounce 4s ease-in-out alternate-reverse infinite;
+        animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
+        -webkit-animation-delay: 1.2s;
+        animation-delay: 1.2s;
+    }
+
+    .fog-svg .fog-line:nth-child(7) {
+        animation: bounce 4s ease-in-out alternate-reverse infinite;
+        stroke: #BAE2E0;
+        animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
+        -webkit-animation-delay: 1.4s;
+        animation-delay: 1.4s;
+    }
+
+    .fog-svg .fog-line:nth-child(8) {
+        stroke: #BAE2E0;
+        animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
+        -webkit-animation-delay: 1.6s;
+        animation-delay: 1.6s;
+    }
+
+    .fog-svg .fog-line:nth-child(9) {
+        stroke: #BAE2E0;
+        animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
+        -webkit-animation-delay: 1.8s;
+        animation-delay: 1.8s;
+    }
+
+    .fog-svg .fog-line:nth-child(10) {
+        stroke: #BAE2E0;
+        animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
+        -webkit-animation-delay: 2s;
+        animation-delay: 2s;
+    }
+
+    .fog-svg .fog-line:nth-child(11) {
+        stroke: #BAE2E0;
+        animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
+        -webkit-animation-delay: 2.2s;
+        animation-delay: 2.2s;
+    }
+
+    .fog-svg .fog-line:nth-child(12) {
+        stroke: #BAE2E0;
+        animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
+        -webkit-animation-delay: 2.4s;
+        animation-delay: 2.4s;
+    }
+
+    .fog-svg .fog-line:nth-child(13) {
+        stroke: #BAE2E0;
+        animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
+        -webkit-animation-delay: 2.6s;
+        animation-delay: 2.6s;
+    }
+
+    .fog-svg .fog-line:nth-child(14) {
+        stroke: #BAE2E0;
+        animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
+        -webkit-animation-delay: 2.8s;
+        animation-delay: 2.8s;
+    }
+
+    .fog-svg .fog-line:nth-child(15) {
+        stroke: #BAE2E0;
+        animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
+        -webkit-animation-delay: 3s;
+        animation-delay: 3s;
+    }
+
+    .fog-svg .fog-line:nth-child(16) {
+        stroke: #BAE2E0;
+        animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
+        -webkit-animation-delay: 3.2s;
+        animation-delay: 3.2s;
+    }
+
+    .fog-svg .fog-line:nth-child(17) {
+        stroke: #BAE2E0;
+        animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
+        -webkit-animation-delay: 3.4s;
+        animation-delay: 3.4s;
+    }
+
+    .fog-svg .fog-line:nth-child(18) {
+        stroke: #BAE2E0;
+        animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
+        -webkit-animation-delay: 3.6s;
+        animation-delay: 3.6s;
+    }
+
+    .fog-svg .fog-line:nth-child(19) {
+        stroke: #BAE2E0;
+        animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
+        -webkit-animation-delay: 3.6s;
+        animation-delay: 3.6s;
+    }
+
+    .fog-svg .fog-line:nth-child(20) {
+        stroke: #BAE2E0;
+        animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
+        -webkit-animation-delay: 3.6s;
+        animation-delay: 3.6s;
+    }
+
+    .fog-svg .fog-line:nth-child(21) {
+        stroke: #BAE2E0;
+        animation: bounce 4s ease-in-out alternate-reverse infinite;
+        -webkit-animation-delay: 3.6s;
+        animation-delay: 3.6s;
+    }
+
+    .fog-svg .fog-line:nth-child(22) {
+        stroke: #BAE2E0;
+        animation: bounce 4s ease-in-out alternate-reverse infinite;
+        -webkit-animation-delay: 3.6s;
+        animation-delay: 3.6s;
+    }
+
+    .fog-svg .fog-line:nth-child(23) {
+        stroke: #BAE2E0;
+        animation: bounce 4s ease-in-out alternate-reverse infinite;
+        -webkit-animation-delay: 3.6s;
+        animation-delay: 3.6s;
+    }
+
+    .fog-svg .fog-line:nth-child(24) {
+        stroke: #BAE2E0;
+        animation: bounce 4s ease-in-out alternate-reverse infinite;
+        -webkit-animation-delay: 3.6s;
+        animation-delay: 3.6s;
+    }
+
+    .fog-svg .fog-line:nth-child(25) {
+        stroke: #BAE2E0;
+        animation: bounce 4s ease-in-out alternate-reverse infinite;
+        -webkit-animation-delay: 3.6s;
+        animation-delay: 3.6s;
+    }
+
+    @-webkit-keyframes colorChange {
+
+        0%,
+        90% {
+            fill: #646478;
         }
 
-        .hurricane-svg .line {
-            stroke: #BAE2E0;
-            opacity: 1;
-            animation: fadeIn 0.8s ease-in alternate-reverse infinite;
+        60%,
+        100% {
+            fill: rgba(200, 200, 200, 0.8);
+        }
+    }
+
+    @keyframes colorChange {
+
+        0%,
+        90% {
+            fill: #646478;
         }
 
-        .hurricane-svg .line:nth-child(1) {
-            -webkit-animation-delay: 0.1s;
-            animation-delay: 0.1s;
+        60%,
+        100% {
+            fill: rgba(200, 200, 200, 0.8);
         }
+    }
 
-        .hurricane-svg .line:nth-child(2) {
-            -webkit-animation-delay: 0.2s;
-            animation-delay: 0.2s;
-        }
-
-        .hurricane-svg .line:nth-child(3) {
-            -webkit-animation-delay: 0.3s;
-            animation-delay: 0.3s;
-        }
-
-        .hurricane-svg .line:nth-child(4) {
-            -webkit-animation-delay: 0.4s;
-            animation-delay: 0.4s;
-        }
-
-        .hurricane-svg .line:nth-child(5) {
-            -webkit-animation-delay: 0.5s;
-            animation-delay: 0.5s;
-        }
-
-        .hurricane-svg .line:nth-child(6) {
-            -webkit-animation-delay: 0.6s;
-            animation-delay: 0.6s;
-        }
-
-        .hurricane-svg .line:nth-child(7) {
-            -webkit-animation-delay: 0.7s;
-            animation-delay: 0.7s;
-        }
-
-        .hurricane-svg .line:nth-child(8) {
-            -webkit-animation-delay: 0.8s;
-            animation-delay: 0.8s;
-        }
-
-        .hurricane-svg .line:nth-child(9) {
-            -webkit-animation-delay: 0.9s;
-            animation-delay: 0.9s;
-        }
-
-        .hurricane-svg .line:nth-child(10) {
-            -webkit-animation-delay: 1s;
-            animation-delay: 1s;
-        }
-
-        .hurricane-svg .line:nth-child(11) {
-            -webkit-animation-delay: 1.1s;
-            animation-delay: 1.1s;
-        }
-
-        .hurricane-svg .line:nth-child(12) {
-            -webkit-animation-delay: 1.2s;
-            animation-delay: 1.2s;
-        }
-
-        .hurricane-svg .lightening {
-            -webkit-animation: flash 1s infinite;
-            animation: flash 1s infinite;
-            stroke: #E5D8BA;
-        }
-
-        .hurricane-svg .big-path,
-        .hurricane-svg .little-path {
-            stroke: #BAE2E0;
-        }
-
-        .hurricane-svg .big-path {
-            stroke-width: 1;
-        }
-
-        .hurricane-svg .little-path {
-            stroke-width: 0.5;
-        }
-
-        .hurricane-svg .cloud {
-            -webkit-animation: colorChange 1s infinite;
-            animation: colorChange 1s infinite;
-        }
-
-        .windy-svg .little-path,
-        .windy-svg .big-path {
-            animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
-        }
-
-        .windy-svg path {
-            stroke: #BAE2E0;
-        }
-
-        .windy-svg .path-1 {
-            stroke-dasharray: 7;
-            stroke-dashoffset: 7;
-        }
-
-        .windy-svg .path-2 {
-            stroke-dasharray: 25;
-            stroke-dashoffset: -25;
-        }
-
-        .windy-svg .path-3 {
-            stroke-dasharray: 30;
-            stroke-dashoffset: 30;
-        }
-
-        .windy-svg .path-4 {
-            stroke-dasharray: 8;
-            stroke-dashoffset: 8;
-        }
-
-        .windy-svg .path-5 {
-            stroke-dasharray: 22;
-            stroke-dashoffset: -22;
-        }
-
-        .windy-svg .big-path-1 {
-            stroke-dasharray: 57;
-            stroke-dashoffset: 57;
-        }
-
-        .windy-svg .big-path-2 {
-            stroke-dasharray: 76;
-            stroke-dashoffset: 76;
-        }
-
-        .clear-sky-svg {
-            animation: expand 0.8s alternate-reverse infinite;
-        }
-
-        .clear-sky-svg .sun {
-            fill: #E5D8BA;
-        }
-
-        .night-clear .sun {
-            fill: #505050;
-        }
-
-        .clear-sky-svg .line {
-            stroke: #E5D8BA;
-            stroke-dasharray: 7;
-            animation: dash 0.8s alternate-reverse infinite, fadeIn 1s forwards;
-        }
-
-        .clear-sky-svg .line-1,
-        .clear-sky-svg .line-3,
-        .clear-sky-svg .line-5,
-        .clear-sky-svg .line-7,
-        .clear-sky-svg .line-4 {
-            stroke-dashoffset: 5;
-            -webkit-animation-delay: 0.3s;
-            animation-delay: 0.3s;
-        }
-
-        .clear-sky-svg .line-2,
-        .clear-sky-svg .line-6,
-        .clear-sky-svg .line-8 {
-            stroke-dashoffset: -5;
-        }
-
-        .overcast-clouds .dark {
-            fill: rgb(61, 61, 61);
-            animation: bounce 4s ease-in-out alternate-reverse infinite;
-        }
-
-        .overcast-clouds .cloud-still {
-            fill: #DAD9D9;
-            animation: bounce 4s ease-in-out alternate-reverse infinite;
-        }
-
-        .overcast-clouds .cloud-for-rain {
-            fill: #DAD9D9;
-            animation: bounceCustom 10s ease-in-out alternate-reverse infinite;
-        }
-
-
-        @-webkit-keyframes bounceCustom {
-
-            0%,
-            50%,
-            100% {
-                transform: translateY(0px) translateX(0px) rotate(0.1deg);
-            }
-
-            30%,
-            80% {
-                transform: translateY(3px) translateX(3px) rotate(0.1deg);
-            }
-        }
-
-        @keyframes bounceCustom {
-
-            0%,
-            50%,
-            100% {
-                transform: translateY(0px) translateX(0px) rotate(0.1deg);
-            }
-
-            80% {
-                transform: translateY(3px) translateX(3px) rotate(0.1deg);
-            }
-
-            30% {
-                transform: translateY(3px) translateX(-4px);
-            }
-        }
-
-
-        .overcast-clouds .cloud-still:nth-child(1) {
-            -webkit-animation-delay: 0.2s;
-            animation-delay: 0.2s;
-        }
-
-        .snow-svg .snowflake {
-            transform-origin: 50% 50%;
-            transform: translateY(-10px);
+    @-webkit-keyframes fadeIn {
+        0% {
             opacity: 0;
         }
 
-        .snow-svg .snowflake:nth-child(1) {
-            -webkit-animation: fall-counterclockwise 2461ms ease-in forwards infinite;
-            animation: fall-counterclockwise 2461ms ease-in forwards infinite;
-            -webkit-animation-delay: 0.1s;
-            animation-delay: 0.1s;
+        100% {
+            opacity: 1;
+        }
+    }
+
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
         }
 
-        .snow-svg .snowflake:nth-child(2) {
-            -webkit-animation: fall-clockwise 2765ms ease-in forwards infinite;
-            animation: fall-clockwise 2765ms ease-in forwards infinite;
-            -webkit-animation-delay: 0.2s;
-            animation-delay: 0.2s;
+        100% {
+            opacity: 1;
+        }
+    }
+
+    @-webkit-keyframes flash {
+
+        0%,
+        90% {
+            opacity: 0;
+            transform: translateX(-1px) translateY(-2px) rotate(0.01deg);
         }
 
-        .snow-svg .snowflake:nth-child(3) {
-            -webkit-animation: fall-counterclockwise 3794ms ease-in forwards infinite;
-            animation: fall-counterclockwise 3794ms ease-in forwards infinite;
-            -webkit-animation-delay: 0.6s;
-            animation-delay: 0.6s;
+        90% {
+            transform: translateX(1px) translateY(-1px);
         }
 
-        .snow-svg .snowflake:nth-child(4) {
-            -webkit-animation: fall-clockwise 3068ms ease-in forwards infinite;
-            animation: fall-clockwise 3068ms ease-in forwards infinite;
-            -webkit-animation-delay: 0.4s;
-            animation-delay: 0.4s;
+        60%,
+        100% {
+            opacity: 1;
+            transform: translateX(0px) translateY(0px);
+        }
+    }
+
+    @keyframes flash {
+
+        0%,
+        90% {
+            opacity: 0;
+            transform: translateX(-1px) translateY(-2px) rotate(0.01deg);
         }
 
-        .snow-svg .snowflake:nth-child(5) {
-            -webkit-animation: fall-counterclockwise 3545ms ease-in forwards infinite;
-            animation: fall-counterclockwise 3545ms ease-in forwards infinite;
-            -webkit-animation-delay: 1s;
-            animation-delay: 1s;
+        90% {
+            transform: translateX(1px) translateY(-1px);
         }
 
-        .snow-svg .snowflake:nth-child(6) {
-            -webkit-animation: fall-clockwise 3983ms ease-in forwards infinite;
-            animation: fall-clockwise 3983ms ease-in forwards infinite;
-            -webkit-animation-delay: 1.8s;
-            animation-delay: 1.8s;
+        60%,
+        100% {
+            opacity: 1;
+            transform: translateX(0px) translateY(0px);
+        }
+    }
+
+    @-webkit-keyframes expand {
+        to {
+            transform: scale(1.1);
+        }
+    }
+
+    @keyframes expand {
+        to {
+            transform: scale(1.1);
+        }
+    }
+
+    @-webkit-keyframes dash {
+        to {
+            stroke-dashoffset: 0;
+        }
+    }
+
+    @keyframes dash {
+        to {
+            stroke-dashoffset: 0;
+        }
+    }
+
+    @-webkit-keyframes bounce {
+
+        0%,
+        50%,
+        100% {
+            transform: translateY(0px) translateX(0px) rotate(0.1deg);
         }
 
-        .snow-svg .snowflake:nth-child(7) {
-            -webkit-animation: fall-counterclockwise 2165ms ease-in forwards infinite;
-            animation: fall-counterclockwise 2165ms ease-in forwards infinite;
-            -webkit-animation-delay: 1.4s;
-            animation-delay: 1.4s;
+        30%,
+        80% {
+            transform: translateY(3px) translateX(3px) rotate(0.1deg);
+        }
+    }
+
+    @keyframes bounce {
+
+        0%,
+        50%,
+        100% {
+            transform: translateY(0px) translateX(0px) rotate(0.1deg);
         }
 
-        .snow-svg .snowflake:nth-child(8) {
-            -webkit-animation: fall-clockwise 3745ms ease-in forwards infinite;
-            animation: fall-clockwise 3745ms ease-in forwards infinite;
-            -webkit-animation-delay: 2.4s;
-            animation-delay: 2.4s;
+        30%,
+        80% {
+            transform: translateY(3px) translateX(3px) rotate(0.1deg);
+        }
+    }
+
+    @-webkit-keyframes fall-clockwise {
+        0% {
+            transform: translateY(-7px) rotate(0) scale(0.5);
+            opacity: 0;
         }
 
-        .snow-svg .snowflake:nth-child(9) {
-            -webkit-animation: fall-counterclockwise 2671ms ease-in forwards infinite;
-            animation: fall-counterclockwise 2671ms ease-in forwards infinite;
-            -webkit-animation-delay: 2.7s;
-            animation-delay: 2.7s;
+        10% {
+            transform: translateY(-4px) translateX(4px) rotate(-30deg) scale(0.7);
+            opacity: 1;
         }
 
-        .snow-svg .snowflake:nth-child(10) {
-            -webkit-animation: fall-clockwise 2308ms ease-in forwards infinite;
-            animation: fall-clockwise 2308ms ease-in forwards infinite;
-            -webkit-animation-delay: 2s;
-            animation-delay: 2s;
+        45% {
+            transform: translateY(5px) translateX(0px) rotate(30deg) scale(0.6);
         }
 
-        .snow-svg .snowflake-path {
-            stroke: #BAE2E0;
-            stroke-width: 1;
+        50% {
+            opacity: 0;
         }
 
-        .fog-svg .fog-line:nth-child(1) {
-            stroke: #BAE2E0;
-            animation: bounce 4s ease-in-out alternate-reverse infinite;
-            animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
-            -webkit-animation-delay: 0.2s;
-            animation-delay: 0.2s;
+        100% {
+            opacity: 0;
+            transform: translateY(10px) translateX(3px) scale(0.5);
+        }
+    }
+
+    @keyframes fall-clockwise {
+        0% {
+            transform: translateY(-7px) rotate(0) scale(0.5);
+            opacity: 0;
         }
 
-        .fog-svg .fog-line:nth-child(2) {
-            stroke: #BAE2E0;
-            animation: bounce 4s ease-in-out alternate-reverse infinite;
-            animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
-            -webkit-animation-delay: 0.4s;
-            animation-delay: 0.4s;
+        10% {
+            transform: translateY(-4px) translateX(4px) rotate(-30deg) scale(0.7);
+            opacity: 1;
         }
 
-        .fog-svg .fog-line:nth-child(3) {
-            stroke: #BAE2E0;
-            animation: bounce 4s ease-in-out alternate-reverse infinite;
-            animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
-            -webkit-animation-delay: 0.6s;
-            animation-delay: 0.6s;
+        45% {
+            transform: translateY(5px) translateX(0px) rotate(30deg) scale(0.6);
         }
 
-        .fog-svg .fog-line:nth-child(4) {
-            stroke: #BAE2E0;
-            animation: bounce 4s ease-in-out alternate-reverse infinite;
-            animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
-            -webkit-animation-delay: 0.8s;
-            animation-delay: 0.8s;
+        50% {
+            opacity: 0;
         }
 
-        .fog-svg .fog-line:nth-child(5) {
-            stroke: #BAE2E0;
-            animation: bounce 4s ease-in-out alternate-reverse infinite;
-            animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
-            -webkit-animation-delay: 1s;
-            animation-delay: 1s;
+        100% {
+            opacity: 0;
+            transform: translateY(10px) translateX(3px) scale(0.5);
+        }
+    }
+
+    @-webkit-keyframes fall-counterclockwise {
+        0% {
+            transform: translateY(-9px) rotate(0) scale(0.6);
+            opacity: 0;
         }
 
-        .fog-svg .fog-line:nth-child(6) {
-            stroke: #BAE2E0;
-            animation: bounce 4s ease-in-out alternate-reverse infinite;
-            animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
-            -webkit-animation-delay: 1.2s;
-            animation-delay: 1.2s;
+        10% {
+            transform: translateY(-4px) translateX(-4px) rotate(30deg) scale(0.7);
+            opacity: 1;
         }
 
-        .fog-svg .fog-line:nth-child(7) {
-            animation: bounce 4s ease-in-out alternate-reverse infinite;
-            stroke: #BAE2E0;
-            animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
-            -webkit-animation-delay: 1.4s;
-            animation-delay: 1.4s;
+        40% {
+            transform: translateY(8px) translateX(4px) rotate(-30deg) scale(0.8);
         }
 
-        .fog-svg .fog-line:nth-child(8) {
-            stroke: #BAE2E0;
-            animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
-            -webkit-animation-delay: 1.6s;
-            animation-delay: 1.6s;
+        50% {
+            opacity: 0;
         }
 
-        .fog-svg .fog-line:nth-child(9) {
-            stroke: #BAE2E0;
-            animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
-            -webkit-animation-delay: 1.8s;
-            animation-delay: 1.8s;
+        100% {
+            opacity: 0;
+            transform: translateY(14px) translateX(-3px) scale(0.7);
+        }
+    }
+
+    @keyframes fall-counterclockwise {
+        0% {
+            transform: translateY(-9px) rotate(0) scale(0.6);
+            opacity: 0;
         }
 
-        .fog-svg .fog-line:nth-child(10) {
-            stroke: #BAE2E0;
-            animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
-            -webkit-animation-delay: 2s;
-            animation-delay: 2s;
+        10% {
+            transform: translateY(-4px) translateX(-4px) rotate(30deg) scale(0.7);
+            opacity: 1;
         }
 
-        .fog-svg .fog-line:nth-child(11) {
-            stroke: #BAE2E0;
-            animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
-            -webkit-animation-delay: 2.2s;
-            animation-delay: 2.2s;
+        40% {
+            transform: translateY(8px) translateX(4px) rotate(-30deg) scale(0.8);
         }
 
-        .fog-svg .fog-line:nth-child(12) {
-            stroke: #BAE2E0;
-            animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
-            -webkit-animation-delay: 2.4s;
-            animation-delay: 2.4s;
+        50% {
+            opacity: 0;
         }
 
-        .fog-svg .fog-line:nth-child(13) {
-            stroke: #BAE2E0;
-            animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
-            -webkit-animation-delay: 2.6s;
-            animation-delay: 2.6s;
+        100% {
+            opacity: 0;
+            transform: translateY(14px) translateX(-3px) scale(0.7);
+        }
+    }
+
+    @-webkit-keyframes pan {
+
+        0%,
+        100% {
+            transform: translateX(-2px) rotate(0.01deg);
         }
 
-        .fog-svg .fog-line:nth-child(14) {
-            stroke: #BAE2E0;
-            animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
-            -webkit-animation-delay: 2.8s;
-            animation-delay: 2.8s;
+        50% {
+            transform: translateX(2px) rotate(0.01deg);
+        }
+    }
+
+    @keyframes pan {
+
+        0%,
+        100% {
+            transform: translateX(-2px) rotate(0.01deg);
         }
 
-        .fog-svg .fog-line:nth-child(15) {
-            stroke: #BAE2E0;
-            animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
-            -webkit-animation-delay: 3s;
-            animation-delay: 3s;
+        50% {
+            transform: translateX(2px) rotate(0.01deg);
         }
+    }
+</style>
+<script>
+    var mqtt;
+    var reconnectTimeout = 1000;
+    var host = "broker.hivemq.com";
+    var port = 8000;
+    var tesdoang = new Object()
 
-        .fog-svg .fog-line:nth-child(16) {
-            stroke: #BAE2E0;
-            animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
-            -webkit-animation-delay: 3.2s;
-            animation-delay: 3.2s;
-        }
+    function onFailure(message) {
+        console.log("Connection Attempt to Host " + host + "Failed");
+        setTimeout(MQTTconnect, reconnectTimeout);
+    }
 
-        .fog-svg .fog-line:nth-child(17) {
-            stroke: #BAE2E0;
-            animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
-            -webkit-animation-delay: 3.4s;
-            animation-delay: 3.4s;
-        }
+    function onMessageArrived(msg) {
+        var payload = msg.payloadString
+        var data = JSON.parse(payload)
 
-        .fog-svg .fog-line:nth-child(18) {
-            stroke: #BAE2E0;
-            animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
-            -webkit-animation-delay: 3.6s;
-            animation-delay: 3.6s;
-        }
-
-        .fog-svg .fog-line:nth-child(19) {
-            stroke: #BAE2E0;
-            animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
-            -webkit-animation-delay: 3.6s;
-            animation-delay: 3.6s;
-        }
-
-        .fog-svg .fog-line:nth-child(20) {
-            stroke: #BAE2E0;
-            animation: dash 1s ease-in alternate-reverse infinite, fadeIn 1s alternate-reverse infinite;
-            -webkit-animation-delay: 3.6s;
-            animation-delay: 3.6s;
-        }
-
-        .fog-svg .fog-line:nth-child(21) {
-            stroke: #BAE2E0;
-            animation: bounce 4s ease-in-out alternate-reverse infinite;
-            -webkit-animation-delay: 3.6s;
-            animation-delay: 3.6s;
-        }
-
-        .fog-svg .fog-line:nth-child(22) {
-            stroke: #BAE2E0;
-            animation: bounce 4s ease-in-out alternate-reverse infinite;
-            -webkit-animation-delay: 3.6s;
-            animation-delay: 3.6s;
-        }
-
-        .fog-svg .fog-line:nth-child(23) {
-            stroke: #BAE2E0;
-            animation: bounce 4s ease-in-out alternate-reverse infinite;
-            -webkit-animation-delay: 3.6s;
-            animation-delay: 3.6s;
-        }
-
-        .fog-svg .fog-line:nth-child(24) {
-            stroke: #BAE2E0;
-            animation: bounce 4s ease-in-out alternate-reverse infinite;
-            -webkit-animation-delay: 3.6s;
-            animation-delay: 3.6s;
-        }
-
-        .fog-svg .fog-line:nth-child(25) {
-            stroke: #BAE2E0;
-            animation: bounce 4s ease-in-out alternate-reverse infinite;
-            -webkit-animation-delay: 3.6s;
-            animation-delay: 3.6s;
-        }
-
-        @-webkit-keyframes colorChange {
-
-            0%,
-            90% {
-                fill: #646478;
+        console.log("====> " + msg.destinationName)
+        if (data.data2 == "temp") {
+            if (data.data1 >=70.0){
+                toastr.warning('Room temperature is high!');
             }
-
-            60%,
-            100% {
-                fill: rgba(200, 200, 200, 0.8);
+            document.getElementById(msg.destinationName).innerHTML = data.data1 + "°C"
+        } else if (data.data2 == "humid") {
+            if (data.data1 >=70.0){
+                toastr.warning('Humidity is high!');
+            }else if (data.data1 <0){
+                toastr.warning('Humidity is low!');
             }
-        }
-
-        @keyframes colorChange {
-
-            0%,
-            90% {
-                fill: #646478;
-            }
-
-            60%,
-            100% {
-                fill: rgba(200, 200, 200, 0.8);
-            }
-        }
-
-        @-webkit-keyframes fadeIn {
-            0% {
-                opacity: 0;
-            }
-
-            100% {
-                opacity: 1;
-            }
-        }
-
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-            }
-
-            100% {
-                opacity: 1;
-            }
-        }
-
-        @-webkit-keyframes flash {
-
-            0%,
-            90% {
-                opacity: 0;
-                transform: translateX(-1px) translateY(-2px) rotate(0.01deg);
-            }
-
-            90% {
-                transform: translateX(1px) translateY(-1px);
-            }
-
-            60%,
-            100% {
-                opacity: 1;
-                transform: translateX(0px) translateY(0px);
-            }
-        }
-
-        @keyframes flash {
-
-            0%,
-            90% {
-                opacity: 0;
-                transform: translateX(-1px) translateY(-2px) rotate(0.01deg);
-            }
-
-            90% {
-                transform: translateX(1px) translateY(-1px);
-            }
-
-            60%,
-            100% {
-                opacity: 1;
-                transform: translateX(0px) translateY(0px);
-            }
-        }
-
-        @-webkit-keyframes expand {
-            to {
-                transform: scale(1.1);
-            }
-        }
-
-        @keyframes expand {
-            to {
-                transform: scale(1.1);
-            }
-        }
-
-        @-webkit-keyframes dash {
-            to {
-                stroke-dashoffset: 0;
-            }
-        }
-
-        @keyframes dash {
-            to {
-                stroke-dashoffset: 0;
-            }
-        }
-
-        @-webkit-keyframes bounce {
-
-            0%,
-            50%,
-            100% {
-                transform: translateY(0px) translateX(0px) rotate(0.1deg);
-            }
-
-            30%,
-            80% {
-                transform: translateY(3px) translateX(3px) rotate(0.1deg);
-            }
-        }
-
-        @keyframes bounce {
-
-            0%,
-            50%,
-            100% {
-                transform: translateY(0px) translateX(0px) rotate(0.1deg);
-            }
-
-            30%,
-            80% {
-                transform: translateY(3px) translateX(3px) rotate(0.1deg);
-            }
-        }
-
-        @-webkit-keyframes fall-clockwise {
-            0% {
-                transform: translateY(-7px) rotate(0) scale(0.5);
-                opacity: 0;
-            }
-
-            10% {
-                transform: translateY(-4px) translateX(4px) rotate(-30deg) scale(0.7);
-                opacity: 1;
-            }
-
-            45% {
-                transform: translateY(5px) translateX(0px) rotate(30deg) scale(0.6);
-            }
-
-            50% {
-                opacity: 0;
-            }
-
-            100% {
-                opacity: 0;
-                transform: translateY(10px) translateX(3px) scale(0.5);
-            }
-        }
-
-        @keyframes fall-clockwise {
-            0% {
-                transform: translateY(-7px) rotate(0) scale(0.5);
-                opacity: 0;
-            }
-
-            10% {
-                transform: translateY(-4px) translateX(4px) rotate(-30deg) scale(0.7);
-                opacity: 1;
-            }
-
-            45% {
-                transform: translateY(5px) translateX(0px) rotate(30deg) scale(0.6);
-            }
-
-            50% {
-                opacity: 0;
-            }
-
-            100% {
-                opacity: 0;
-                transform: translateY(10px) translateX(3px) scale(0.5);
-            }
-        }
-
-        @-webkit-keyframes fall-counterclockwise {
-            0% {
-                transform: translateY(-9px) rotate(0) scale(0.6);
-                opacity: 0;
-            }
-
-            10% {
-                transform: translateY(-4px) translateX(-4px) rotate(30deg) scale(0.7);
-                opacity: 1;
-            }
-
-            40% {
-                transform: translateY(8px) translateX(4px) rotate(-30deg) scale(0.8);
-            }
-
-            50% {
-                opacity: 0;
-            }
-
-            100% {
-                opacity: 0;
-                transform: translateY(14px) translateX(-3px) scale(0.7);
-            }
-        }
-
-        @keyframes fall-counterclockwise {
-            0% {
-                transform: translateY(-9px) rotate(0) scale(0.6);
-                opacity: 0;
-            }
-
-            10% {
-                transform: translateY(-4px) translateX(-4px) rotate(30deg) scale(0.7);
-                opacity: 1;
-            }
-
-            40% {
-                transform: translateY(8px) translateX(4px) rotate(-30deg) scale(0.8);
-            }
-
-            50% {
-                opacity: 0;
-            }
-
-            100% {
-                opacity: 0;
-                transform: translateY(14px) translateX(-3px) scale(0.7);
-            }
-        }
-
-        @-webkit-keyframes pan {
-
-            0%,
-            100% {
-                transform: translateX(-2px) rotate(0.01deg);
-            }
-
-            50% {
-                transform: translateX(2px) rotate(0.01deg);
-            }
-        }
-
-        @keyframes pan {
-
-            0%,
-            100% {
-                transform: translateX(-2px) rotate(0.01deg);
-            }
-
-            50% {
-                transform: translateX(2px) rotate(0.01deg);
-            }
-        }
-    </style>
-    <script>
-        var mqtt;
-        var reconnectTimeout = 1000;
-        var host = "broker.hivemq.com";
-        var port = 8000;
-
-        function onFailure(message) {
-            console.log("Connection Attempt to Host " + host + "Failed");
-            setTimeout(MQTTconnect, reconnectTimeout);
-        }
-
-        function onMessageArrived(msg) {
-            var payload = msg.payloadString
-            var data = JSON.parse(payload)
-            
-            console.log("====> " + msg.destinationName)
-            if (data.data2 == "temp") {
-                data_global_temp = parseFloat(data.data1)
-                topic_global_temp = msg.destinationName
-                document.getElementById(msg.destinationName).innerHTML = data.data1 + "°C"
-            } else if (data.data2 == "humid") {
-                data_global_humd = parseFloat(data.data1)
-                topic_global_humd = msg.destinationName
-                document.getElementById(msg.destinationName).innerHTML = data.data1 + "%"
-            } else if (data.data2 == "lamp") {
-                if (data.data1) {
-                    document.getElementById(msg.destinationName).innerHTML = "On"
-                    document.getElementById(msg.destinationName).className = ''
-                    document.getElementById(msg.destinationName).classList.add('btn')
-                    document.getElementById(msg.destinationName).classList.add('btn-info')
-                    var data = new Object();
-                    data.data1 = false
-                    data.data2 = "lamp"
-                    console.log("Lamp" + msg.destinationName, data.data1)
-                    document.getElementById(msg.destinationName).onclick = function () {
-                        for_lamp = new Paho.MQTT.Message(JSON.stringify(data))
-                        for_lamp.destinationName = msg.destinationName
-                        mqtt.send(for_lamp)
-                    }
-                } else if (data.data1 == false) {
-                    document.getElementById(msg.destinationName).className = ''
-                    document.getElementById(msg.destinationName).innerHTML = "Off"
-                    document.getElementById(msg.destinationName).classList.add('btn')
-                    document.getElementById(msg.destinationName).classList.add('btn-outline-info')
-                    var data = new Object();
-                    data.data1 = true
-                    data.data2 = "lamp"
-                    console.log("Lamp" + msg.destinationName, data.data1)
-                    document.getElementById(msg.destinationName).onclick = function () {
-                        for_lamp = new Paho.MQTT.Message(JSON.stringify(data))
-                        for_lamp.destinationName = msg.destinationName
-                        mqtt.send(for_lamp)
-                    }
+            document.getElementById(msg.destinationName).innerHTML = data.data1 + "%"
+        } else if (data.data2 == "lamp") {
+            if (data.data1) {
+                document.getElementById(msg.destinationName).innerHTML = "On"
+                document.getElementById(msg.destinationName).className = ''
+                document.getElementById(msg.destinationName).classList.add('btn')
+                document.getElementById(msg.destinationName).classList.add('btn-info')
+                var data = new Object();
+                data.data1 = false
+                data.data2 = "lamp"
+                console.log("Lamp" + msg.destinationName, data.data1)
+                document.getElementById(msg.destinationName).onclick = function () {
+                    for_lamp = new Paho.MQTT.Message(JSON.stringify(data))
+                    for_lamp.destinationName = msg.destinationName
+                    mqtt.send(for_lamp)
                 }
-            } else {
-                if (data.data1) {
-                    document.getElementById(msg.destinationName).innerHTML = "On"
-                    document.getElementById(msg.destinationName).className = ''
-                    document.getElementById(msg.destinationName).classList.add('btn')
-                    document.getElementById(msg.destinationName).classList.add('btn-info')
-                    var data = new Object();
-                    data.data1 = false
-                    data.data2 = "swch"
-                    console.log("Switch" + msg.destinationName, data.data1)
-                    document.getElementById(msg.destinationName).onclick = function () {
-                        for_swch = new Paho.MQTT.Message(JSON.stringify(data))
-                        for_swch.destinationName = msg.destinationName
-                        mqtt.send(for_swch)
-                    }
-                } else if (data.data1 == false) {
-                    document.getElementById(msg.destinationName).className = ''
-                    document.getElementById(msg.destinationName).innerHTML = "Off"
-                    document.getElementById(msg.destinationName).classList.add('btn')
-                    document.getElementById(msg.destinationName).classList.add('btn-outline-info')
-                    var data = new Object();
-                    data.data1 = true
-                    data.data2 = "swch"
-                    console.log("Switch" + msg.destinationName, data.data1)
-                    document.getElementById(msg.destinationName).onclick = function () {
-                        for_swch = new Paho.MQTT.Message(JSON.stringify(data))
-                        for_swch.destinationName = msg.destinationName
-                        mqtt.send(for_swch)
-                    }
+            } else if (data.data1 == false) {
+                document.getElementById(msg.destinationName).className = ''
+                document.getElementById(msg.destinationName).innerHTML = "Off"
+                document.getElementById(msg.destinationName).classList.add('btn')
+                document.getElementById(msg.destinationName).classList.add('btn-outline-info')
+                var data = new Object();
+                data.data1 = true
+                data.data2 = "lamp"
+                console.log("Lamp" + msg.destinationName, data.data1)
+                document.getElementById(msg.destinationName).onclick = function () {
+                    for_lamp = new Paho.MQTT.Message(JSON.stringify(data))
+                    for_lamp.destinationName = msg.destinationName
+                    mqtt.send(for_lamp)
+                }
+            }
+        } else {
+            if (data.data1) {
+                document.getElementById(msg.destinationName).innerHTML = "On"
+                document.getElementById(msg.destinationName).className = ''
+                document.getElementById(msg.destinationName).classList.add('btn')
+                document.getElementById(msg.destinationName).classList.add('btn-info')
+                var data = new Object();
+                data.data1 = false
+                data.data2 = "swch"
+                console.log("Switch" + msg.destinationName, data.data1)
+                document.getElementById(msg.destinationName).onclick = function () {
+                    for_swch = new Paho.MQTT.Message(JSON.stringify(data))
+                    for_swch.destinationName = msg.destinationName
+                    mqtt.send(for_swch)
+                }
+            } else if (data.data1 == false) {
+                document.getElementById(msg.destinationName).className = ''
+                document.getElementById(msg.destinationName).innerHTML = "Off"
+                document.getElementById(msg.destinationName).classList.add('btn')
+                document.getElementById(msg.destinationName).classList.add('btn-outline-info')
+                var data = new Object();
+                data.data1 = true
+                data.data2 = "swch"
+                console.log("Switch" + msg.destinationName, data.data1)
+                document.getElementById(msg.destinationName).onclick = function () {
+                    for_swch = new Paho.MQTT.Message(JSON.stringify(data))
+                    for_swch.destinationName = msg.destinationName
+                    mqtt.send(for_swch)
                 }
             }
         }
+    }
 
-        function onConnect() {
-            // Once a connection has been made, make a subscription and send a message.
-            console.log("Connected ");
-            var data = JSON.parse("{{dataJSON|escapejs}}");
-            var topic = []
-            var qos = []
-            for (let i = 0; i < data.length; i++) {
-                for (let j = 0; j < data[i].room.device.topic.length; j++) {
-                    topic.push(data[i].room.device.topic[j]);
-                    qos.push(data[i].room.device.qos[j])
-                }
-            }
-            for (let i = 0; i < topic.length; i++) {
-                mqtt.subscribe(String(topic[i]), {
-                    qos: parseInt(qos[i])
-                })
-                document.getElementById(String(topic[i])).innerHTML =
-                    `<img src="{% static 'spinner.gif' %}" alt="o" width=50px loading="lazy">`
-            }
-            // console.log(topic)
-        }
-
-        function MQTTconnect() {
-            console.log("connecting to " + host + " " + port);
-            mqtt = new Paho.MQTT.Client(host, port, "clientjs");
-            var options = {
-                onSuccess: onConnect,
-                onFailure: onFailure,
-            };
-            mqtt.onMessageArrived = onMessageArrived
-            mqtt.connect(options); //connect
-        }
-    </script>
-    <script>
-        //Start weather
-        const appKey = '9697e661a188cb4621c5a52a23ca3907';
-
-        let cityName = document.getElementById("city-name");
-        let icon = document.getElementById("icon");
-        let temperature = document.getElementById("temp");
-        let desc = document.getElementById("desc");
-
-        var x = document.getElementById("cuaca");
-
-        navigator.geolocation.getCurrentPosition(showPosition);
-
-        function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(showPosition);
-            } else {
-                x.innerHTML = "Geolocation is not supported by this browser.";
+    function onConnect() {
+        // Once a connection has been made, make a subscription and send a message.
+        console.log("Connected ");
+        var data = JSON.parse("{{dataJSON|escapejs}}");
+        var topic = []
+        var qos = []
+        for (let i = 0; i < data.length; i++) {
+            for (let j = 0; j < data[i].room.device.topic.length; j++) {
+                topic.push(data[i].room.device.topic[j]);
+                qos.push(data[i].room.device.qos[j])
             }
         }
+        for (let i = 0; i < topic.length; i++) {
+            mqtt.subscribe(String(topic[i]), {
+                qos: parseInt(qos[i])
+            })
+            document.getElementById(String(topic[i])).innerHTML =
+                `<img src="{% static 'spinner.gif' %}" alt="o" width=50px loading="lazy">`
+        }
+        // console.log(topic)
+    }
 
-        function showPosition(position) {
-            // (position.coords.latitude) (position.coords.longitude) -6.921507 107.617751
-            var latt = (position.coords.latitude);
-            var long = (position.coords.longitude);
-            console.log('Your latitude is :' + latt + ' and longitude is ' + long);
-            findWeatherDetails();
+    function MQTTconnect() {
+        console.log("connecting to " + host + " " + port);
+        mqtt = new Paho.MQTT.Client(host, port, "clientjs");
+        var options = {
+            onSuccess: onConnect,
+            onFailure: onFailure,
+        };
+        mqtt.onMessageArrived = onMessageArrived
+        mqtt.connect(options); //connect
+    }
+</script>
+<script>
+    //Start weather
+    const appKey = '9697e661a188cb4621c5a52a23ca3907';
 
-            function findWeatherDetails() {
-                let searchLink = "https://api.openweathermap.org/data/2.5/weather?lat=" + latt + "&lon=" + long +
-                    "&appid=" + appKey;
-                httpRequestAsync(searchLink, theResponse);
-            }
+    let cityName = document.getElementById("city-name");
+    let icon = document.getElementById("icon");
+    let temperature = document.getElementById("temp");
+    let desc = document.getElementById("desc");
 
-            function theResponse(response) {
-                let rain_icon = `<div class="svg-contain">
+    var x = document.getElementById("cuaca");
+
+    navigator.geolocation.getCurrentPosition(showPosition);
+
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+
+    function showPosition(position) {
+        // (position.coords.latitude) (position.coords.longitude) -6.921507 107.617751
+        var latt = (position.coords.latitude);
+        var long = (position.coords.longitude);
+        console.log('Your latitude is :' + latt + ' and longitude is ' + long);
+        findWeatherDetails();
+
+        function findWeatherDetails() {
+            let searchLink = "https://api.openweathermap.org/data/2.5/weather?lat=" + latt + "&lon=" + long +
+                "&appid=" + appKey;
+            httpRequestAsync(searchLink, theResponse);
+        }
+
+        function theResponse(response) {
+            let rain_icon = `<div class="svg-contain">
                                     <svg class="fog-svg overcast-clouds" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                     x="0px" y="0px" viewBox="0 0 68 52.6" style="enable-background:new 0 0 68 52.6;" xml:space="preserve">
                                     <g id="Layer_1">
@@ -961,7 +966,7 @@
                                     </g>
                                 </svg>
                                 </div>`
-                let thunder_icon = `<div class="svg-contain">
+            let thunder_icon = `<div class="svg-contain">
                                         <svg class="hurricane-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                                             xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="-437 254.4 85 52.6"
                                             style="enable-background:new -437 254.4 85 52.6;" xml:space="preserve">
@@ -991,7 +996,7 @@
                                             </g>
                                         </svg>
                                     </div>`
-                let snow_icon = `<div class="svg-contain">
+            let snow_icon = `<div class="svg-contain">
                                     <svg version="1.1" class="snow-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                             x="0px" y="0px" viewBox="0 0 70.3 52.6" style="enable-background:new 0 0 70.3 52.6;" xml:space="preserve">
                                             <g id="Layer_1">
@@ -1082,7 +1087,7 @@
                                             </g>
                                         </svg>
                                 </div>`
-                let clear_icon = `<div class="svg-contain">
+            let clear_icon = `<div class="svg-contain">
                                     <svg version="1.1" class="clear-sky-svg" xmlns="http://www.w3.org/2000/svg"
                                     xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 72.3 52.6"
                                     style="enable-background:new 0 0 72.3 52.6;" xml:space="preserve">
@@ -1100,7 +1105,7 @@
                                     </g>
                                     </svg>
                                 </div>`
-                let broke_cloud_icon = `<div class="svg-contain">
+            let broke_cloud_icon = `<div class="svg-contain">
                                             <svg class="overcast-clouds the-dark" version="1.1" xmlns="http://www.w3.org/2000/svg"
                                                 xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 82.6 52.3"
                                                 style="enable-background:new 0 0 82.6 52.3;" xml:space="preserve">
@@ -1117,7 +1122,7 @@
                                                 </g>
                                             </svg>
                                         </div>`
-                let scattered_icon = `<div class="svg-contain">
+            let scattered_icon = `<div class="svg-contain">
                                         <svg class="overcast-clouds" version="1.1" xmlns="http://www.w3.org/2000/svg"
                                             xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 82.6 52.3"
                                             style="enable-background:new 0 0 82.6 52.3;" xml:space="preserve">
@@ -1134,7 +1139,7 @@
                                             </g>
                                         </svg>
                                     </div>`
-                let mist_icon = `<div class="svg-contain">
+            let mist_icon = `<div class="svg-contain">
                                     <svg version="1.1" class="windy-svg" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                                     xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="-447 254.4 64 52.6"
                                     style="enable-background:new -447 254.4 64 52.6;" xml:space="preserve">
@@ -1156,7 +1161,7 @@
                                     </g>
                                 </svg>
                                 </div>`
-                let night_clear = `<div class="svg-contain">
+            let night_clear = `<div class="svg-contain">
                                         <svg version="1.1" class="clear-sky-svg night-clear" xmlns="http://www.w3.org/2000/svg"
                                         xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 72.3 52.6"
                                         style="enable-background:new 0 0 72.3 52.6;" xml:space="preserve">
@@ -1166,7 +1171,7 @@
                                         </g>
                                         </svg>
                                     </div>`
-                let night_few_clouds = `<div class="svg-contain">
+            let night_few_clouds = `<div class="svg-contain">
                                             <svg version="1.1" class="night-clear overcast-clouds" xmlns="http://www.w3.org/2000/svg"
                                             xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 72.3 52.6"
                                             style="enable-background:new 0 0 72.3 52.6;" xml:space="preserve">
@@ -1181,7 +1186,7 @@
                                             </g>
                                             </svg>
                                         </div>`
-                let few_clouds = `<div class="svg-contain">
+            let few_clouds = `<div class="svg-contain">
                                         <svg version="1.1" class="clear-sky-svg for-few-clouds overcast-clouds" xmlns="http://www.w3.org/2000/svg"
                                         xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 72.3 52.6"
                                         style="enable-background:new 0 0 72.3 52.6;" xml:space="preserve">
@@ -1201,319 +1206,319 @@
                                         </svg>
                                     </div>`
 
-                let jsonObject = JSON.parse(response);
-                cityName.innerHTML = "<i class='fas fa-map-marker-alt'></i> &nbsp;" + jsonObject.name;
-                // icon.src = "http://openweathermap.org/img/w/" + jsonObject.weather[0].icon + ".png";
-                temperature.innerHTML = "Feels like " + parseInt(jsonObject.main.temp - 273) + "°";
-                if (jsonObject.weather[0].icon == "10n" || jsonObject.weather[0].icon == "10d" || jsonObject.weather[0]
-                    .icon == "09n" || jsonObject.weather[0].icon == "09d") {
-                    icon.innerHTML = rain_icon
-                } else if (jsonObject.weather[0].icon == "11n" || jsonObject.weather[0].icon == "11d") {
-                    icon.innerHTML = thunder_icon
-                } else if (jsonObject.weather[0].icon == "01d") {
-                    icon.innerHTML = clear_icon
-                } else if (jsonObject.weather[0].icon == "01n") {
-                    icon.innerHTML = night_clear
-                } else if (jsonObject.weather[0].icon == "02d") {
-                    icon.innerHTML = few_clouds
-                } else if (jsonObject.weather[0].icon == "02n") {
-                    icon.innerHTML = night_few_clouds
-                } else if (jsonObject.weather[0].icon == "13n" || jsonObject.weather[0].icon == "13d") {
-                    icon.innerHTML = snow_icon
-                } else if (jsonObject.weather[0].icon == "03n" || jsonObject.weather[0].icon == "03d") {
-                    icon.innerHTML = scattered_icon
-                } else if (jsonObject.weather[0].icon == "04n" || jsonObject.weather[0].icon == "04d") {
-                    icon.innerHTML = broke_cloud_icon
-                } else if (jsonObject.weather[0].icon == "11n" || jsonObject.weather[0].icon == "11d") {
-                    icon.innerHTML = mist_icon
-                }
-                desc.innerHTML = jsonObject.weather[0].main + "-" + jsonObject.weather[0].description;
+            let jsonObject = JSON.parse(response);
+            cityName.innerHTML = "<i class='fas fa-map-marker-alt'></i> &nbsp;" + jsonObject.name;
+            // icon.src = "http://openweathermap.org/img/w/" + jsonObject.weather[0].icon + ".png";
+            temperature.innerHTML = "Feels like " + parseInt(jsonObject.main.temp - 273) + "°";
+            if (jsonObject.weather[0].icon == "10n" || jsonObject.weather[0].icon == "10d" || jsonObject.weather[0]
+                .icon == "09n" || jsonObject.weather[0].icon == "09d") {
+                icon.innerHTML = rain_icon
+            } else if (jsonObject.weather[0].icon == "11n" || jsonObject.weather[0].icon == "11d") {
+                icon.innerHTML = thunder_icon
+            } else if (jsonObject.weather[0].icon == "01d") {
+                icon.innerHTML = clear_icon
+            } else if (jsonObject.weather[0].icon == "01n") {
+                icon.innerHTML = night_clear
+            } else if (jsonObject.weather[0].icon == "02d") {
+                icon.innerHTML = few_clouds
+            } else if (jsonObject.weather[0].icon == "02n") {
+                icon.innerHTML = night_few_clouds
+            } else if (jsonObject.weather[0].icon == "13n" || jsonObject.weather[0].icon == "13d") {
+                icon.innerHTML = snow_icon
+            } else if (jsonObject.weather[0].icon == "03n" || jsonObject.weather[0].icon == "03d") {
+                icon.innerHTML = scattered_icon
+            } else if (jsonObject.weather[0].icon == "04n" || jsonObject.weather[0].icon == "04d") {
+                icon.innerHTML = broke_cloud_icon
+            } else if (jsonObject.weather[0].icon == "11n" || jsonObject.weather[0].icon == "11d") {
+                icon.innerHTML = mist_icon
             }
+            desc.innerHTML = jsonObject.weather[0].main + "-" + jsonObject.weather[0].description;
+        }
 
-            function httpRequestAsync(url, callback) {
-                var httpRequest = new XMLHttpRequest();
-                httpRequest.onreadystatechange = () => {
-                    if (httpRequest.readyState == 4 && httpRequest.status == 200)
-                        callback(httpRequest.responseText);
+        function httpRequestAsync(url, callback) {
+            var httpRequest = new XMLHttpRequest();
+            httpRequest.onreadystatechange = () => {
+                if (httpRequest.readyState == 4 && httpRequest.status == 200)
+                    callback(httpRequest.responseText);
+            }
+            httpRequest.open("GET", url, true); // true for asynchronous 
+            httpRequest.send();
+        }
+    }
+    // End weather
+    $(document).on('click', '.confirm-delete', function () {
+        return confirm('Are you sure you want to delete this?');
+    })
+
+    function startTime() {
+        var today = new Date();
+        var weekday = new Array(7);
+        weekday[0] = "Sun";
+        weekday[1] = "Mon";
+        weekday[2] = "Tue";
+        weekday[3] = "Wed";
+        weekday[4] = "Thur";
+        weekday[5] = "Fri";
+        weekday[6] = "Sat";
+        var hari = weekday[today.getDay()];
+        var m = today.getMonth();
+        // var jam = today.getHours();
+        // var menit = today.getMinutes();
+        // menit = checkTime(menit);
+        var monthArr = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
+            "October", "November", "December"
+        ];
+        var m = monthArr[m];
+        var d = today.getDate();
+        document.getElementById("date-now").innerHTML = hari + ", " + m + " " + d + " ";
+        var t = setTimeout(startTime, 500);
+    }
+
+    function checkTime(i) {
+        if (i < 10) {
+            i = "0" + i
+        }; // add zero in front of numbers < 10
+        return i;
+    }
+    $(document).on('click', '.dropdown-menu', function (e) {
+        e.stopPropagation();
+    });
+</script>
+<script>
+    function chart_click(id) {
+        
+        var data_iot = JSON.parse("{{dataJSON|escapejs}}");
+        topic_cut = id
+        topic = topic_cut.substring(0, 4)
+        for (let i = 0; i < data_iot.length; i++) {
+            for (let j = 0; j < data_iot[i].room.device.topic.length; j++) {
+                if (id == data_iot[i].room.device.topic[j]) {
+                    var index_room = i
+                    var index_device = j
                 }
-                httpRequest.open("GET", url, true); // true for asynchronous 
-                httpRequest.send();
             }
         }
-        // End weather
-        $(document).on('click', '.confirm-delete', function () {
-            return confirm('Are you sure you want to delete this?');
-        })
-
-        function startTime() {
-            var today = new Date();
-            var weekday = new Array(7);
-            weekday[0] = "Sun";
-            weekday[1] = "Mon";
-            weekday[2] = "Tue";
-            weekday[3] = "Wed";
-            weekday[4] = "Thur";
-            weekday[5] = "Fri";
-            weekday[6] = "Sat";
-            var hari = weekday[today.getDay()];
-            var m = today.getMonth();
-            // var jam = today.getHours();
-            // var menit = today.getMinutes();
-            // menit = checkTime(menit);
-            var monthArr = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
-                "October", "November", "December"
-            ];
-            var m = monthArr[m];
-            var d = today.getDate();
-            document.getElementById("date-now").innerHTML = hari + ", " + m + " " + d + " ";
-            var t = setTimeout(startTime, 500);
-        }
-
-        function checkTime(i) {
-            if (i < 10) {
-                i = "0" + i
-            }; // add zero in front of numbers < 10
-            return i;
-        }
-        $(document).on('click', '.dropdown-menu', function (e) {
-            e.stopPropagation();
-        });
-    </script>
-    <script>
-        function chart_click(id) {
-            var data_iot = JSON.parse("{{dataJSON|escapejs}}");
-            topic_cut = id
-            topic = topic_cut.substring(0, 4)
-            for (let i = 0; i < data_iot.length; i++) {
-                for (let j = 0; j < data_iot[i].room.device.topic.length; j++) {
-                    if (id == data_iot[i].room.device.topic[j]) {
-                        var index_room = i
-                        var index_device = j
+        var display = document.getElementById(`chart-${data_iot[index_room].room.id}`)
+        display.style.display = "block"
+        if (topic == 'temp') {
+            Highcharts.chart(`chart-${data_iot[index_room].room.id}`, {
+                plotOptions: {
+                    series: {
+                        connectNulls: true
                     }
-                }
-            }
-            if (topic == 'temp') {
-                Highcharts.chart(`chart-${data_iot[index_room].room.id}`, {
-                    plotOptions: {
-                        series: {
-                            connectNulls: true
+                },
+                chart: {
+                    type: 'spline',
+                    animation: Highcharts.svg, // don't animate in old IE
+                    marginRight: 10,
+                    events: {
+                        load: function () {
+                            var series = this.series[0];
+                            setInterval(function () {
+                                y = null
+                                var x = (new Date()).getTime()
+                                var y = parseFloat(document.getElementById(id).innerText)
+                                series.addPoint([x, y], true, true);
+                            }, 1500);
                         }
-                    },
-                    chart: {
-                        type: 'spline',
-                        animation: Highcharts.svg, // don't animate in old IE
-                        marginRight: 10,
-                        events: {
-                            load: function () {
-                                var series = this.series[0];
-                                setInterval(function () {
-                                    y = null
-                                    var x = (new Date()).getTime()
-                                    if (topic_global_temp == id) {
-                                        var y = data_global_temp;
-                                        
-                                    }
-                                    series.addPoint([x, y], true, true);
-                                }, 1500);
+                    }
+                },
+
+                time: {
+                    useUTC: false
+                },
+
+                title: {
+                    text: capitalizeFirstLetter(String(data_iot[index_room].room.device.nama[index_device]))
+                },
+
+                accessibility: {
+                    announceNewData: {
+                        enabled: true,
+                        minAnnounceInterval: 15000,
+                        announcementFormatter: function (allSeries, newSeries, newPoint) {
+                            if (newPoint) {
+                                return 'New point added. Value: ' + newPoint.y;
                             }
+                            return false;
                         }
-                    },
+                    }
+                },
 
-                    time: {
-                        useUTC: false
-                    },
+                xAxis: {
+                    type: 'datetime',
+                    tickPixelInterval: 150
+                },
 
+                yAxis: {
                     title: {
-                        text: capitalizeFirstLetter(String(data_iot[index_room].room.device.nama[index_device]))
+                        text: 'Value'
                     },
-
-                    accessibility: {
-                        announceNewData: {
-                            enabled: true,
-                            minAnnounceInterval: 15000,
-                            announcementFormatter: function (allSeries, newSeries, newPoint) {
-                                if (newPoint) {
-                                    return 'New point added. Value: ' + newPoint.y;
-                                }
-                                return false;
-                            }
-                        }
-                    },
-
-                    xAxis: {
-                        type: 'datetime',
-                        tickPixelInterval: 150
-                    },
-
-                    yAxis: {
-                        title: {
-                            text: 'Value'
-                        },
-                        plotLines: [{
-                            value: 0,
-                            width: 1,
-                            color: '#808080'
-                        }]
-                    },
-
-                    tooltip: {
-                        valueSuffix: '°C',
-                        headerFormat: '<b>{series.name}</b><br/>',
-                        pointFormat: '{point.x: %H:%M:%S}<br>{point.y}'
-                    },
-
-                    legend: {
-                        enabled: false
-                    },
-
-                    exporting: {
-                        enabled: false
-                    },
-
-                    series: [{
-                        name: 'Temperature',
-                        data: (function () {
-                            var data = [],
-                                time = (new Date()).getTime(),
-                                i;
-
-                            for (i = -19; i <= 0; i += 1) {
-                                data.push({
-                                    x: time + i * 1000,
-                                    y: data_global_temp
-                                });
-                            }
-                            return data;
-                        }())
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
                     }]
-                });
-            } else if (topic == "humd") {
-                Highcharts.chart(`chart-${data_iot[index_room].room.id}`, {
-                    plotOptions: {
-                        series: {
-                            connectNulls: true
+                },
+
+                tooltip: {
+                    valueSuffix: '°C',
+                    headerFormat: '<b>{series.name}</b><br/>',
+                    pointFormat: '{point.x: %H:%M:%S}<br>{point.y}'
+                },
+
+                legend: {
+                    enabled: false
+                },
+
+                exporting: {
+                    enabled: false
+                },
+
+                series: [{
+                    name: 'Temperature',
+                    data: (function () {
+                        var data = [],
+                            time = (new Date()).getTime(),
+                            i;
+
+                        for (i = -19; i <= 0; i += 1) {
+                            data.push({
+                                x: time + i * 1000,
+                                y: parseFloat(document.getElementById(id).innerText)
+                            });
                         }
-                    },
-                    chart: {
-                        type: 'spline',
-                        animation: Highcharts.svg, // don't animate in old IE
-                        marginRight: 10,
-                        events: {
-                            load: function () {
-
-                                // set up the updating of the chart each second
-                                var series = this.series[0];
-                                setInterval(function () {
-                                    y = null
-                                    var x = (new Date()).getTime()
-                                    if (topic_global_humd == id) {
-                                        var y = data_global_humd;
-                                    }
-                                    series.addPoint([x, y], true, true);
-                                }, 1500);
-                            }
-                        }
-                    },
-
-                    time: {
-                        useUTC: false
-                    },
-
-                    title: {
-                        text: capitalizeFirstLetter(String(data_iot[index_room].room.device.nama[index_device]))
-                    },
-
-                    accessibility: {
-                        announceNewData: {
-                            enabled: true,
-                            minAnnounceInterval: 15000,
-                            announcementFormatter: function (allSeries, newSeries, newPoint) {
-                                if (newPoint) {
-                                    return 'New point added. Value: ' + newPoint.y;
-                                }
-                                return false;
-                            }
-                        }
-                    },
-
-                    xAxis: {
-                        type: 'datetime',
-                        tickPixelInterval: 150
-                    },
-
-                    yAxis: {
-                        title: {
-                            text: 'Value'
-                        },
-                        plotLines: [{
-                            value: 0,
-                            width: 1,
-                            color: '#808080'
-                        }]
-                    },
-
-                    tooltip: {
-                        valueSuffix: '%',
-                        headerFormat: '<b>{series.name}</b><br/>',
-                        pointFormat: '{point.x: %H:%M:%S}<br>{point.y}'
-                    },
-
-                    legend: {
-                        enabled: false
-                    },
-
-                    exporting: {
-                        enabled: false
-                    },
-
-                    series: [{
-                        name: 'Humidity',
-                        data: (function () {
-                            var data = [],
-                                time = (new Date()).getTime(),
-                                i;
-
-                            for (i = -19; i <= 0; i += 1) {
-                                data.push({
-                                    x: time + i * 1000,
-                                    y: data_global_humd
-                                });
-                            }
-                            return data;
-                        }())
-                    }],
-                    responsive: {
-                        rules: [{
-                            condition: {
-                                maxWidth: 500
-                            },
-                            chartOptions: {
-                                legend: {
-                                    align: 'center',
-                                    verticalAlign: 'bottom',
-                                    layout: 'horizontal'
-                                },
-                                yAxis: {
-                                    labels: {
-                                        align: 'left',
-                                        x: 0,
-                                        y: -5
-                                    },
-                                    title: {
-                                        text: null
-                                    }
-                                },
-                                subtitle: {
-                                    text: null
-                                },
-                                credits: {
-                                    enabled: false
-                                }
-                            }
-                        }]
+                        return data;
+                    }())
+                }]
+            });
+        } else if (topic == "humd") {
+            Highcharts.chart(`chart-${data_iot[index_room].room.id}`, {
+                plotOptions: {
+                    series: {
+                        connectNulls: true
                     }
+                },
+                chart: {
+                    type: 'spline',
+                    animation: Highcharts.svg, // don't animate in old IE
+                    marginRight: 10,
+                    events: {
+                        load: function () {
 
-                });
-            }
+                            // set up the updating of the chart each second
+                            var series = this.series[0];
+                            setInterval(function () {
+                                y = null
+                                var x = (new Date()).getTime()
+                                var y = parseFloat(document.getElementById(id).innerText)
+                                series.addPoint([x, y], true, true);
+                            }, 1500);
+                        }
+                    }
+                },
+
+                time: {
+                    useUTC: false
+                },
+
+                title: {
+                    text: capitalizeFirstLetter(String(data_iot[index_room].room.device.nama[index_device]))
+                },
+
+                accessibility: {
+                    announceNewData: {
+                        enabled: true,
+                        minAnnounceInterval: 15000,
+                        announcementFormatter: function (allSeries, newSeries, newPoint) {
+                            if (newPoint) {
+                                return 'New point added. Value: ' + newPoint.y;
+                            }
+                            return false;
+                        }
+                    }
+                },
+
+                xAxis: {
+                    type: 'datetime',
+                    tickPixelInterval: 150
+                },
+
+                yAxis: {
+                    title: {
+                        text: 'Value'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+
+                tooltip: {
+                    valueSuffix: '%',
+                    headerFormat: '<b>{series.name}</b><br/>',
+                    pointFormat: '{point.x: %H:%M:%S}<br>{point.y}'
+                },
+
+                legend: {
+                    enabled: false
+                },
+
+                exporting: {
+                    enabled: false
+                },
+
+                series: [{
+                    name: 'Humidity',
+                    data: (function () {
+                        var data = [],
+                            time = (new Date()).getTime(),
+                            i;
+
+                        for (i = -19; i <= 0; i += 1) {
+                            data.push({
+                                x: time + i * 1000,
+                                y: parseFloat(document.getElementById(id).innerText)
+                            });
+                        }
+                        return data;
+                    }())
+                }],
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 500
+                        },
+                        chartOptions: {
+                            legend: {
+                                align: 'center',
+                                verticalAlign: 'bottom',
+                                layout: 'horizontal'
+                            },
+                            yAxis: {
+                                labels: {
+                                    align: 'left',
+                                    x: 0,
+                                    y: -5
+                                },
+                                title: {
+                                    text: null
+                                }
+                            },
+                            subtitle: {
+                                text: null
+                            },
+                            credits: {
+                                enabled: false
+                            }
+                        }
+                    }]
+                }
+
+            });
+        } else {
+            toastr.error('Device chart unavailable!');
         }
-    </script>
+    }
+</script>

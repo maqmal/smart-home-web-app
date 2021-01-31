@@ -40,6 +40,11 @@
                                                 Edit Room
                                             </button>
                                         </li>
+                                        <li>
+                                            <button class="btn" type="button" onclick="function_clear('{{value.room.id}}')">
+                                                Clear Chart
+                                            </button>
+                                        </li>
                                         <form id="name_form" method="post" action="/del/{{value.room.id}}">
                                             {% csrf_token %}
                                             <li><button class="btn confirm-delete" type="submit" name="submit">
@@ -64,7 +69,7 @@
                                                     <li>
                                                         <button class="btn"
                                                             onclick="chart_click('{{value.room.device.topic|index:forloop.counter0}}')">
-                                                            Show on graph
+                                                            View on Chart
                                                         </button>
                                                     </li>
                                                     <li>
@@ -190,14 +195,18 @@
 {% endif %}
 </div>
 <script>
+    function function_clear(id) {
+        var x = document.getElementById(`chart-${id}`);
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
-    var data_global_temp = 0.0
-    var data_global_humd = 0.0
-    var topic_global_temp = ""
-    var topic_global_humd = ""
-
     $(function () {
         $('.pop').on('click', function () {
             $('.imagepreview').attr('src', $(this).find('img').attr('src'));
